@@ -1,5 +1,10 @@
 www:
-  type: nodejs
+  type: custom
+  buildscript: _nodejs/builder.sh
+  ports:
+    www: http
+  process: node app.js
+  node_version: v0.6.18
   environment:
     DOTCLOUD: 1
   config:

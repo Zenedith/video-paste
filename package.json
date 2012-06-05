@@ -1,0 +1,34 @@
+{
+  "name": "video-paste-api",
+  "description": "My mobile pkp app",
+  "version": "0.2.0",
+  "homepage": "https://github.com/Zenedith/video-paste",
+  "main":"api",
+  "author": "Mateusz Stępniak (zenedith@wp.pl)",
+  "directories": {
+    "config": "./config",
+    "controllers": "./controllers",
+    "docs": "./docs",
+    "lib": "./lib",
+    "locales": "./locales",
+    "logs": "./logs",
+    "models": "./models",
+    "public": "./public",
+    "tests": "./test",
+    "views": "./views"
+  },
+  "repository" : {
+     "type" : "git",
+     "url" : "https://github.com/Zenedith/video-paste.git"
+  },
+  "engines" : { "node" : "0.6" },
+  "dependencies" : {
+    "validator" : "",
+    "express": "",
+    "jade": "",
+    "log": "",
+    "config" : "",
+    "node-secure" : "",
+    "loggly" : ""
+  }
+}

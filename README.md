@@ -1,4 +1,4 @@
 video-paste
 ===========
 
-video-paste
+video-paste-api

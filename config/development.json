@@ -1,0 +1,12 @@
+{
+  "app" : {
+    "port" : 3001,
+    "host" : "localhost",
+    "log_level" : "debug",
+    "log2file" : true,
+    "use_winston" : false,
+    "use_loggly" : false,
+    "use_loggly_frontend" : false,
+    "enable_google_analytics" : false
+  }
+}

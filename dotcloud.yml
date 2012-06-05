@@ -1,0 +1,11 @@
+www:
+  type: nodejs
+  environment:
+    DOTCLOUD: 1
+  config:
+    smtp_server: smtp.mailgun.org
+    smtp_port: 587
+    smtp_username: info@zenedith.mailgun.org
+    smtp_password: xxxx
+data:
+  type: redis

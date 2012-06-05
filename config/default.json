@@ -1,0 +1,39 @@
+{
+  "app" : {
+    "port" : 3001,
+    "host" : "",
+    "version" : "0.0.1",
+    "log_level" : "error",
+    "log2file" : true,
+    "use_winston" : false,
+    "use_loggly" : true,
+    "use_loggly_frontend" : false,
+    "enable_google_analytics" : true
+  },
+  "routers": {
+    "index" : {
+      "controller": "index",
+      "action": "index",
+      "url": "",
+      "method":"get",
+      "description":"index page",
+      "isRegExp" : false
+    },
+    "get_session" : {
+      "controller": "api",
+      "action": "get_session",
+      "url": "api/getSession/:api_key",
+      "method":"get",
+      "description":"get session",
+      "isRegExp" : false
+    },
+    "post_create" : {
+      "controller": "api",
+      "action": "post_create",
+      "url": "api/post",
+      "method":"get",
+      "description":"create post",
+      "isRegExp" : false
+    }
+  }
+}

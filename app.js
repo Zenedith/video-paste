@@ -6,13 +6,6 @@ if (!process.env.APP_PATH) {
   process.env.APP_PATH = __dirname;
 }
 
-if (process.env.NODE_ENV == 'dotcloud') {
-  var fs = require('fs');
-  var env = JSON.parse(fs.readFileSync('/home/dotcloud/environment.json', 'utf-8'));
-  console.log('Application info: ');
-  console.log(env);
-}
-
 process.on('uncaughtException', function (err) {
   console.log('error: ' + err);
 });
@@ -27,11 +20,20 @@ error = function (status, msg) {
 
 var
     express = require('express'),
+    config = require('config'),
+    port = config.app.port || process.env.PORT,
 //    i18n = require("i18n"),
 //    expressValidator = require('express-validator'),
-    config = require('config'),
     log = require(process.env.APP_PATH + "/lib/log"),
     controller = require(process.env.APP_PATH + "/lib/controller");
+
+if (process.env.NODE_ENV == 'dotcloud') {
+  var fs = require('fs');
+  var env = JSON.parse(fs.readFileSync('/home/dotcloud/environment.json', 'utf-8'));
+  port = env['PORT_WWW']; //override port
+}
+
+
 
   var app = express.createServer();
   // Configuration
@@ -69,31 +71,37 @@ var
 //    app.use(i18n.init);
   //  i18n.setLocale('en');
 
-    app.use('/api', function(req, res, next){
-
-      //exclude getSession method
-      if (!req.url.match(/^\/getSession\//g)) {
-
-        var sessid = req.query['sessid'];
-
-
-        // sessid isnt present
-        if (!sessid) {
-          return next(error(401, 'invalid api sessid'));
-        }
-
-        var apiSess = ['3ec6d5a02375a2b778d3bfd866a6676c1f69f8b057d24aea65e939a124e486c6'];
-
-        // sessid is invalid
-        if (!~apiSess.indexOf(sessid)) {
-          return next(error(401, 'invalid api sessid'));
-        }
-
-        req.sessid = sessid;
-      }
-
-      next();
-    });
+//    app.use('/api', function(req, res, next){
+//
+//      //exclude getSession method
+//      if (!req.url.match(/^\/getSession\//g)) {
+//
+//        var sessionId = req.query['sessionId'];
+//
+//        if (!sessionId) {
+//          console.log(req);
+//          sessionId = req.params.sessionId;
+//        }
+//
+//        console.log(sessionId);
+//
+//        // sessionId isnt present
+//        if (!sessionId) {
+//          return next(error(401, 'invalid api sessionId'));
+//        }
+//
+//        var apiSess = ['3ec6d5a02375a2b778d3bfd866a6676c1f69f8b057d24aea65e939a124e486c6'];
+//
+//        // sessionId is invalid
+//        if (!~apiSess.indexOf(sessionId)) {
+//          return next(error(401, 'invalid api sessionId'));
+//        }
+//
+//        req.sessionId = sessionId;
+//      }
+//
+//      next();
+//    });
 
     // position our routes above the error handling middleware,
     // and below our API middleware, since we want the API validation
@@ -124,6 +132,6 @@ var
     });
   });
 
-app.listen(process.env.PORT || config.app.port);
+app.listen(port);
 log.debug("Express server listening on port %d in %s mode", app.address().port, app.settings.env);
 log.debug('Using Express %s', express.version);

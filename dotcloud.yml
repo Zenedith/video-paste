@@ -4,9 +4,10 @@ www:
   ports:
     www: http
   process: node app.js
-  node_version: v0.6.18
+  node_version: v0.6.19
   environment:
     DOTCLOUD: 1
+    NODE_ENV: dotcloud
   config:
     smtp_server: smtp.mailgun.org
     smtp_port: 587

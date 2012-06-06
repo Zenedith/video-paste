@@ -1,6 +1,6 @@
 {
   "app" : {
-    "port" : 3001,
+    "port" : 0,
     "host" : "",
     "version" : "0.0.1",
     "log_level" : "error",
@@ -30,9 +30,41 @@
     "post_create" : {
       "controller": "api",
       "action": "post_create",
-      "url": "api/post",
-      "method":"get",
+      "url": "api/postLink/:sessionId",
+      "method":"post",
       "description":"create post",
+      "isRegExp" : false
+    },
+    "get_top_link" : {
+      "controller": "api",
+      "action": "get_top_link",
+      "url": "api/getTopLinks/:sessionId/:categoryId/:limit/:page",
+      "method":"get",
+      "description":"get top links",
+      "isRegExp" : false
+    },
+    "get_top_link_default1" : {
+      "controller": "api",
+      "action": "get_top_link",
+      "url": "api/getTopLinks/:sessionId/:categoryId/:limit",
+      "method":"get",
+      "description":"get top links",
+      "isRegExp" : false
+    },
+    "get_top_link_default2" : {
+      "controller": "api",
+      "action": "get_top_link",
+      "url": "api/getTopLinks/:sessionId/:categoryId",
+      "method":"get",
+      "description":"get top links",
+      "isRegExp" : false
+    },
+    "get_top_link_default3" : {
+      "controller": "api",
+      "action": "get_top_link",
+      "url": "api/getTopLinks/:sessionId",
+      "method":"get",
+      "description":"get top links",
       "isRegExp" : false
     }
   }

@@ -21,7 +21,6 @@ error = function (status, msg) {
 var
     express = require('express'),
     config = require('config'),
-    port = config.app.port || process.env.PORT,
 //    i18n = require("i18n"),
 //    expressValidator = require('express-validator'),
     log = require(process.env.APP_PATH + "/lib/log"),
@@ -29,10 +28,16 @@ var
 
 if (process.env.NODE_ENV == 'dotcloud') {
   var fs = require('fs');
-  var env = JSON.parse(fs.readFileSync('/home/dotcloud/environment.json', 'utf-8'));
-  port = env['PORT_WWW']; //override port
+  var env = JSON.parse(fs.readFileSync('environment.json', 'utf-8'));
+
+  config.app.port = env['PORT_WWW']; //override port
+  config.db.use = "redis";
+  config.db.redis.host = env['DOTCLOUD_DATA_REDIS_HOST']; //override redis host
+  config.db.redis.port = env['DOTCLOUD_DATA_REDIS_PORT']; //override redis port
+  config.db.redis.auth = env['DOTCLOUD_DATA_REDIS_PASSWORD']; //override redis auth
 }
 
+console.log(config);
 
 
   var app = express.createServer();
@@ -132,6 +137,6 @@ if (process.env.NODE_ENV == 'dotcloud') {
     });
   });
 
-app.listen(port);
+app.listen(config.app.port || process.env.PORT);
 log.debug("Express server listening on port %d in %s mode", app.address().port, app.settings.env);
 log.debug('Using Express %s', express.version);

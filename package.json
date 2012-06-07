@@ -25,6 +25,7 @@
   "dependencies" : {
     "validator" : "",
     "express": "",
+    "redis": "",
     "jade": "",
     "log": "",
     "config" : "",

@@ -1,5 +1,7 @@
 var
+  log = require(process.env.APP_PATH + "/lib/log"),
   config = require('config'),
+  Database = require(process.env.APP_PATH + "/lib/database").Database;
   secure = require("node-secure");
 
 var Api_Controller = {
@@ -25,6 +27,16 @@ var Api_Controller = {
     return true;
   },
   get_session: function (req, res, next) {
+
+    Key = require(process.env.APP_PATH + "/models/key").Key;
+    var key = new Key();
+    key.generateKey();
+
+    Database.save(key, function (err, obj) {
+      console.log('save ok', obj);
+    });
+
+//    console.log(key);
 
     //TODO TEMP!
     var

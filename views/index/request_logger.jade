@@ -1,0 +1,85 @@
+style
+  #requests {
+    background-color: whiteSmoke;
+    border: 1px solid #CCC;
+  }
+  ul {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+  .date {
+    width: 230px;
+    border-right: 1px solid #000;
+    border-bottom: 1px solid #000;
+  }
+  .url {
+    width: 400px;
+    border-right: 1px solid #000;
+    border-bottom: 1px solid #000;
+  }
+  .query_params {
+    width: 230px;
+    border-right: 1px solid #000;
+    border-bottom: 1px solid #000;
+  }
+  .post_params {
+    width: 230px;
+    border-right: 1px solid #000;
+    border-bottom: 1px solid #000;
+  }
+  .json_response {
+    border-bottom: 1px solid #000;
+  }
+
+script(type='text/javascript', src='http://code.jquery.com/jquery-1.7.2.min.js')
+script(type='text/javascript', src='/socket.io/socket.io.js')
+script
+  $(document).ready(function () {
+
+    //Crockford compliance! Define all the need variables here
+    var socket;
+
+    //- Setup the socket library. The rememberTransport and tryTransportsOnConnectTimeout
+    //- are neccessary because the defaults will cause some browsers to degrade to
+    //- crappy transports when they are disconnected (think suspended laptop) and will
+    //- subsequently stick on said crappy transport even after the network is up again.
+
+    var socket = io.connect('http://' + location.host);
+
+    //- Log our connection even and hide the disconnectMessage element in case
+    //- we are reconnecting after an interuption
+    socket.on('connect', function () {
+        console.log('Connected');
+    });
+
+    socket.on('update', function (data) {
+      console.log('update');
+      console.log(data);
+
+      var qs_html = '';
+      var post_html = '';
+
+      for (var k in data.qs) {
+        qs_html += '<li>'+ k + ': ' + data.qs[k] + '</li>';
+      }
+
+      for (var k in data.post) {
+        post_html += '<li>'+ k + ': ' + data.post[k] + '</li>';
+      }
+
+      var html = '<tr><td class="date">' + new Date() + '</td><td class="url">' + data.url + '</td><td class="query_params"><ul>' + qs_html + '</ul></td><td class="post_params"><ul>' + post_html + '</ul></td><td class="json_response">' + data.json + '</td></tr>';
+      $('#requests').append(html);
+    });
+
+    //- Handle disconnection by displaying a notice to the user and
+    //- setting a timer to try connecting in 500ms.
+    socket.on('disconnect', function () {
+        console.log('Disconnected');
+    });
+
+  });
+
+<table id="requests">
+<tr><th class="date">Data</th><th class="url">url</th><th class="query_params">Url params</th><th class="post_params">Post</th><th class="json_response">Response</th></tr>
+</table>

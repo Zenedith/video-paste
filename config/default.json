@@ -28,12 +28,28 @@
       "description":"index page",
       "isRegExp" : false
     },
+    "request_logger" : {
+      "controller": "index",
+      "action": "request_logger",
+      "url": "debug/requests",
+      "method":"get",
+      "description":"request logger",
+      "isRegExp" : false
+    },
     "get_session" : {
       "controller": "api",
       "action": "get_session",
       "url": "api/getSession/:apiKey",
       "method":"get",
       "description":"get session",
+      "isRegExp" : false
+    },
+    "login_fb" : {
+      "controller": "api",
+      "action": "login_fb",
+      "url": "api/loginByFb/:apiKey/:id/:name/:fist_name/:last_name/:locale",
+      "method":"get",
+      "description":"login by fb",
       "isRegExp" : false
     },
     "generate_key" : {

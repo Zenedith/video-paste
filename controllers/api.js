@@ -1,6 +1,7 @@
 var
   log = require(process.env.APP_PATH + "/lib/log"),
   config = require('config'),
+  RequestLogger = require(process.env.APP_PATH + "/lib/requestLogger").RequestLogger,
   secure = require("node-secure");
 
 var Api_Controller = {
@@ -36,12 +37,35 @@ var Api_Controller = {
 
     key.createNewKey(function (err, obj) {
       if (!err) {
-        res.json(new generateKey(obj));
+        var data = new generateKey(obj);
+        res.json(data);
+        RequestLogger.log(req, data);
       }
       else {
         next(err);
+        RequestLogger.log(req, err);
       }
     });
+  },
+  //api/loginByFb/:apiKey/:id/:name/:fist_name/:last_name/:locale
+  login_fb: function (req, res, next) {
+    var
+      apiKey = req.params.apiKey,
+      fbId = req.params.id,
+      name = req.params.name,
+      fist_name = req.params.fist_name,
+      last_name = req.params.last_name,
+      locale = req.params.locale;
+
+//    var ok = Api_Controller.validate_key(key);
+      //
+//          if (!ok) {
+//            return next(error(401, 'invalid api key'));
+//          }
+
+    var data = {status: 'ok'};
+    res.json(data, 201);
+    RequestLogger.log(req, data);
   },
   get_session: function (req, res, next) {
     var key = req.params.apiKey;
@@ -60,10 +84,13 @@ var Api_Controller = {
 
     sess.createNewSession(key, ip, forwardedFor, function (err, obj) {
       if (!err) {
-        res.json(new getSession(obj));
+        var data = new getSession(obj);
+        res.json(data);
+        RequestLogger.log(req, data);
       }
       else {
         next(err);
+        RequestLogger.log(req, err);
       }
     });
   },
@@ -73,24 +100,29 @@ var Api_Controller = {
       sessionId = req.params.sessionId,
       url = req.body.url || '';
 
-    console.log(req.params);
-    console.log(req.body);
+//    console.log(req.params);
+//    console.log(req.body);
 
     var ok = Api_Controller.validate_session(sessionId);
 
     if (!ok) {
-      return next(error(401, 'invalid api sessionId'));
+      var err = error(401, 'invalid api sessionId');
+      RequestLogger.log(req, err);
+      return next(err);
     }
 
     //TODO sanitize url
     console.log(url);
 
     if (!url) {
-      return next(error(400, 'Bad Request (url)'));
+      var err = error(400, 'Bad Request (url)');
+      RequestLogger.log(req, err);
+      return next(err);
     }
 
-//    res.statusCode = 201; //status 201: created
-    res.json({status: 'ok'}, 201);
+    var data = {status: 'ok'};
+    res.json(data, 201);
+    RequestLogger.log(req, data);
   },
   //get top link:  /api/getTopLinks/:sessionId/:categoryId/:limit/:page
   get_top_link: function(req, res, next) {
@@ -98,7 +130,9 @@ var Api_Controller = {
     var ok = Api_Controller.validate_session(sessionId);
 
     if (!ok) {
-      return next(error(401, 'invalid api sessionId'));
+      var err = error(401, 'invalid api sessionId');
+      RequestLogger.log(req, err);
+      return next(err);
     }
 
     var
@@ -132,6 +166,7 @@ var Api_Controller = {
     };
 
     res.json(response);
+    RequestLogger.log(req, response);
   }
 };
 

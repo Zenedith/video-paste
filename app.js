@@ -44,6 +44,7 @@ var
     config = require('config'),
 //    i18n = require("i18n"),
 //    expressValidator = require('express-validator'),
+    RequestLogger = require(process.env.APP_PATH + "/lib/requestLogger").RequestLogger,
     log = require(process.env.APP_PATH + "/lib/log"),
     controller = require(process.env.APP_PATH + "/lib/controller");
 
@@ -58,7 +59,11 @@ if (process.env.NODE_ENV == 'dotcloud') {
   config.db.redis.auth = env['DOTCLOUD_DATA_REDIS_PASSWORD']; //override redis auth
 }
 
-  var app = express.createServer();
+  var
+    app = express.createServer();
+
+  //global socketio!
+  socketio = require('socket.io').listen(app);
   // Configuration
 
 //  i18n.configure({
@@ -94,35 +99,12 @@ if (process.env.NODE_ENV == 'dotcloud') {
 //    app.use(i18n.init);
   //  i18n.setLocale('en');
 
-//    app.use('/api', function(req, res, next){
+//    app.use(express.static(__dirname + '/public'));
+//    app.use(express.compiler({src: __dirname + '/public', enable: ['less'] }));
+
+//    app.use('/api', function(req, res, next) {
 //
-//      //exclude getSession method
-//      if (!req.url.match(/^\/getSession\//g)) {
-//
-//        var sessionId = req.query['sessionId'];
-//
-//        if (!sessionId) {
-//          console.log(req);
-//          sessionId = req.params.sessionId;
-//        }
-//
-//        console.log(sessionId);
-//
-//        // sessionId isnt present
-//        if (!sessionId) {
-//          return next(error(401, 'invalid api sessionId'));
-//        }
-//
-//        var apiSess = ['3ec6d5a02375a2b778d3bfd866a6676c1f69f8b057d24aea65e939a124e486c6'];
-//
-//        // sessionId is invalid
-//        if (!~apiSess.indexOf(sessionId)) {
-//          return next(error(401, 'invalid api sessionId'));
-//        }
-//
-//        req.sessionId = sessionId;
-//      }
-//
+//      //count IP calls
 //      next();
 //    });
 
@@ -146,6 +128,7 @@ if (process.env.NODE_ENV == 'dotcloud') {
       }
 
       res.send(err, { 'Content-Type': 'application/json' }, err.code);
+      RequestLogger.log(req, err);
     });
 
     // our custom JSON 404 middleware. Since it's placed last
@@ -153,7 +136,9 @@ if (process.env.NODE_ENV == 'dotcloud') {
     // invoke next() and do not respond.
     app.use(function(req, res, next){
 //      console.log('404');
-      res.send(error(404, 'Bad method name'), { 'Content-Type': 'application/json' }, 404);
+      var err = error(404, 'Bad method name');
+      res.send(err, { 'Content-Type': 'application/json' }, 404);
+      RequestLogger.log(req, err);
     });
   });
 

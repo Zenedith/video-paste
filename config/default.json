@@ -68,6 +68,22 @@
       "description":"create post",
       "isRegExp" : false
     },
+    "post_like" : {
+      "controller": "api",
+      "action": "post_like",
+      "url": "api/postLike/:sessionId/:postId",
+      "method":"post",
+      "description":"like post",
+      "isRegExp" : false
+    },
+    "post_rate" : {
+      "controller": "api",
+      "action": "post_view",
+      "url": "api/postRate/:sessionId/:postId",
+      "method":"post",
+      "description":"rate post",
+      "isRegExp" : false
+    },
     "get_top_link" : {
       "controller": "api",
       "action": "get_top_link",

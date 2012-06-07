@@ -42,8 +42,7 @@ var Api_Controller = {
         RequestLogger.log(req, data);
       }
       else {
-        next(err);
-        RequestLogger.log(req, err);
+        return next(err);
       }
     });
   },
@@ -89,14 +88,48 @@ var Api_Controller = {
         RequestLogger.log(req, data);
       }
       else {
-        next(err);
-        RequestLogger.log(req, err);
+        return next(err);
       }
     });
   },
-  //create post
+
+  //api/postLike/:sessionId/:postId
+  post_like: function(req, res, next) {
+
+  },
+
+  //api/postRate/:sessionId/:postId
+  //rate from post body
+  post_rate: function(req, res, next) {
+    var
+      rate = ~~req.body.rate || 0;
+
+    if (rate === 0) {
+      var err = error(400, 'Bad Request (rate)');
+      return next(err);
+    }
+
+    //check accepted value
+    if (rate > 1) {
+      rate = 1;
+    }
+
+    if (rate < -1) {
+      rate = -1;
+    }
+
+    console.log(rate);
+    console.log(req.body.rate);
+
+
+  },
+
+  // create postLink
+  // url and categoryId from POST bod
   post_create: function(req, res, next) {
     var
+      sanitize = require('validator').sanitize,
+      check = require('validator').check,
       sessionId = req.params.sessionId,
       url = req.body.url || '';
 
@@ -106,23 +139,43 @@ var Api_Controller = {
     var ok = Api_Controller.validate_session(sessionId);
 
     if (!ok) {
-      var err = error(401, 'invalid api sessionId');
-      RequestLogger.log(req, err);
+      var err = error(603, 'invalid api sessionId');
       return next(err);
     }
 
-    //TODO sanitize url
-    console.log(url);
-
-    if (!url) {
-      var err = error(400, 'Bad Request (url)');
-      RequestLogger.log(req, err);
+    try {
+      url = sanitize(url).xss();
+      check(url).notEmpty().isUrl();
+    }
+    catch (e) {
+      var err = error(400, 'Bad request (url param)');
       return next(err);
     }
 
-    var data = {status: 'ok'};
-    res.json(data, 201);
-    RequestLogger.log(req, data);
+    var
+      authorId = 0,     //TODO author from session
+      categoryId = req.body.categoryId || 0;
+      Post = require(process.env.APP_PATH + "/models/post").Post,
+      postLink = require(process.env.APP_PATH + "/models/response/postLink").postLink,
+      post = new Post();
+
+    try {
+      post.createNewPost(url, categoryId, authorId, function (err, obj) {
+        if (!err) {
+          var data = new postLink(obj);
+
+          res.json(data, 201);
+          RequestLogger.log(req, data);
+        }
+        else {
+          return next(err);
+        }
+      });
+    }
+    catch (err) {
+      return next(err);
+    }
+
   },
   //get top link:  /api/getTopLinks/:sessionId/:categoryId/:limit/:page
   get_top_link: function(req, res, next) {
@@ -130,8 +183,7 @@ var Api_Controller = {
     var ok = Api_Controller.validate_session(sessionId);
 
     if (!ok) {
-      var err = error(401, 'invalid api sessionId');
-      RequestLogger.log(req, err);
+      var err = error(603, 'invalid api sessionId');
       return next(err);
     }
 

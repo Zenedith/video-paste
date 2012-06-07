@@ -29,6 +29,7 @@
     "jade": "",
     "log": "",
     "config" : "",
+    "socket.io" : "",
     "node-secure" : "",
     "loggly" : ""
   }

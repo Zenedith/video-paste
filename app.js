@@ -11,42 +11,22 @@ process.on('uncaughtException', function (err) {
 });
 
 
-//global
-error = function (code, msg) {
-  var err = new Error(msg);
-
-  switch (code) {
-    case 400:
-      err.error = 'ERR_BAD_REQUEST';
-      break;
-    case 401:
-      err.error = 'ERR_UNAUTHORIZED';
-      break;
-    case 403:
-      err.error = 'ERR_NOT_ALLOWED';
-      break;
-    case 404:
-      err.error = 'ERR_NOT_FOUND';
-      break;
-    case 405:
-      err.error = 'ERR_METHOD_NOT_ALLOWED';
-    break;
-  }
-
-  err.data = '';
-  err.code = code;
-  err.msg = msg;
-  return err;
-};
-
 var
     express = require('express'),
     config = require('config'),
 //    i18n = require("i18n"),
 //    expressValidator = require('express-validator'),
+    Errors = require(process.env.APP_PATH + "/models/errors").Errors,
     RequestLogger = require(process.env.APP_PATH + "/lib/requestLogger").RequestLogger,
     log = require(process.env.APP_PATH + "/lib/log"),
     controller = require(process.env.APP_PATH + "/lib/controller");
+
+
+
+//global
+error = Errors;
+
+
 
 if (process.env.NODE_ENV == 'dotcloud') {
   var fs = require('fs');

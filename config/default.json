@@ -60,6 +60,14 @@
       "description":"generate ket",
       "isRegExp" : false
     },
+    "post_get" : {
+      "controller": "api",
+      "action": "post_get",
+      "url": "api/postLink/:sessionId/:postId",
+      "method":"get",
+      "description":"get post",
+      "isRegExp" : false
+    },
     "post_create" : {
       "controller": "api",
       "action": "post_create",
@@ -68,17 +76,17 @@
       "description":"create post",
       "isRegExp" : false
     },
-    "post_like" : {
+    "post_view" : {
       "controller": "api",
-      "action": "post_like",
-      "url": "api/postLike/:sessionId/:postId",
+      "action": "post_view",
+      "url": "api/postViews/:sessionId/:postId",
       "method":"post",
-      "description":"like post",
+      "description":"post view increase",
       "isRegExp" : false
     },
     "post_rate" : {
       "controller": "api",
-      "action": "post_view",
+      "action": "post_rate",
       "url": "api/postRate/:sessionId/:postId",
       "method":"post",
       "description":"rate post",

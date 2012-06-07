@@ -93,16 +93,85 @@ var Api_Controller = {
     });
   },
 
-  //api/postLike/:sessionId/:postId
-  post_like: function(req, res, next) {
+  //api/postLink/:sessionId/:postId
+  post_get: function(req, res, next) {
+    var
+      sessionId = req.params.sessionId,
+      postId = req.params.postId || 0;
 
+    if (postId < 1) {
+      var err = error(400, 'Bad Request (postId)');
+      return next(err);
+    }
+
+    var
+      Post = require(process.env.APP_PATH + "/models/post").Post,
+      postLink = require(process.env.APP_PATH + "/models/response/postLink").postLink,
+      post = new Post();
+
+    post.load(postId, function (err, obj) {
+
+      console.log(obj);
+
+      if (!err) {
+        var data = new postLink(obj);
+
+        res.json(data);
+        RequestLogger.log(req, data);
+      }
+      else {
+        var err = error(400, 'Bad Request (postId)');
+        return next(err);
+      }
+    });
+  },
+
+
+  //api/postViews/:sessionId/:postId
+  post_view: function(req, res, next) {
+    var
+      sessionId = req.params.sessionId,
+      postId = req.params.postId || 0;
+
+    if (postId < 1) {
+      var err = error(400, 'Bad Request (postId)');
+      return next(err);
+    }
+
+    var
+      Post = require(process.env.APP_PATH + "/models/post").Post,
+      postViews = require(process.env.APP_PATH + "/models/response/postViews").postViews,
+      post = new Post();
+
+    post.views(postId, function (err, obj) {
+      console.log(err);
+      console.log(obj);
+
+      if (!err) {
+        var data = new postViews(obj);
+
+        res.json(data);
+        RequestLogger.log(req, data);
+      }
+      else {
+        var err = error(400, 'Bad Request (postId)');
+        return next(err);
+      }
+    });
   },
 
   //api/postRate/:sessionId/:postId
   //rate from post body
   post_rate: function(req, res, next) {
     var
+      sessionId = req.params.sessionId,
+      postId = req.params.postId || 0,
       rate = ~~req.body.rate || 0;
+
+    if (postId < 1) {
+      var err = error(400, 'Bad Request (postId)');
+      return next(err);
+    }
 
     if (rate === 0) {
       var err = error(400, 'Bad Request (rate)');
@@ -118,10 +187,23 @@ var Api_Controller = {
       rate = -1;
     }
 
-    console.log(rate);
-    console.log(req.body.rate);
+    var
+      Post = require(process.env.APP_PATH + "/models/post").Post,
+      postRate = require(process.env.APP_PATH + "/models/response/postRate").postRate,
+      post = new Post();
 
+    post.rate(postId, rate, function (err, obj) {
+      if (!err) {
+        var data = new postRate(obj);
 
+        res.json(data);
+        RequestLogger.log(req, data);
+      }
+      else {
+        var err = error(400, 'Bad Request (postId)');
+        return next(err);
+      }
+    });
   },
 
   // create postLink
@@ -155,8 +237,8 @@ var Api_Controller = {
     var
       authorId = 0,     //TODO author from session
       categoryId = req.body.categoryId || 0;
-      Post = require(process.env.APP_PATH + "/models/post").Post,
       postLink = require(process.env.APP_PATH + "/models/response/postLink").postLink,
+      Post = require(process.env.APP_PATH + "/models/post").Post,
       post = new Post();
 
     try {
@@ -199,7 +281,7 @@ var Api_Controller = {
       url: "https://www.youtube.com/watch?v=hFmPRt_B3Tk&feature=g-all-f",
       author: "zenedith",
       views: 12222322,
-      likes: 10001211,
+      rate: 10001211,
       added: 1339013450
     };
 

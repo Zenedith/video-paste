@@ -14,7 +14,7 @@ var Post = function ()
   this.__added = 0;
   this.__authorId = 0;
   this.__url = '';
-  this.__likes = 0;
+  this.__rate = 0;
   this.__views = 0;
 
   this.createNewPost = function (url, categoryId, authorId, callback) {
@@ -33,6 +33,21 @@ var Post = function ()
     Database.save(this, callback);
   };
 
+  this.load = function (id, callback) {
+    this.setId(id);
+    Database.load(this, callback);
+  };
+
+  this.rate = function (id, rate, callback) {
+    this.setId(id);
+    Database.incr(this, '__rate', callback);
+  };
+
+  this.views = function (id, callback) {
+    this.setId(id);
+    Database.incr(this, '__views', callback);
+  };
+
   this.getCategoryId = function () {
     return this.__categoryId;
   };
@@ -49,14 +64,15 @@ var Post = function ()
     return this.__url;
   };
 
-  this.getLikes = function () {
-    return this.__likes;
+  this.getRating = function () {
+    return this.__rate;
   };
 
   this.getViews = function () {
     return this.__views;
   };
 };
+
 
 //extending base class
 //util.inherits(Post, Base);

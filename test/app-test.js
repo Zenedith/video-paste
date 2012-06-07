@@ -66,3 +66,48 @@ exports.testPostLinkMissingParams = function (beforeExit, assert) {
 //  }
 //);
 //};
+//
+//exports.testpostRate = function (beforeExit, assert) {
+//
+//  assert.response(app, {
+//    url: '/api/postRate/8bb7ccb5aee1803bdcb482fe48a6997e7dfb9a27/1',
+//    method: 'POST',
+////    headers: { 'Content-Type': 'text/html; charset=utf-8' },
+//    data: qs.stringify({
+//      rate: 1
+//    })
+//
+//  }, {
+//    status: 200,
+//    headers: { 'Content-Type': 'application/json; charset=utf-8' }
+//  },
+//  function(res) {
+//    var json = JSON.parse(res.body);
+//    console.log(json);
+//    assert.equal(json.status, 'ok');
+//  }
+//  );
+//};
+
+exports.testpostRateInvalid = function (beforeExit, assert) {
+
+  assert.response(app, {
+    url: '/api/postRate/8bb7ccb5aee1803bdcb482fe48a6997e7dfb9a27/1',
+    method: 'POST',
+//    headers: { 'Content-Type': 'text/html; charset=utf-8' },
+    data: qs.stringify({
+      rate: -2
+    })
+
+  }, {
+    status: 400,
+    headers: { 'Content-Type': 'application/json; charset=utf-8' }
+  },
+  function(res) {
+    var json = JSON.parse(res.body);
+//    console.log(json);
+    assert.equal(json.error, 'ERR_BAD_REQUEST');
+    assert.equal(json.code, 400);
+  }
+);
+};

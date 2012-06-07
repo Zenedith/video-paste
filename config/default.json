@@ -31,7 +31,7 @@
     "get_session" : {
       "controller": "api",
       "action": "get_session",
-      "url": "api/getSession/:api_key",
+      "url": "api/getSession/:apiKey",
       "method":"get",
       "description":"get session",
       "isRegExp" : false

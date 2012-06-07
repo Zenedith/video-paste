@@ -12,18 +12,18 @@ var Key = function ()
   const KEY_VERSION = 1;
 
   this.__className = "Key";
-  this.__key = '';
   this.__lifetime = 0;
   this.__version = 0;
   this.__last_used = 0;
 
   this.generateKey = function () {
-    Key_Generator = require(process.env.APP_PATH + "/models/key/generator").Key_Generator;
+    log.debug('Key.generateKey()');
     var
+      Key_Generator = require(process.env.APP_PATH + "/models/key/generator").Key_Generator,
       kgen = new Key_Generator(),
       current_timestamp = Math.round(+new Date()/1000);
 
-    this.__key = kgen.generateKey();
+    this.setId(kgen.generateKey()); //id is a key!
     this.__lifetime = current_timestamp + KEY_LIFETIME;
     this.__version = KEY_VERSION;
     this.__last_used = current_timestamp;

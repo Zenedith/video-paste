@@ -1,12 +1,14 @@
 var
   log = require(process.env.APP_PATH + "/lib/log"),
   config = require('config'),
-  Database = require(process.env.APP_PATH + "/lib/database").Database;
   secure = require("node-secure");
 
 var Api_Controller = {
-  validate_session: function (req, res, next) {
-    var sessionId = req.params.sessionId;
+  validate_key: function (key) {
+    //TODO
+    return true;
+  },
+  validate_session: function (sessionId) {
 
 //    console.log(sessionId);
 
@@ -27,37 +29,33 @@ var Api_Controller = {
     return true;
   },
   get_session: function (req, res, next) {
+    var key = req.params.apiKey;
+//    var ok = Api_Controller.validate_key(key);
+//
+//    if (!ok) {
+//      return next(error(401, 'invalid api key'));
+//    }
 
-    Key = require(process.env.APP_PATH + "/models/key").Key;
-    var key = new Key();
-    key.generateKey();
-
-    Database.save(key, function (err, obj) {
-      console.log('save ok', obj);
-    });
-
-//    console.log(key);
-
-    //TODO TEMP!
     var
-      api_key = req.params.api_key,
-      apiKeys = ['win7', 'android'];
+      ip = res.connection.remoteAddress,
+      forwardedFor = '',
+      Session_Generator = require(process.env.APP_PATH + "/models/session/generator").Session_Generator,
+      getSession = require(process.env.APP_PATH + "/models/response/getSession").getSession,
+      sess = new Session_Generator();
 
-    //validate key
-    if (!~apiKeys.indexOf(api_key)) {
-      return next(error(401, 'invalid api key'));
-    }
-
-    if (api_key) {
-      res.send({"sess":"3ec6d5a02375a2b778d3bfd866a6676c1f69f8b057d24aea65e939a124e486c6"});
-    }
-    else {
-      next();
-    }
+    sess.createNewSession(key, ip, forwardedFor, function (err, obj) {
+      if (!err) {
+        res.send(new getSession(obj));
+      }
+      else {
+        next();
+      }
+    });
   },
   //create post
   post_create: function(req, res, next) {
-    var ok = Api_Controller.validate_session(req);
+    var sessionId = req.params.sessionId;
+    var ok = Api_Controller.validate_session(sessionId);
 
     if (!ok) {
       return next(error(401, 'invalid api sessionId'));
@@ -67,7 +65,8 @@ var Api_Controller = {
   },
   //get top link:  /api/getTopLinks/:sessionId/:categoryId/:limit/:page
   get_top_link: function(req, res, next) {
-    var ok = Api_Controller.validate_session(req);
+    var sessionId = req.params.sessionId;
+    var ok = Api_Controller.validate_session(sessionId);
 
     if (!ok) {
       return next(error(401, 'invalid api sessionId'));

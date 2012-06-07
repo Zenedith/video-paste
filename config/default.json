@@ -36,6 +36,14 @@
       "description":"get session",
       "isRegExp" : false
     },
+    "generate_key" : {
+      "controller": "api",
+      "action": "generate_key",
+      "url": "api/generateKey",
+      "method":"get",
+      "description":"generate ket",
+      "isRegExp" : false
+    },
     "post_create" : {
       "controller": "api",
       "action": "post_create",

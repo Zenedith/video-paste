@@ -13,20 +13,35 @@ var Api_Controller = {
 //    console.log(sessionId);
 
     // sessionId isnt present
-    if (!sessionId) {
-      return false;
-    }
-
-    //TODO TEMP!
-    var apiSess = ['3ec6d5a02375a2b778d3bfd866a6676c1f69f8b057d24aea65e939a124e486c6'];
-
-    // sessionId is invalid
-    if (!~apiSess.indexOf(sessionId)) {
-      return false;
-    }
-
-    req.sessionId = sessionId;
+//    if (!sessionId) {
+//      return false;
+//    }
+//
+//    //TODO TEMP!
+//    var apiSess = ['3ec6d5a02375a2b778d3bfd866a6676c1f69f8b057d24aea65e939a124e486c6'];
+//
+//    // sessionId is invalid
+//    if (!~apiSess.indexOf(sessionId)) {
+//      return false;
+//    }
+//
+//    req.sessionId = sessionId;
     return true;
+  },
+  generate_key: function (req, res, next) {
+    var
+      Key_Generator = require(process.env.APP_PATH + "/models/key/generator").Key_Generator,
+      generateKey = require(process.env.APP_PATH + "/models/response/generateKey").generateKey,
+      key = new Key_Generator();
+
+    key.createNewKey(function (err, obj) {
+      if (!err) {
+        res.json(new generateKey(obj));
+      }
+      else {
+        next(err);
+      }
+    });
   },
   get_session: function (req, res, next) {
     var key = req.params.apiKey;
@@ -45,23 +60,37 @@ var Api_Controller = {
 
     sess.createNewSession(key, ip, forwardedFor, function (err, obj) {
       if (!err) {
-        res.send(new getSession(obj));
+        res.json(new getSession(obj));
       }
       else {
-        next();
+        next(err);
       }
     });
   },
   //create post
   post_create: function(req, res, next) {
-    var sessionId = req.params.sessionId;
+    var
+      sessionId = req.params.sessionId,
+      url = req.body.url || '';
+
+    console.log(req.params);
+    console.log(req.body);
+
     var ok = Api_Controller.validate_session(sessionId);
 
     if (!ok) {
       return next(error(401, 'invalid api sessionId'));
     }
 
-    res.send({status: 'ok'}); //status 202
+    //TODO sanitize url
+    console.log(url);
+
+    if (!url) {
+      return next(error(400, 'Bad Request (url)'));
+    }
+
+//    res.statusCode = 201; //status 201: created
+    res.json({status: 'ok'}, 201);
   },
   //get top link:  /api/getTopLinks/:sessionId/:categoryId/:limit/:page
   get_top_link: function(req, res, next) {
@@ -102,7 +131,7 @@ var Api_Controller = {
       result: data
     };
 
-    res.send(response);
+    res.json(response);
   }
 };
 

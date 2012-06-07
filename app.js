@@ -12,9 +12,30 @@ process.on('uncaughtException', function (err) {
 
 
 //global
-error = function (status, msg) {
+error = function (code, msg) {
   var err = new Error(msg);
-  err.status = status;
+
+  switch (code) {
+    case 400:
+      err.error = 'ERR_BAD_REQUEST';
+      break;
+    case 401:
+      err.error = 'ERR_UNAUTHORIZED';
+      break;
+    case 403:
+      err.error = 'ERR_NOT_ALLOWED';
+      break;
+    case 404:
+      err.error = 'ERR_NOT_FOUND';
+      break;
+    case 405:
+      err.error = 'ERR_METHOD_NOT_ALLOWED';
+    break;
+  }
+
+  err.data = '';
+  err.code = code;
+  err.msg = msg;
   return err;
 };
 
@@ -36,9 +57,6 @@ if (process.env.NODE_ENV == 'dotcloud') {
   config.db.redis.port = env['DOTCLOUD_DATA_REDIS_PORT']; //override redis port
   config.db.redis.auth = env['DOTCLOUD_DATA_REDIS_PASSWORD']; //override redis auth
 }
-
-console.log(config);
-
 
   var app = express.createServer();
   // Configuration
@@ -120,22 +138,27 @@ console.log(config);
     // in order, but ONLY those with an arity of 4, ignoring
     // regular middleware.
     app.use(function(err, req, res, next){
-      log.error(err.message);
-
+//      log.error(err.message);
+//      console.log('50x');
+//      console.log(err);
       if (process.env.NODE_ENV != 'development') {
         err.message = 'Unexpected api problem';
       }
 
-      res.send(err.status || 500, { error: err.message });
+      res.send(err, { 'Content-Type': 'application/json' }, err.code);
     });
 
     // our custom JSON 404 middleware. Since it's placed last
     // it will be the last middleware called, if all others
     // invoke next() and do not respond.
-    app.use(function(req, res){
-      res.send(404, { error: "Bad method name" });
+    app.use(function(req, res, next){
+//      console.log('404');
+      res.send(error(404, 'Bad method name'), { 'Content-Type': 'application/json' }, 404);
     });
   });
+
+//expresso need it
+module.exports = app;
 
 app.listen(config.app.port || process.env.PORT);
 log.debug("Express server listening on port %d in %s mode", app.address().port, app.settings.env);

@@ -34,10 +34,56 @@ var Session = function ()
     this.__userId = userId || 0;
   };
 
+  this.isValidSession = function (id, callback) {
+    var
+      _this = this;
+
+    this.load(id, function(err, obj) {
+      if (obj === null) {
+        return callback(error(603, 'invalid api sessionId'), null);
+      }
+
+      var
+        current_timestamp = Math.round(+new Date()/1000);
+
+      //check expiration time
+      if (obj.getLifeTime() < current_timestamp) {
+        return callback(error(603, 'sessionId has expired'), null);
+      }
+
+      //TODO check key
+      var
+        Key = require(process.env.APP_PATH + "/models/key").Key,
+        key_obj = new Key(),
+        apiKey = _this.getApiKey();
+
+      //validate key
+      key_obj.isValidKey(apiKey, function (err, _obj_) {
+
+        //if something wrong
+        if (err) {
+          return next(err);
+        }
+
+        //renew session
+        _this.setDBValue(id, '__lifetime', (current_timestamp + SESSION_LIFETIME), function (err, __obj__) {
+          return callback(err, obj);  //call calback with full loaded obj, not _obj_ or __obj__
+        });
+      });
+    });
+  };
+};
+
+Session.prototype.getLifeTime = function() {
+  return this.__lifetime;
 };
 
 Session.prototype.getUserId = function() {
   return this.__userId;
+};
+
+Session.prototype.getApiKey = function() {
+  return this.__key;
 };
 
 //extending base class

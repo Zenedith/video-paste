@@ -1,7 +1,9 @@
 var
   app = require(__dirname + '/../app'),
   qs = require('qs'),
+  postId = 1,
   apikey = 'a3ca844f14fbb45b',
+  sessId = '0f9311d1495a9f1155a764e678a70f1ec7a3c7c2',  //expired by one hour
   secure = require("node-secure");
 
 
@@ -31,7 +33,7 @@ var
 //
 //exports.testPostLinkMissingParams = function (beforeExit, assert) {
 //  assert.response(app, {
-//    url: '/api/postLink/8bb7ccb5aee1803bdcb482fe48a6997e7dfb9a27',
+//    url: '/api/postLink/' + sessId + '',
 //    method: 'POST',
 //    headers: { 'Content-Type': 'text/html; charset=utf-8' }
 //  }, {
@@ -49,7 +51,7 @@ var
 //exports.testPostLink = function (beforeExit, assert) {
 //
 //  assert.response(app, {
-//    url: '/api/postLink/8bb7ccb5aee1803bdcb482fe48a6997e7dfb9a27',
+//    url: '/api/postLink/' + sessId + '',
 //    method: 'POST',
 ////    headers: { 'Content-Type': 'text/html; charset=utf-8' },
 //    data: qs.stringify({
@@ -67,11 +69,44 @@ var
 //  }
 //);
 //};
+//exports.testGetPostLinkInvalidSess = function (beforeExit, assert) {
+//
+//  assert.response(app, {
+//    url: '/api/postLink/nosess/' + postId,
+//    method: 'GET',
+//    headers: { 'Content-Type': 'text/html; charset=utf-8' }
+//  }, {
+//    status: 603,
+//    headers: { 'Content-Type': 'application/json; charset=utf-8' }
+//  },
+//  function(res) {
+//    var json = JSON.parse(res.body);
+//    assert.equal(json.error, 'ERR_INVALID_SESSION');
+//    assert.equal(json.code, 603);
+//  }
+//  );
+//};
+//exports.testGetPostLinkValidSess = function (beforeExit, assert) {
+//
+//  assert.response(app, {
+//    url: '/api/postLink/' + sessId + '/' + postId,
+//    method: 'GET',
+//    headers: { 'Content-Type': 'text/html; charset=utf-8' }
+//  }, {
+//    status: 200,
+//    headers: { 'Content-Type': 'application/json; charset=utf-8' }
+//  },
+//  function(res) {
+//    var json = JSON.parse(res.body);
+//
+//  }
+//);
+//};
 //
 //exports.testPostRate = function (beforeExit, assert) {
 //
 //  assert.response(app, {
-//    url: '/api/postRate/8bb7ccb5aee1803bdcb482fe48a6997e7dfb9a27/1',
+//    url: '/api/postRate/' + sessId + '/' + postId,
 //    method: 'POST',
 ////    headers: { 'Content-Type': 'text/html; charset=utf-8' },
 //    data: qs.stringify({
@@ -79,13 +114,14 @@ var
 //    })
 //
 //  }, {
-//    status: 200,
+////    status: 200,
 //    headers: { 'Content-Type': 'application/json; charset=utf-8' }
 //  },
 //  function(res) {
 //    var json = JSON.parse(res.body);
 //    console.log(json);
-//    assert.equal(json.status, 'ok');
+//    assert.equal(json.postId, postId);
+//    assert.ok(json.rate > 0);
 //  }
 //  );
 //};
@@ -93,7 +129,7 @@ var
 //exports.testPostRateInvalid = function (beforeExit, assert) {
 //
 //  assert.response(app, {
-//    url: '/api/postRate/8bb7ccb5aee1803bdcb482fe48a6997e7dfb9a27/1',
+//    url: '/api/postRate/' + sessId + '/' + postId,
 //    method: 'POST',
 ////    headers: { 'Content-Type': 'text/html; charset=utf-8' },
 //    data: qs.stringify({
@@ -151,7 +187,7 @@ var
 //  );
 //};
 //
-//exports.testGetSession = function (beforeExit, assert) {
+//exports.testGetSessionValid = function (beforeExit, assert) {
 //
 //  assert.response(app, {
 //    url: '/api/getSession/' + apikey,
@@ -188,4 +224,63 @@ var
 //  }
 //  );
 //};
-
+//
+//exports.testPostValid = function (beforeExit, assert) {
+//
+//  assert.response(app, {
+//    url: '/api/postViews/' + sessId + '/' + postId,
+//    method: 'POST',
+////    headers: { 'Content-Type': 'text/html; charset=utf-8' }
+//  }, {
+//    status: 200,
+//    headers: { 'Content-Type': 'application/json; charset=utf-8' }
+//  },
+//  function(res) {
+//    var json = JSON.parse(res.body);
+////    console.log(json);
+//    assert.equal(json.postId, postId);
+////    assert.equal(json.views, 1);
+//  }
+//  );
+//};
+//
+//exports.testPostValidInvalidPostId = function (beforeExit, assert) {
+//
+//  assert.response(app, {
+//    url: '/api/postViews/' + sessId + '/-1',
+//    method: 'POST',
+////    headers: { 'Content-Type': 'text/html; charset=utf-8' }
+//  }, {
+//    status: 400,
+//    headers: { 'Content-Type': 'application/json; charset=utf-8' }
+//  },
+//  function(res) {
+//    var json = JSON.parse(res.body);
+//    assert.equal(json.error, 'ERR_BAD_REQUEST');
+//    assert.equal(json.code, 400);
+//  }
+//  );
+//};
+//
+//exports.testGetTopLinksValid = function (beforeExit, assert) {
+//
+//  assert.response(app, {
+//    url: '/api/getTopLinks/' + sessId,
+//    method: 'GET',
+//    headers: { 'Content-Type': 'text/html; charset=utf-8' }
+//  }, {
+//    status: 200,
+//    headers: { 'Content-Type': 'application/json; charset=utf-8' }
+//  },
+//  function(res) {
+//    var json = JSON.parse(res.body);
+////    console.log(json);
+//    assert.isNotNull(json.count);
+//    assert.isNotNull(json.pages);
+//    assert.isNotNull(json.currentPage);
+//    assert.isNotNull(json.isNextPage);
+//    assert.isNotNull(json.isPrevPage);
+//    assert.isNotNull(json.result);
+//  }
+//  );
+//};

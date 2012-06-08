@@ -47,17 +47,21 @@ var Api_Controller = {
         accountType = require(process.env.APP_PATH + "/models/user/accountType").accountType,
         user = new User();
 
-      user.getIdByExternalId(fbId, accountType.FACEBOOK, function(err, id) {
+      user.getIdByExternalId(fbId, accountType.FACEBOOK, function(err2, id) {
+
+        if (err2) {
+          return next(err2);
+        }
+
         //if user not finded, create new
         if (!id) {
-          user.createNewFbUser(fbId, name, fist_name, last_name, locale, function (err, obj) {
-            if (!err) {
+          user.createNewFbUser(fbId, name, fist_name, last_name, locale, function (err3, obj) {
+            if (!err3) {
               req.userId = obj.getId(); //add info about user and forward to get session method
               return Api_Controller.get_session(req, res, next);
             }
-            else {
-              return next(err);
-            }
+
+            return next(err3);
           });
         }
         else {
@@ -99,39 +103,49 @@ var Api_Controller = {
         }
       });
     });
-
   },
 
   //api/postLink/:sessionId/:postId
   post_get: function(req, res, next) {
     var
-      sessionId = req.params.sessionId,
-      postId = req.params.postId || 0;
+      Session = require(process.env.APP_PATH + "/models/session").Session,
+      sess_obj = new Session(),
+      sessionId = req.params.sessionId;
 
-    if (postId < 1) {
-      var err = error(400, 'Bad Request (postId)');
-      return next(err);
-    }
+    //validate session and key
+    sess_obj.isValidSession(sessionId, function (err, obj) {
 
-    var
-      Post = require(process.env.APP_PATH + "/models/post").Post,
-      postLink = require(process.env.APP_PATH + "/models/response/postLink").postLink,
-      post = new Post();
-
-    post.load(postId, function (err, obj) {
-
-      console.log(obj);
-
-      if (!err) {
-        var data = new postLink(obj);
-
-        res.json(data);
-        RequestLogger.log(req, data);
+      //if something wrong
+      if (err) {
+        return next(err);
       }
-      else {
+
+      var
+        postId = req.params.postId || 0;
+
+      if (postId < 1) {
         var err = error(400, 'Bad Request (postId)');
         return next(err);
       }
+
+      var
+        Post = require(process.env.APP_PATH + "/models/post").Post,
+        postLink = require(process.env.APP_PATH + "/models/response/postLink").postLink,
+        post = new Post();
+
+      post.load(postId, function (err, obj) {
+
+        if (!err) {
+          var data = new postLink(obj);
+
+          res.json(data);
+          RequestLogger.log(req, data);
+        }
+        else {
+          var err = error(400, 'Bad Request (postId)');
+          return next(err);
+        }
+      });
     });
   },
 
@@ -139,33 +153,46 @@ var Api_Controller = {
   //api/postViews/:sessionId/:postId
   post_view: function(req, res, next) {
     var
-      sessionId = req.params.sessionId,
-      postId = req.params.postId || 0;
+      Session = require(process.env.APP_PATH + "/models/session").Session,
+      sess_obj = new Session(),
+      sessionId = req.params.sessionId;
 
-    if (postId < 1) {
-      var err = error(400, 'Bad Request (postId)');
-      return next(err);
-    }
+    //validate session and key
+    sess_obj.isValidSession(sessionId, function (err, obj) {
 
-    var
-      Post = require(process.env.APP_PATH + "/models/post").Post,
-      postViews = require(process.env.APP_PATH + "/models/response/postViews").postViews,
-      post = new Post();
-
-    post.views(postId, function (err, obj) {
-      console.log(err);
-      console.log(obj);
-
-      if (!err) {
-        var data = new postViews(obj);
-
-        res.json(data);
-        RequestLogger.log(req, data);
+      //if something wrong
+      if (err) {
+        return next(err);
       }
-      else {
+
+      var
+        postId = req.params.postId || 0;
+
+      if (postId < 1) {
         var err = error(400, 'Bad Request (postId)');
         return next(err);
       }
+
+      var
+        Post = require(process.env.APP_PATH + "/models/post").Post,
+        postViews = require(process.env.APP_PATH + "/models/response/postViews").postViews,
+        post = new Post();
+
+      post.views(postId, function (err, obj) {
+  //      console.log(err);
+  //      console.log(obj);
+
+        if (!err) {
+          var data = new postViews(obj);
+
+          res.json(data);
+          RequestLogger.log(req, data);
+        }
+        else {
+          var err = error(400, 'Bad Request (postId)');
+          return next(err);
+        }
+      });
     });
   },
 
@@ -173,45 +200,57 @@ var Api_Controller = {
   //rate from post body
   post_rate: function(req, res, next) {
     var
-      sessionId = req.params.sessionId,
-      postId = req.params.postId || 0,
-      rate = ~~req.body.rate || 0;
+      Session = require(process.env.APP_PATH + "/models/session").Session,
+      sess_obj = new Session(),
+      sessionId = req.params.sessionId;
 
-    if (postId < 1) {
-      var err = error(400, 'Bad Request (postId)');
-      return next(err);
-    }
+    //validate session and key
+    sess_obj.isValidSession(sessionId, function (err, obj) {
 
-    if (rate === 0) {
-      var err = error(400, 'Bad Request (rate)');
-      return next(err);
-    }
-
-    //check accepted value
-    if (rate > 1) {
-      rate = 1;
-    }
-
-    if (rate < -1) {
-      rate = -1;
-    }
-
-    var
-      Post = require(process.env.APP_PATH + "/models/post").Post,
-      postRate = require(process.env.APP_PATH + "/models/response/postRate").postRate,
-      post = new Post();
-
-    post.rate(postId, rate, function (err, obj) {
-      if (!err) {
-        var data = new postRate(obj);
-
-        res.json(data);
-        RequestLogger.log(req, data);
+      //if something wrong
+      if (err) {
+        return next(err);
       }
-      else {
+
+      var
+        postId = req.params.postId || 0,
+        rate = ~~req.body.rate || 0;
+
+      if (postId < 1) {
         var err = error(400, 'Bad Request (postId)');
         return next(err);
       }
+
+      if (rate === 0) {
+        var err = error(400, 'Bad Request (rate)');
+        return next(err);
+      }
+
+      //check accepted value
+      if (rate > 1) {
+        rate = 1;
+      }
+
+      if (rate < -1) {
+        rate = -1;
+      }
+
+      var
+        Post = require(process.env.APP_PATH + "/models/post").Post,
+        postRate = require(process.env.APP_PATH + "/models/response/postRate").postRate,
+        post = new Post();
+
+      post.rate(postId, rate, function (err2, obj) {
+        if (!err2) {
+          var data = new postRate(obj);
+
+          res.json(data);
+          RequestLogger.log(req, data);
+        }
+        else {
+          return next(err2);
+        }
+      });
     });
   },
 
@@ -219,97 +258,105 @@ var Api_Controller = {
   // url and categoryId from POST bod
   post_create: function(req, res, next) {
     var
-      sanitize = require('validator').sanitize,
-      check = require('validator').check,
-      sessionId = req.params.sessionId,
-      url = req.body.url || '';
+      Session = require(process.env.APP_PATH + "/models/session").Session,
+      sess_obj = new Session(),
+      sessionId = req.params.sessionId;
 
-//    console.log(req.params);
-//    console.log(req.body);
+    //validate session and key
+    sess_obj.isValidSession(sessionId, function (err, obj) {
 
-    var ok = Api_Controller.validate_session(sessionId);
+      //if something wrong
+      if (err) {
+        return next(err);
+      }
 
-    if (!ok) {
-      var err = error(603, 'invalid api sessionId');
-      return next(err);
-    }
+      var
+        sanitize = require('validator').sanitize,
+        check = require('validator').check,
+        url = req.body.url || '';
 
-    try {
-      url = sanitize(url).xss();
-      check(url).notEmpty().isUrl();
-    }
-    catch (e) {
-      var err = error(400, 'Bad request (url param)');
-      return next(err);
-    }
+      try {
+        url = sanitize(url).xss();
+        check(url).notEmpty().isUrl();
+      }
+      catch (e) {
+        var err = error(400, 'Bad request (url param)');
+        return next(err);
+      }
 
-    var
-      authorId = 0,     //TODO author from session
-      categoryId = req.body.categoryId || 0;
-      postLink = require(process.env.APP_PATH + "/models/response/postLink").postLink,
-      Post = require(process.env.APP_PATH + "/models/post").Post,
-      post = new Post();
+      var
+        authorId = 0,     //TODO author from session
+        categoryId = req.body.categoryId || 0;
+        postLink = require(process.env.APP_PATH + "/models/response/postLink").postLink,
+        Post = require(process.env.APP_PATH + "/models/post").Post,
+        post = new Post();
 
-    try {
-      post.createNewPost(url, categoryId, authorId, function (err, obj) {
-        if (!err) {
-          var data = new postLink(obj);
+      try {
+        post.createNewPost(url, categoryId, authorId, function (err2, p_obj) {
+          if (!err2) {
+            var data = new postLink(p_obj);
 
-          res.json(data, 201);
-          RequestLogger.log(req, data);
-        }
-        else {
-          return next(err);
-        }
-      });
-    }
-    catch (err) {
-      return next(err);
-    }
-
+            res.json(data, 201);
+            RequestLogger.log(req, data);
+          }
+          else {
+            return next(err2);
+          }
+        });
+      }
+      catch (err3) {
+        return next(err3);
+      }
+    });
   },
   //get top link:  /api/getTopLinks/:sessionId/:categoryId/:limit/:page
   get_top_link: function(req, res, next) {
-    var sessionId = req.params.sessionId;
-    var ok = Api_Controller.validate_session(sessionId);
-
-    if (!ok) {
-      var err = error(603, 'invalid api sessionId');
-      return next(err);
-    }
-
     var
-      categoryId = req.params.categoryId || 0,
-      limit = req.params.limit || 1,
-      page = req.params.page || 1,
-      data = [];
+      Session = require(process.env.APP_PATH + "/models/session").Session,
+      sess_obj = new Session(),
+      sessionId = req.params.sessionId;
 
-    var elem = {
-      id: 1,
-      categoryId: categoryId,
-      url: "https://www.youtube.com/watch?v=hFmPRt_B3Tk&feature=g-all-f",
-      author: "zenedith",
-      views: 12222322,
-      rate: 10001211,
-      added: 1339013450
-    };
+    //validate session and key
+    sess_obj.isValidSession(sessionId, function (err, obj) {
 
-    for (var i=1; i <= limit; ++i) {
-      elem.id = i;
-      data.push(elem);
-    }
+      //if something wrong
+      if (err) {
+        return next(err);
+      }
 
-    var response = {
-      count: 20 * limit,
-      pages: 20,
-      currentPage: page,
-      isNextPage: page < 20,
-      isPrevPage: page > 1,
-      result: data
-    };
+      var
+        categoryId = req.params.categoryId || 0,
+        limit = req.params.limit || 1,
+        page = req.params.page || 1,
+        data = [];
 
-    res.json(response);
-    RequestLogger.log(req, response);
+      var elem = {
+        id: 1,
+        categoryId: categoryId,
+        url: "https://www.youtube.com/watch?v=hFmPRt_B3Tk&feature=g-all-f",
+        author: "zenedith",
+        views: 12222322,
+        rate: 10001211,
+        added: 1339013450
+      };
+
+      for (var i=1; i <= limit; ++i) {
+        elem.id = i;
+        data.push(elem);
+      }
+
+      var response = {
+        count: 20 * limit,
+        pages: 20,
+        currentPage: page,
+        isNextPage: page < 20,
+        isPrevPage: page > 1,
+        result: data
+      };
+
+      res.json(response);
+      RequestLogger.log(req, response);
+    });
   }
 };
 

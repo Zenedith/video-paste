@@ -26,16 +26,26 @@ var Api_Controller = {
   login_fb: function (req, res, next) {
     var
       apiKey = req.params.apiKey,
-      fbId = req.params.id,
-      name = req.params.name,
-      fist_name = req.params.fist_name,
-      last_name = req.params.last_name,
-      locale = req.params.locale,
-      User = require(process.env.APP_PATH + "/models/user").User,
-      accountType = require(process.env.APP_PATH + "/models/user/accountType").accountType,
-      user = new User();
+      Key = require(process.env.APP_PATH + "/models/key").Key,
+      key_obj = new Key();
 
-//TODO KEY
+    //validate key
+    key_obj.isValidKey(apiKey, function (err, obj) {
+
+      //if something wrong
+      if (err) {
+        return next(err);
+      }
+
+      var
+        fbId = req.params.id,
+        name = req.params.name,
+        fist_name = req.params.fist_name,
+        last_name = req.params.last_name,
+        locale = req.params.locale,
+        User = require(process.env.APP_PATH + "/models/user").User,
+        accountType = require(process.env.APP_PATH + "/models/user/accountType").accountType,
+        user = new User();
 
       user.getIdByExternalId(fbId, accountType.FACEBOOK, function(err, id) {
         //if user not finded, create new
@@ -55,6 +65,7 @@ var Api_Controller = {
           return Api_Controller.get_session(req, res, next);
         }
       });
+    });
   },
   get_session: function (req, res, next) {
     var
@@ -62,6 +73,7 @@ var Api_Controller = {
       key_obj = new Key(),
       apiKey = req.params.apiKey;
 
+    //validate key
     key_obj.isValidKey(apiKey, function (err, obj) {
 
       //if something wrong

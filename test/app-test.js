@@ -68,7 +68,7 @@ var
 //);
 //};
 //
-//exports.testpostRate = function (beforeExit, assert) {
+//exports.testPostRate = function (beforeExit, assert) {
 //
 //  assert.response(app, {
 //    url: '/api/postRate/8bb7ccb5aee1803bdcb482fe48a6997e7dfb9a27/1',
@@ -90,7 +90,7 @@ var
 //  );
 //};
 //
-//exports.testpostRateInvalid = function (beforeExit, assert) {
+//exports.testPostRateInvalid = function (beforeExit, assert) {
 //
 //  assert.response(app, {
 //    url: '/api/postRate/8bb7ccb5aee1803bdcb482fe48a6997e7dfb9a27/1',
@@ -116,7 +116,7 @@ var
 //exports.testLoginByFb = function (beforeExit, assert) {
 //
 //  assert.response(app, {
-//    url: '/api/loginByFb/key/666/zenedith/mat/ste/pl_PL',
+//    url: '/api/loginByFb/' + apikey + '/666/zenedith/mat/ste/pl_PL',
 //    method: 'GET',
 //    headers: { 'Content-Type': 'text/html; charset=utf-8' }
 //  }, {
@@ -132,24 +132,43 @@ var
 //  );
 //};
 //
-exports.testGetSession = function (beforeExit, assert) {
-
-  assert.response(app, {
-    url: '/api/getSession/' + apikey,
-    method: 'GET',
-    headers: { 'Content-Type': 'text/html; charset=utf-8' }
-  }, {
-    status: 200,
-    headers: { 'Content-Type': 'application/json; charset=utf-8' }
-  },
-  function(res) {
-    var json = JSON.parse(res.body);
-    console.log(json);
-    assert.isNotNull(json.sess);
-    assert.equal(json.userId, 0);
-  }
-  );
-};
+//exports.testLoginByFbNoKey = function (beforeExit, assert) {
+//
+//  assert.response(app, {
+//    url: '/api/loginByFb/nokey/666/zenedith/mat/ste/pl_PL',
+//    method: 'GET',
+//    headers: { 'Content-Type': 'text/html; charset=utf-8' }
+//  }, {
+//    status: 602,
+//    headers: { 'Content-Type': 'application/json; charset=utf-8' }
+//  },
+//  function(res) {
+//    var json = JSON.parse(res.body);
+//    console.log(json);
+//  assert.equal(json.error, 'ERR_INVALID_KEY');
+//  assert.equal(json.code, 602);
+//  }
+//  );
+//};
+//
+//exports.testGetSession = function (beforeExit, assert) {
+//
+//  assert.response(app, {
+//    url: '/api/getSession/' + apikey,
+//    method: 'GET',
+//    headers: { 'Content-Type': 'text/html; charset=utf-8' }
+//  }, {
+//    status: 200,
+//    headers: { 'Content-Type': 'application/json; charset=utf-8' }
+//  },
+//  function(res) {
+//    var json = JSON.parse(res.body);
+//    console.log(json);
+//    assert.isNotNull(json.sess);
+//    assert.equal(json.userId, 0);
+//  }
+//  );
+//};
 
 //exports.testGetSessionNoKey = function (beforeExit, assert) {
 //

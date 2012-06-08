@@ -91,7 +91,7 @@ var Api_Controller = {
       getSession = require(process.env.APP_PATH + "/models/response/getSession").getSession,
       sess = new Session_Generator();
 
-    sess.createNewSession(key, ip, forwardedFor, function (err, obj) {
+    sess.createNewSession(key, ip, forwardedFor, req.userId, function (err, obj) {
       if (!err) {
         var data = new getSession(obj);
         res.json(data);

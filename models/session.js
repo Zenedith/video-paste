@@ -17,8 +17,9 @@ var Session = function ()
   this.__key = '';
   this.__client_ip = '';
   this.__client_forwarder_for = '';
+  this.__userId = 0;
 
-  this.generateSession = function (key, ip, forwardedFor) {
+  this.generateSession = function (key, ip, forwardedFor, userId) {
     log.debug('Session.generateSession()');
     var
       Session_Generator = require(process.env.APP_PATH + "/models/session/generator").Session_Generator,
@@ -30,7 +31,13 @@ var Session = function ()
     this.__lifetime = current_timestamp + SESSION_LIFETIME;
     this.__client_ip = ip;
     this.__client_forwarder_for = forwardedFor;
+    this.__userId = userId || 0;
   };
+
+};
+
+Session.prototype.getUserId = function() {
+  return this.__userId;
 };
 
 //extending base class

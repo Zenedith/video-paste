@@ -33,14 +33,16 @@ var Post = function ()
     Database.save(this, callback);
   };
 
-  this.load = function (id, callback) {
-    this.setId(id);
-    Database.load(this, callback);
-  };
-
   this.rate = function (id, rate, callback) {
     this.setId(id);
-    Database.incr(this, '__rate', callback);
+
+    if (rate > 0) {
+      Database.incr(this, '__rate', callback);
+    }
+    else if (rate < 0) {
+      Database.decr(this, '__rate', callback);
+    }
+
   };
 
   this.views = function (id, callback) {

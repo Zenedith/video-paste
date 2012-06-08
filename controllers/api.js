@@ -54,25 +54,35 @@ var Api_Controller = {
       name = req.params.name,
       fist_name = req.params.fist_name,
       last_name = req.params.last_name,
-      locale = req.params.locale;
+      locale = req.params.locale,
+      User = require(process.env.APP_PATH + "/models/user").User,
+      accountType = require(process.env.APP_PATH + "/models/user/accountType").accountType,
+      user = new User();
 
-//    var ok = Api_Controller.validate_key(key);
-      //
-//          if (!ok) {
-//            return next(error(401, 'invalid api key'));
-//          }
+//TODO KEY
 
-    var data = {status: 'ok'};
-    res.json(data, 201);
-    RequestLogger.log(req, data);
+      user.getIdByExternalId(fbId, accountType.FACEBOOK, function(err, id) {
+        //if user not finded, create new
+        if (!id) {
+          user.createNewFbUser(fbId, name, fist_name, last_name, locale, function (err, obj) {
+            if (!err) {
+              req.userId = obj.getId(); //add info about user and forward to get session method
+              return Api_Controller.get_session(req, res, next);
+            }
+            else {
+              return next(err);
+            }
+          });
+        }
+        else {
+          req.userId = id; //add info about user and forward to get session method
+          return Api_Controller.get_session(req, res, next);
+        }
+      });
   },
   get_session: function (req, res, next) {
     var key = req.params.apiKey;
-//    var ok = Api_Controller.validate_key(key);
-//
-//    if (!ok) {
-//      return next(error(401, 'invalid api key'));
-//    }
+    //TODO KEY
 
     var
       ip = res.connection.remoteAddress,

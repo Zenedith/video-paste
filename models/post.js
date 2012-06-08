@@ -30,18 +30,49 @@ var Post = function ()
     this.__added = Math.round(+new Date()/1000);
     this.__authorId = authorId;
 
-    Database.save(this, callback);
+    Database.save(this, function (err, p_obj) {
+
+      if (err) {
+        return callback(err, p_obj);
+      }
+
+      log.debug('p_obj');
+      console.log(p_obj);
+
+      //add score for post
+      Database.addScore(p_obj, '__rate', function (err2, res) {
+        log.debug('res');
+        console.log(res);
+        return callback(err, p_obj);
+      });
+
+    });
   };
 
   this.rate = function (id, rate, callback) {
     this.setId(id);
 
+    var
+      add_score_callback = function (err, p_obj) {
+
+      if (err) {
+        return callback(err, p_obj);
+      }
+
+      //add score for post
+      Database.addScore(p_obj, '__rate', function (err2, res) {
+        return callback(err, p_obj);
+      });
+
+    };
+
     if (rate > 0) {
-      Database.incr(this, '__rate', callback);
+      Database.incr(this, '__rate', add_score_callback);
     }
     else if (rate < 0) {
-      Database.decr(this, '__rate', callback);
+      Database.decr(this, '__rate', add_score_callback);
     }
+
   };
 
   this.views = function (id, callback) {

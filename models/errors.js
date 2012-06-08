@@ -23,9 +23,9 @@ var Errors = function (code, msg) {
     case 503:
       err.error = 'ERR_API_INTERNAL_ERROR';
       break;
-    case 601:
-      err.error = 'ERR_POST_MISSING_AUTHOR';
-      break;
+//    case 601:
+//      err.error = 'ERR_POST_MISSING_AUTHOR';
+//      break;
     case 602:
       err.error = 'ERR_INVALID_KEY';
       break;

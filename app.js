@@ -94,40 +94,37 @@ if (process.env.NODE_ENV == 'dotcloud') {
     app.use(app.router);
     controller.bootControllers(app, '');
 
+    // middleware with an arity of 4 are considered
+    // error handling middleware. When you next(err)
+    // it will be passed through the defined middleware
+    // in order, but ONLY those with an arity of 4, ignoring
+    // regular middleware.
+    app.use(function(err, req, res, next){
+//      log.error(err.message);
+//      console.log('50x');
+//      console.log(err);
 
-    if (process.env.NODE_ENV !== 'development') {
-      // middleware with an arity of 4 are considered
-      // error handling middleware. When you next(err)
-      // it will be passed through the defined middleware
-      // in order, but ONLY those with an arity of 4, ignoring
-      // regular middleware.
-      app.use(function(err, req, res, next){
-  //      log.error(err.message);
-  //      console.log('50x');
-  //      console.log(err);
+      //TODO check API or html
 
-        //TODO check API or html
+      if (process.env.NODE_ENV != 'development') {
+        err.message = 'Unexpected api problem';
+      }
 
-        if (process.env.NODE_ENV != 'development') {
-          err.message = 'Unexpected api problem';
-        }
+      res.send(err, { 'Content-Type': 'application/json' }, err.code);
+      RequestLogger.log(req, err);
+    });
 
-        res.send(err, { 'Content-Type': 'application/json' }, err.code);
-        RequestLogger.log(req, err);
-      });
+    // our custom JSON 404 middleware. Since it's placed last
+    // it will be the last middleware called, if all others
+    // invoke next() and do not respond.
+    app.use(function(req, res, next){
+//      console.log('404');
 
-      // our custom JSON 404 middleware. Since it's placed last
-      // it will be the last middleware called, if all others
-      // invoke next() and do not respond.
-      app.use(function(req, res, next){
-  //      console.log('404');
-
-        //TODO check API or html
-        var err = error(404, 'Bad method name');
-        res.send(err, { 'Content-Type': 'application/json' }, 404);
-        RequestLogger.log(req, err);
-      });
-    }
+      //TODO check API or html
+      var err = error(404, 'Bad method name');
+      res.send(err, { 'Content-Type': 'application/json' }, 404);
+      RequestLogger.log(req, err);
+    });
   });
 
 

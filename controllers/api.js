@@ -5,30 +5,6 @@ var
   secure = require("node-secure");
 
 var Api_Controller = {
-  validate_key: function (key) {
-    //TODO
-    return true;
-  },
-  validate_session: function (sessionId) {
-
-//    console.log(sessionId);
-
-    // sessionId isnt present
-//    if (!sessionId) {
-//      return false;
-//    }
-//
-//    //TODO TEMP!
-//    var apiSess = ['3ec6d5a02375a2b778d3bfd866a6676c1f69f8b057d24aea65e939a124e486c6'];
-//
-//    // sessionId is invalid
-//    if (!~apiSess.indexOf(sessionId)) {
-//      return false;
-//    }
-//
-//    req.sessionId = sessionId;
-    return true;
-  },
   generate_key: function (req, res, next) {
     var
       Key_Generator = require(process.env.APP_PATH + "/models/key/generator").Key_Generator,
@@ -81,26 +57,37 @@ var Api_Controller = {
       });
   },
   get_session: function (req, res, next) {
-    var key = req.params.apiKey;
-    //TODO KEY
-
     var
-      ip = res.connection.remoteAddress,
-      forwardedFor = '',
-      Session_Generator = require(process.env.APP_PATH + "/models/session/generator").Session_Generator,
-      getSession = require(process.env.APP_PATH + "/models/response/getSession").getSession,
-      sess = new Session_Generator();
+      Key = require(process.env.APP_PATH + "/models/key").Key,
+      key_obj = new Key(),
+      apiKey = req.params.apiKey;
 
-    sess.createNewSession(key, ip, forwardedFor, req.userId, function (err, obj) {
-      if (!err) {
-        var data = new getSession(obj);
-        res.json(data);
-        RequestLogger.log(req, data);
-      }
-      else {
+    key_obj.isValidKey(apiKey, function (err, obj) {
+
+      //if something wrong
+      if (err) {
         return next(err);
       }
+
+      var
+        ip = res.connection.remoteAddress,
+        forwardedFor = '',
+        Session_Generator = require(process.env.APP_PATH + "/models/session/generator").Session_Generator,
+        getSession = require(process.env.APP_PATH + "/models/response/getSession").getSession,
+        sess = new Session_Generator();
+
+      sess.createNewSession(apiKey, ip, forwardedFor, req.userId, function (err, obj) {
+        if (!err) {
+          var data = new getSession(obj);
+          res.json(data);
+          RequestLogger.log(req, data);
+        }
+        else {
+          return next(err);
+        }
+      });
     });
+
   },
 
   //api/postLink/:sessionId/:postId

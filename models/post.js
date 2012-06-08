@@ -42,7 +42,6 @@ var Post = function ()
     else if (rate < 0) {
       Database.decr(this, '__rate', callback);
     }
-
   };
 
   this.views = function (id, callback) {

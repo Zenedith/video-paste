@@ -29,6 +29,22 @@ Base.prototype.load = function (id, callback) {
   Database.load(this, callback);
 };
 
+Base.prototype.getDBValue = function (id, field, callback) {
+  this.setId(id);
+  Database.getValue(this, field, callback);
+};
+
+
+Base.prototype.setDBValue = function (id, field, value, callback) {
+  this.setId(id);
+  this[field] = value;
+
+  var
+    Database = require(process.env.APP_PATH + "/lib/database").Database;
+
+  Database.setValue(this, field, value, callback);
+};
+
 //used for searching elem id base on uniq key
 Base.prototype.getUniqeKeys = function () {
   return [];

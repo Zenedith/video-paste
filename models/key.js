@@ -28,6 +28,33 @@ var Key = function ()
     this.__version = KEY_VERSION;
     this.__last_used = current_timestamp;
   };
+
+  this.isValidKey = function (id, callback) {
+    var
+      _this = this;
+
+    this.load(id, function(err, obj) {
+
+      if (obj === null) {
+        return callback(error(602, 'invalid api key'), null);
+      }
+
+      var
+        current_timestamp = Math.round(+new Date()/1000);
+
+      //check expiration time
+      if (obj.getLifeTime() < current_timestamp) {
+        return callback(error(602, 'key has expired'), null);
+      }
+
+      _this.setDBValue(id, '__last_used', current_timestamp, callback);
+    });
+
+  };
+};
+
+Key.prototype.getLifeTime = function() {
+  return this.__lifetime;
 };
 
 //extending base class

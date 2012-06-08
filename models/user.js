@@ -43,8 +43,7 @@ var User = function ()
   };
 
   this.getNameById = function (id) {
-    this.setId(id);
-    Database.getValue(this, '__name', callback);
+    this.getDBValue(id, '__name', callback);
   };
 
   this.getIdByExternalId = function (externalId, account_type, callback) {

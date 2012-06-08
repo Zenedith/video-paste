@@ -1,6 +1,7 @@
 var
   app = require(__dirname + '/../app'),
   qs = require('qs'),
+  apikey = 'a3ca844f14fbb45b',
   secure = require("node-secure");
 
 
@@ -111,30 +112,30 @@ var
 //  }
 //);
 //};
-
-exports.testLoginByFb = function (beforeExit, assert) {
-
-  assert.response(app, {
-    url: '/api/loginByFb/key/666/zenedith/mat/ste/pl_PL',
-    method: 'GET',
-    headers: { 'Content-Type': 'text/html; charset=utf-8' }
-  }, {
-    status: 200,
-    headers: { 'Content-Type': 'application/json; charset=utf-8' }
-  },
-  function(res) {
-    var json = JSON.parse(res.body);
-    console.log(json);
-    assert.isNotNull(json.sess);
-    assert.isNotNull(json.userId);
-  }
-  );
-};
-
+//
+//exports.testLoginByFb = function (beforeExit, assert) {
+//
+//  assert.response(app, {
+//    url: '/api/loginByFb/key/666/zenedith/mat/ste/pl_PL',
+//    method: 'GET',
+//    headers: { 'Content-Type': 'text/html; charset=utf-8' }
+//  }, {
+//    status: 200,
+//    headers: { 'Content-Type': 'application/json; charset=utf-8' }
+//  },
+//  function(res) {
+//    var json = JSON.parse(res.body);
+//    console.log(json);
+//    assert.isNotNull(json.sess);
+//    assert.isNotNull(json.userId);
+//  }
+//  );
+//};
+//
 exports.testGetSession = function (beforeExit, assert) {
 
   assert.response(app, {
-    url: '/api/getSession/key',
+    url: '/api/getSession/' + apikey,
     method: 'GET',
     headers: { 'Content-Type': 'text/html; charset=utf-8' }
   }, {
@@ -147,7 +148,25 @@ exports.testGetSession = function (beforeExit, assert) {
     assert.isNotNull(json.sess);
     assert.equal(json.userId, 0);
   }
-);
+  );
 };
 
+//exports.testGetSessionNoKey = function (beforeExit, assert) {
+//
+//  assert.response(app, {
+//    url: '/api/getSession/nokey',
+//    method: 'GET',
+//    headers: { 'Content-Type': 'text/html; charset=utf-8' }
+//  }, {
+//    status: 602,
+//    headers: { 'Content-Type': 'application/json; charset=utf-8' }
+//  },
+//  function(res) {
+//    var json = JSON.parse(res.body);
+//    console.log(json);
+//    assert.equal(json.error, 'ERR_INVALID_KEY');
+//    assert.equal(json.code, 602);
+//  }
+//  );
+//};
 

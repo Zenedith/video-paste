@@ -121,7 +121,7 @@ var Api_Controller = {
       }
 
       var
-        postId = req.params.postId || 0;
+        postId = parseInt(req.params.postId) || 0;
 
       if (postId < 1) {
         return next(error(400, 'Bad Request (postId)'));
@@ -177,12 +177,12 @@ var Api_Controller = {
       }
 
       var
-        postId = req.params.postId || 0,
-        userId = obj.getUserId();
-
-      if (userId < 1) {
-        return next(error(401, 'Session not authorized (userId)'));
-      }
+        postId = parseInt(req.params.postId) || 0;
+//        userId = obj.getUserId();
+//
+//      if (userId < 1) {
+//        return next(error(401, 'Session not authorized (userId)'));
+//      }
 
 
       if (postId < 1) {
@@ -195,8 +195,6 @@ var Api_Controller = {
         post = new Post();
 
       post.views(postId, function (err, obj) {
-  //      console.log(err);
-  //      console.log(obj);
 
         if (!err) {
           var data = new postViews(obj);
@@ -228,8 +226,8 @@ var Api_Controller = {
       }
 
       var
-        postId = req.params.postId || 0,
-        rate = ~~req.body.rate || 0,
+        postId = parseInt(req.params.postId) || 0,
+        rate = parseInt(req.body.rate) || 0,
         userId = obj.getUserId();
 
       if (userId < 1) {
@@ -305,7 +303,7 @@ var Api_Controller = {
       }
 
       var
-        categoryId = req.body.categoryId || 0;
+        categoryId = parseInt(req.body.categoryId) || 0;
         postLink = require(process.env.APP_PATH + "/models/response/postLink").postLink,
         Post = require(process.env.APP_PATH + "/models/post").Post,
         post = new Post();
@@ -360,9 +358,9 @@ var Api_Controller = {
       }
 
       var
-//        categoryId = parseInt(req.params.categoryId || 0),
-        limit = parseInt(req.params.limit || 1),
-        page = parseInt(req.params.page || 1),
+//        categoryId = parseInt(req.params.categoryId) || 0,
+        limit = parseInt(req.params.limit) || 1,
+        page = parseInt(req.params.page) || 1,
         getTopLinks = require(process.env.APP_PATH + "/models/response/getTopLinks").getTopLinks,
         Post_List = require(process.env.APP_PATH + "/models/post/list").Post_List,
         postList = new Post_List();

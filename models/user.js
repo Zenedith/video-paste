@@ -42,11 +42,11 @@ var User = function ()
   };
 
   this.getNameById = function (id, callback) {
-    this.getDBValue(id, '__name', callback);
+    this.getObjectValue(id, '__name', callback);
   };
 
   this.getNamesByIds = function (ids, callback) {
-    this.getManyValues(ids, '__name', callback);
+    this.getManyObjectValuesFromDB(ids, '__name', callback);
   };
 
   this.getIdByExternalId = function (externalId, account_type, callback) {

@@ -36,20 +36,20 @@ Base.prototype.loadMany = function (ids, callback) {
   Database.loadMany(this, ids, callback);
 };
 
-Base.prototype.getDBValue = function (id, field, callback) {
+Base.prototype.getObjectValueFromDB = function (id, field, callback) {
   this.setId(id);
 
   var
     Database = require(process.env.APP_PATH + "/lib/database").Database;
 
-  Database.getValue(this, field, callback);
+  Database.getObjectValue(this, field, callback);
 };
 
-Base.prototype.getManyValues = function (ids, field, callback) {
+Base.prototype.getManyObjectValuesFromDB = function (ids, field, callback) {
   var
     Database = require(process.env.APP_PATH + "/lib/database").Database;
 
-  Database.getManyValues(this, ids, field, callback);
+  Database.getManyObjectValues(this, ids, field, callback);
 };
 
 
@@ -60,7 +60,7 @@ Base.prototype.setDBValue = function (id, field, value, callback) {
   var
     Database = require(process.env.APP_PATH + "/lib/database").Database;
 
-  Database.setValue(this, field, value, callback);
+  Database.setObjectValue(this, field, value, callback);
 };
 
 //used for searching elem id base on uniq key

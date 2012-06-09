@@ -31,7 +31,7 @@ var Session = function ()
     this.__lifetime = current_timestamp + SESSION_LIFETIME;
     this.__client_ip = ip;
     this.__client_forwarder_for = forwardedFor;
-    this.__userId = userId || 0;
+    this.__userId = parseInt(userId) || 0;
   };
 
   this.isValidSession = function (id, callback) {

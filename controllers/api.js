@@ -166,7 +166,13 @@ var Api_Controller = {
       }
 
       var
-        postId = req.params.postId || 0;
+        postId = req.params.postId || 0,
+        userId = obj.getUserId();
+
+      if (userId < 1) {
+        return next(error(401, 'Session not authorized (userId)'));
+      }
+
 
       if (postId < 1) {
         var err = error(400, 'Bad Request (postId)');
@@ -214,7 +220,12 @@ var Api_Controller = {
 
       var
         postId = req.params.postId || 0,
-        rate = ~~req.body.rate || 0;
+        rate = ~~req.body.rate || 0,
+        userId = obj.getUserId();
+
+      if (userId < 1) {
+        return next(error(401, 'Session not authorized (userId)'));
+      }
 
       if (postId < 1) {
         var err = error(400, 'Bad Request (postId)');
@@ -255,7 +266,7 @@ var Api_Controller = {
   },
 
   // create postLink
-  // url and categoryId from POST bod
+  // url and categoryId from POST body
   post_create: function(req, res, next) {
     var
       Session = require(process.env.APP_PATH + "/models/session").Session,
@@ -273,7 +284,12 @@ var Api_Controller = {
       var
         sanitize = require('validator').sanitize,
         check = require('validator').check,
-        url = req.body.url || '';
+        url = req.body.url || ''
+        userId = obj.getUserId();
+
+      if (userId < 1) {
+        return next(error(401, 'Session not authorized (userId)'));
+      }
 
       try {
         url = sanitize(url).xss();
@@ -285,7 +301,6 @@ var Api_Controller = {
       }
 
       var
-        userId = 0,     //TODO author from session
         categoryId = req.body.categoryId || 0;
         postLink = require(process.env.APP_PATH + "/models/response/postLink").postLink,
         Post = require(process.env.APP_PATH + "/models/post").Post,

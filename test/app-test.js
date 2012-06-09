@@ -4,7 +4,7 @@ var
   postId = 21,
   apikey = 'a3ca844f14fbb45b',
   sessId = 'cfbad7d430a9425992da77fafa8ae405a826c51e',  //expired by one hour
-  authorizedSessId = '9456233b0850e22a807ce2b2f5768396cb6ad49d',  //expired by one hour
+  authorizedSessId = '1506b7d731f2d3617bdbd19efd90a4d13ff07cd8',  //expired by one hour
   secure = require("node-secure");
 
 
@@ -57,6 +57,39 @@ var
 //  );
 //};
 //
+//exports.testPostLinkCreateTestConverter = function (beforeExit, assert) {
+//
+//  var post_data = qs.stringify({'url': 'http://m.youtube.com/index?desktop_uri=%2F&gl=PL#/watch?feature=m-feedf&v=BrBQvJ-anB8'});
+////  var post_data = qs.stringify({'url': 'http://touch.dailymotion.com/video/xef0k9_fists-of-bruce-lee_shortfilms'});
+//
+//  assert.response(app, {
+//    url: '/api/postLink/' + authorizedSessId + '',
+//    method: 'POST',
+//    headers: {
+//      'Content-Type': 'application/x-www-form-urlencoded',
+//      'Content-Length': post_data.length
+//    },
+//    data: post_data
+//  }, {
+//    status: 201,
+//    headers: { 'Content-Type': 'application/json; charset=utf-8' }
+//  },
+//  function(res) {
+//    var json = JSON.parse(res.body);
+//    console.log(json);
+//    assert.isDefined(json.postId);
+//    assert.ok(json.postId > 0, 'Empty postId');
+//    assert.isDefined(json.added);
+//    assert.ok(json.added > 0, 'Empty added time');
+//    assert.isDefined(json.userId);
+//    assert.ok(json.userId > 0, 'Empty userId');
+//    assert.isDefined(json.userName);
+//    assert.isDefined(json.url);
+//    assert.isDefined(json.rate);
+//    assert.isDefined(json.views);
+//  }
+//  );
+//};
 //exports.testPostLinkCreate = function (beforeExit, assert) {
 //
 //  var post_data = qs.stringify({'url': 'http://sss.wp.pl'});

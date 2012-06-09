@@ -289,22 +289,19 @@ var Api_Controller = {
       }
 
       var
-        sanitize = require('validator').sanitize,
-        check = require('validator').check,
-        url = req.body.url || ''
         userId = obj.getUserId();
 
       if (userId < 1) {
         return next(error(401, 'Session not authorized (userId)'));
       }
 
-      try {
-        url = sanitize(url).xss();
-        check(url).notEmpty().isUrl();
-      }
-      catch (e) {
-        var err = error(400, 'Bad request (url param)');
-        return next(err);
+      var
+        url = req.body.url || '',
+        Url = require(process.env.APP_PATH + "/models/url").Url,
+        urlObj = new Url(url);
+
+      if (!urlObj.isValid()) {
+        return next(error(400, 'Bad request (url param)'));
       }
 
       var
@@ -314,7 +311,7 @@ var Api_Controller = {
         post = new Post();
 
       try {
-        post.createNewPost(url, categoryId, userId, function (err2, p_obj) {
+        post.createNewPost(urlObj.get(), categoryId, userId, function (err2, p_obj) {
 
           if (err2) {
             return next(err2);

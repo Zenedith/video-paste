@@ -32,6 +32,9 @@ var Errors = function (code, msg) {
     case 603:
       err.error = 'ERR_INVALID_SESSION';
       break;
+    case 604:
+      err.error = 'ERR_ALREADY_RATED';
+      break;
   }
 
   err.data = '';

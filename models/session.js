@@ -66,7 +66,7 @@ var Session = function ()
         }
 
         //renew session
-        _this.setDBValue(id, '__lifetime', (current_timestamp + SESSION_LIFETIME), function (err, __obj__) {
+        _this.setObjectValueToDB(id, '__lifetime', (current_timestamp + SESSION_LIFETIME), function (err, __obj__) {
           return callback(err, obj);  //call calback with full loaded obj, not _obj_ or __obj__
         });
       });

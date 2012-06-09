@@ -46,7 +46,7 @@ var Post_List = function ()
 //    console.log('offset: ' + offset, (offset + limit - 1));
 
     //get post ids
-    Database.getScoreList(this, '__rate', offset, (offset + limit), function (err, resList) {
+    Database.getObjectScoreList(this, '__rate', offset, (offset + limit), function (err, resList) {
 
       if (err) {
         return callback(err, null);
@@ -66,7 +66,7 @@ var Post_List = function ()
         //we now got posts data
 
         //get count for listing
-        Database.getScoreCount(_this, '__rate', -1, -1, function (err3, count) {
+        Database.getObjectScoreCount(_this, '__rate', -1, -1, function (err3, count) {
           if (err3) {
             return callback(err3, null);
           }

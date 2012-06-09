@@ -256,7 +256,7 @@ var Api_Controller = {
         postRate = require(process.env.APP_PATH + "/models/response/postRate").postRate,
         post = new Post();
 
-      post.rate(postId, rate, function (err2, obj) {
+      post.rate(postId, rate, userId, function (err2, obj) {
         if (!err2) {
           var data = new postRate(obj);
 

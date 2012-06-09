@@ -23,7 +23,7 @@ var Session_Generator = function ()
     var sess = new Session();
     sess.generateSession(key, ip, forwardedFor, userId);
 
-    Database.save(sess, callback);
+    Database.saveObject(sess, callback);
   };
 
 };

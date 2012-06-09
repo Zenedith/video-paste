@@ -1,11 +1,13 @@
 var
   app = require(__dirname + '/../app'),
   qs = require('qs'),
-  postId = 21,
+//  postId = 21,
+  postId = 47,
   apikey = 'a3ca844f14fbb45b',
   sessId = 'cfec983a0652e476f6a82f375480b2bc3a973b82',  //expired by one hour
   authorizedSessId = 'd4d0bd18a953c72bf4f6b524e1d0f9ceeafab812',  //expired by one hour
   show_response = false,
+//  show_response = true,
   secure = require("node-secure");
 
 
@@ -323,7 +325,7 @@ exports.testPostRateInvalidRate = function (beforeExit, assert) {
 exports.testLoginByFbValid = function (beforeExit, assert) {
 
   assert.response(app, {
-    url: '/api/loginByFb/' + apikey + '/666/zenedith/mat/ste/pl_PL',
+    url: '/api/loginByFb/' + apikey + '/6661/zenedith/mat/ste/pl_PL',
     method: 'GET',
     headers: { 'Content-Type': 'text/html; charset=utf-8' }
   }, {

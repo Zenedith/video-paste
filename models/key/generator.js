@@ -23,7 +23,7 @@ var Key_Generator = function ()
     var key = new Key();
     key.generateKey();
 
-    Database.save(key, callback);
+    Database.saveObject(key, callback);
   };
 
 };

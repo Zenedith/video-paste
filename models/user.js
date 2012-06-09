@@ -11,7 +11,7 @@ var User = function ()
   log.debug('User.construct()');
 
   this.__className = "User";
-  this.__account_type = accountType.FACEBOOK;
+  this.__account_type = '';
   this.__created = 0;
   this.__externalId = 0;
   this.__name = '';
@@ -22,9 +22,8 @@ var User = function ()
   this.createNewFbUser = function (externalId, name, fist_name, last_name, locale, callback) {
     log.debug('User.createNewUser()');
 
-//    if (!externalId) {
-//      return callback(error(601, 'Brak externalId usera'), null);
-//    }
+    //TODO validate user data in facbook!
+    // how to prevend frauds?!
 
     this.__account_type = accountType.FACEBOOK;
     this.__created = Math.round(+new Date()/1000);
@@ -34,7 +33,7 @@ var User = function ()
     this.__last_name = last_name;
     this.__locale = locale;
 
-    Database.save(this, callback);
+    Database.saveObject(this, callback);
   };
 
   this.getName = function () {
@@ -51,7 +50,7 @@ var User = function ()
 
   this.getIdByExternalId = function (externalId, account_type, callback) {
 //    log.debug('User.getIdByExternalId(' + externalId + ', ' + account_type + ')');
-    Database.getIdByUniqeKey(this, [externalId, account_type], callback);
+    Database.getObjectIdByUniqeKey(this, [externalId, account_type], callback);
   };
 
   this.getFirstName = function () {

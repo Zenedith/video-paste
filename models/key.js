@@ -47,7 +47,7 @@ var Key = function ()
         return callback(error(602, 'key has expired'), null);
       }
 
-      _this.setDBValue(id, '__last_used', current_timestamp, callback);
+      _this.setObjectValueToDB(id, '__last_used', current_timestamp, callback);
     });
 
   };

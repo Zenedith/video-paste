@@ -26,14 +26,14 @@ Base.prototype.load = function (id, callback) {
   var
     Database = require(process.env.APP_PATH + "/lib/database").Database;
 
-  Database.load(this, callback);
+  Database.loadObject(this, callback);
 };
 
 Base.prototype.loadMany = function (ids, callback) {
   var
     Database = require(process.env.APP_PATH + "/lib/database").Database;
 
-  Database.loadMany(this, ids, callback);
+  Database.loadManyObjects(this, ids, callback);
 };
 
 Base.prototype.getObjectValueFromDB = function (id, field, callback) {
@@ -53,7 +53,7 @@ Base.prototype.getManyObjectValuesFromDB = function (ids, field, callback) {
 };
 
 
-Base.prototype.setDBValue = function (id, field, value, callback) {
+Base.prototype.setObjectValueToDB = function (id, field, value, callback) {
   this.setId(id);
   this[field] = value;
 

@@ -124,8 +124,7 @@ var Api_Controller = {
         postId = req.params.postId || 0;
 
       if (postId < 1) {
-        var err = error(400, 'Bad Request (postId)');
-        return next(err);
+        return next(error(400, 'Bad Request (postId)'));
       }
 
       var
@@ -133,18 +132,30 @@ var Api_Controller = {
         postLink = require(process.env.APP_PATH + "/models/response/postLink").postLink,
         post = new Post();
 
-      post.load(postId, function (err, obj) {
+      post.load(postId, function (err2, p_obj) {
 
-        if (!err) {
-          var data = new postLink(obj);
+        if (err2) {
+          return next(err2);
+        }
+
+        var
+          User_Names = require(process.env.APP_PATH + "/models/user/names").User_Names,
+          usersIds = {};
+
+        usersIds[p_obj.getUserId()] = ''; //add post user id
+
+        new User_Names(usersIds, function (err3, userNamesObj) {
+
+          if (err3) {
+            return next(err3);
+          }
+
+          var
+            data = new postLink(p_obj, userNamesObj);
 
           res.json(data);
           RequestLogger.log(req, data);
-        }
-        else {
-          var err = error(400, 'Bad Request (postId)');
-          return next(err);
-        }
+        });
       });
     });
   },
@@ -175,8 +186,7 @@ var Api_Controller = {
 
 
       if (postId < 1) {
-        var err = error(400, 'Bad Request (postId)');
-        return next(err);
+        return next(error(400, 'Bad Request (postId)'));
       }
 
       var
@@ -195,8 +205,7 @@ var Api_Controller = {
           RequestLogger.log(req, data);
         }
         else {
-          var err = error(400, 'Bad Request (postId)');
-          return next(err);
+          return next(error(400, 'Bad Request (postId)'));
         }
       });
     });
@@ -228,13 +237,11 @@ var Api_Controller = {
       }
 
       if (postId < 1) {
-        var err = error(400, 'Bad Request (postId)');
-        return next(err);
+        return next(error(400, 'Bad Request (postId)'));
       }
 
       if (rate === 0) {
-        var err = error(400, 'Bad Request (rate)');
-        return next(err);
+        return next(error(400, 'Bad Request (rate)'));
       }
 
       //check accepted value
@@ -308,15 +315,31 @@ var Api_Controller = {
 
       try {
         post.createNewPost(url, categoryId, userId, function (err2, p_obj) {
-          if (!err2) {
-            var data = new postLink(p_obj);
+
+          if (err2) {
+            return next(err2);
+          }
+
+          var
+            User_Names = require(process.env.APP_PATH + "/models/user/names").User_Names,
+            usersIds = {};
+
+          usersIds[p_obj.getUserId()] = ''; //add post user id
+
+          new User_Names(usersIds, function (err3, userNamesObj) {
+
+            if (err3) {
+              return next(err3);
+            }
+
+            var
+              data = new postLink(p_obj, userNamesObj);
+
 
             res.json(data, 201);
             RequestLogger.log(req, data);
-          }
-          else {
-            return next(err2);
-          }
+          });
+
         });
       }
       catch (err3) {
@@ -353,34 +376,15 @@ var Api_Controller = {
           return next(err2);
         }
 
-//      var elem = {
-//        id: 1,
-//        categoryId: categoryId,
-//        url: "https://www.youtube.com/watch?v=hFmPRt_B3Tk&feature=g-all-f",
-//        author: "zenedith",
-//        views: 12222322,
-//        rate: 10001211,
-//        added: 1339013450
-//      };
-//
-//      for (var i=1; i <= limit; ++i) {
-//        elem.id = i;
-//        data.push(elem);
-//      }
-//
-//      var response = {
-//        count: 20 * limit,
-//        pages: 20,
-//        currentPage: page,
-//        isNextPage: page < 20,
-//        isPrevPage: page > 1,
-//        result: data
-//      };
+        new getTopLinks(listObj, function (err3, data){
+          if (err3) {
+            return next(err3);
+          }
 
-        var data = new getTopLinks(listObj);
+          res.json(data);
+          RequestLogger.log(req, data);
+        });
 
-        res.json(data);
-        RequestLogger.log(req, data);
       });
 
     });

@@ -38,7 +38,18 @@ Base.prototype.loadMany = function (ids, callback) {
 
 Base.prototype.getDBValue = function (id, field, callback) {
   this.setId(id);
+
+  var
+    Database = require(process.env.APP_PATH + "/lib/database").Database;
+
   Database.getValue(this, field, callback);
+};
+
+Base.prototype.getManyValues = function (ids, field, callback) {
+  var
+    Database = require(process.env.APP_PATH + "/lib/database").Database;
+
+  Database.getManyValues(this, ids, field, callback);
 };
 
 

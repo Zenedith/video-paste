@@ -3,8 +3,8 @@ var
   qs = require('qs'),
   postId = 21,
   apikey = 'a3ca844f14fbb45b',
-  sessId = 'fa45621da3c601430c204290912a13b7db8ed7c8',  //expired by one hour
-  authorizedSessId = 'ed9218979181295ae36da47aaa3cc1fff25a36da',  //expired by one hour
+  sessId = 'cfbad7d430a9425992da77fafa8ae405a826c51e',  //expired by one hour
+  authorizedSessId = '9456233b0850e22a807ce2b2f5768396cb6ad49d',  //expired by one hour
   secure = require("node-secure");
 
 
@@ -75,13 +75,14 @@ var
 //  },
 //  function(res) {
 //    var json = JSON.parse(res.body);
-////    console.log(json);
+//    console.log(json);
 //    assert.isDefined(json.postId);
 //    assert.ok(json.postId > 0, 'Empty postId');
 //    assert.isDefined(json.added);
 //    assert.ok(json.added > 0, 'Empty added time');
 //    assert.isDefined(json.userId);
 //    assert.ok(json.userId > 0, 'Empty userId');
+//    assert.isDefined(json.userName);
 //    assert.isDefined(json.url);
 //    assert.isDefined(json.rate);
 //    assert.isDefined(json.views);
@@ -132,6 +133,7 @@ var
 //    assert.ok(json.added > 0, 'Empty added time');
 //    assert.isDefined(json.userId);
 //    assert.ok(json.userId > 0, 'Empty userId');
+//    assert.isDefined(json.userName);
 //    assert.isDefined(json.url);
 //    assert.isDefined(json.rate);
 //    assert.isDefined(json.views);
@@ -358,7 +360,7 @@ var
 //exports.testGetTopLinksValid = function (beforeExit, assert) {
 //
 //  assert.response(app, {
-//    url: '/api/getTopLinks/' + sessId + '/0/1/1',
+//    url: '/api/getTopLinks/' + sessId + '/0/10/1',
 //    method: 'GET',
 //    headers: { 'Content-Type': 'text/html; charset=utf-8' }
 //  }, {

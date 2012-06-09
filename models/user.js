@@ -41,8 +41,12 @@ var User = function ()
     return this.__name;
   };
 
-  this.getNameById = function (id) {
+  this.getNameById = function (id, callback) {
     this.getDBValue(id, '__name', callback);
+  };
+
+  this.getNamesByIds = function (ids, callback) {
+    this.getManyValues(ids, '__name', callback);
   };
 
   this.getIdByExternalId = function (externalId, account_type, callback) {

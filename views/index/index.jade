@@ -76,7 +76,7 @@ div.content
     div.method_type GET
     div.method_status 200
     div.method_desc get posted link data by postId
-    div.method_sample_response { postId: int, categoryId: int, added: int, userId: int, url: string, rate: int, views: int }
+    div.method_sample_response { postId: int, categoryId: int, added: int, userId: int, userName: string, url: string, rate: int, views: int }
     div.method_error_codes
       ul
         li ERR_BAD_REQUEST
@@ -88,7 +88,7 @@ div.content
     div.method_type POST
     div.method_status 201
     div.method_desc create post link (url param from POST BODY)
-    div.method_sample_response { postId: int, categoryId: int, added: int, userId: int, url: string, rate: int, views: int }
+    div.method_sample_response { postId: int, categoryId: int, added: int, userId: int, userName: string, url: string, rate: int, views: int }
     div.method_error_codes
       ul
         li ERR_BAD_REQUEST
@@ -124,10 +124,10 @@ div.content
         li ERR_UNAUTHORIZED
   div.method
     div.method_url /api/getTopLinks/:sessionId/:categoryId/:limit/:page
-    div.method_type POST
+    div.method_type GET
     div.method_status 200
     div.method_desc get top links (only sessionId is required)
-    div.method_sample_response {count: int, pages: int, currentPage: int, isNextPage: bool, isPrevPage: bool, result: [{ postId: int, categoryId: int, added: int, userId: int, url: string, rate: int, views: int}]
+    div.method_sample_response {count: int, pages: int, currentPage: int, isNextPage: bool, isPrevPage: bool, result: [{ postId: int, categoryId: int, added: int, userId: int, userName: string, url: string, rate: int, views: int}]
     div.method_error_codes
       ul
         li ERR_BAD_REQUEST

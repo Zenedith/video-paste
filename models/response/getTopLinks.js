@@ -1,7 +1,7 @@
 //var
 //  log = require(process.env.APP_PATH + "/lib/log");
 
-var getTopLinks = function (listObj)
+var getTopLinks = function (listObj, callback)
 {
 //  log.debug('getTopLinks.construct()');
 
@@ -13,12 +13,36 @@ var getTopLinks = function (listObj)
   this.result = [];
 
   var
+    _this = this,
     resList = listObj.getResults(),
-    postLink = require(process.env.APP_PATH + "/models/response/postLink").postLink;
+    usersIds = {},
+    postLink = require(process.env.APP_PATH + "/models/response/postLink").postLink,
+    User_Names = require(process.env.APP_PATH + "/models/user/names").User_Names;
 
+  //get all users ids
     for (var lp in resList) {
-      this.result.push(new postLink(resList[lp]));
+      var
+        post = resList[lp],
+        userId = post.getUserId();
+
+      usersIds[userId] = '';
     }
+
+    new User_Names(usersIds, function (err, userNamesObj) {
+
+      if (err) {
+        return callback(err, null);
+      }
+
+      for (var lp in resList) {
+        var
+          post = resList[lp];
+
+        _this.result.push(new postLink(post, userNamesObj));
+      }
+
+      return callback(null, _this);
+    });
 };
 
 exports.getTopLinks = getTopLinks;

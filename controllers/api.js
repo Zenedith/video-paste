@@ -285,14 +285,14 @@ var Api_Controller = {
       }
 
       var
-        authorId = 0,     //TODO author from session
+        userId = 0,     //TODO author from session
         categoryId = req.body.categoryId || 0;
         postLink = require(process.env.APP_PATH + "/models/response/postLink").postLink,
         Post = require(process.env.APP_PATH + "/models/post").Post,
         post = new Post();
 
       try {
-        post.createNewPost(url, categoryId, authorId, function (err2, p_obj) {
+        post.createNewPost(url, categoryId, userId, function (err2, p_obj) {
           if (!err2) {
             var data = new postLink(p_obj);
 
@@ -325,37 +325,49 @@ var Api_Controller = {
       }
 
       var
-        categoryId = req.params.categoryId || 0,
-        limit = req.params.limit || 1,
-        page = req.params.page || 1,
-        data = [];
+//        categoryId = parseInt(req.params.categoryId || 0),
+        limit = parseInt(req.params.limit || 1),
+        page = parseInt(req.params.page || 1),
+        getTopLinks = require(process.env.APP_PATH + "/models/response/getTopLinks").getTopLinks,
+        Post_List = require(process.env.APP_PATH + "/models/post/list").Post_List,
+        postList = new Post_List();
 
-      var elem = {
-        id: 1,
-        categoryId: categoryId,
-        url: "https://www.youtube.com/watch?v=hFmPRt_B3Tk&feature=g-all-f",
-        author: "zenedith",
-        views: 12222322,
-        rate: 10001211,
-        added: 1339013450
-      };
+      postList.get(limit, page, function (err2, listObj) {
 
-      for (var i=1; i <= limit; ++i) {
-        elem.id = i;
-        data.push(elem);
-      }
+        if (err2) {
+          return next(err2);
+        }
 
-      var response = {
-        count: 20 * limit,
-        pages: 20,
-        currentPage: page,
-        isNextPage: page < 20,
-        isPrevPage: page > 1,
-        result: data
-      };
+//      var elem = {
+//        id: 1,
+//        categoryId: categoryId,
+//        url: "https://www.youtube.com/watch?v=hFmPRt_B3Tk&feature=g-all-f",
+//        author: "zenedith",
+//        views: 12222322,
+//        rate: 10001211,
+//        added: 1339013450
+//      };
+//
+//      for (var i=1; i <= limit; ++i) {
+//        elem.id = i;
+//        data.push(elem);
+//      }
+//
+//      var response = {
+//        count: 20 * limit,
+//        pages: 20,
+//        currentPage: page,
+//        isNextPage: page < 20,
+//        isPrevPage: page > 1,
+//        result: data
+//      };
 
-      res.json(response);
-      RequestLogger.log(req, response);
+        var data = new getTopLinks(listObj);
+
+        res.json(data);
+        RequestLogger.log(req, data);
+      });
+
     });
   }
 };

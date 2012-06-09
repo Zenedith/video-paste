@@ -23,8 +23,7 @@ var User = function ()
     log.debug('User.createNewUser()');
 
 //    if (!externalId) {
-//      callback(error(601, 'Brak externalId usera'), null);
-//      return false;
+//      return callback(error(601, 'Brak externalId usera'), null);
 //    }
 
     this.__account_type = accountType.FACEBOOK;
@@ -47,7 +46,7 @@ var User = function ()
   };
 
   this.getIdByExternalId = function (externalId, account_type, callback) {
-    log.debug('User.getIdByExternalId(' + externalId + ', ' + account_type + ')');
+//    log.debug('User.getIdByExternalId(' + externalId + ', ' + account_type + ')');
     Database.getIdByUniqeKey(this, [externalId, account_type], callback);
   };
 

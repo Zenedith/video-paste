@@ -12,23 +12,23 @@ var Post = function ()
   this.__className = "Post";
   this.__categoryId = 0;
   this.__added = 0;
-  this.__authorId = 0;
+  this.__userId = 0;
   this.__url = '';
   this.__rate = 0;
   this.__views = 0;
 
-  this.createNewPost = function (url, categoryId, authorId, callback) {
+  this.createNewPost = function (url, categoryId, userId, callback) {
     log.debug('Post.createNewPost()');
 
-//    if (!authorId) {
-//      callback(error(601, 'Brak autora'), null);
+//    if (!userId) {
+//      callback(error(401, 'Brak autora'), null);
 //      return false;
 //    }
 
     this.__url = url;
     this.__categoryId = categoryId || 0;
     this.__added = Math.round(+new Date()/1000);
-    this.__authorId = authorId;
+    this.__userId = userId;
 
     Database.save(this, function (err, p_obj) {
 
@@ -36,13 +36,8 @@ var Post = function ()
         return callback(err, p_obj);
       }
 
-      log.debug('p_obj');
-      console.log(p_obj);
-
       //add score for post
       Database.addScore(p_obj, '__rate', function (err2, res) {
-        log.debug('res');
-        console.log(res);
         return callback(err, p_obj);
       });
 
@@ -81,15 +76,15 @@ var Post = function ()
   };
 
   this.getCategoryId = function () {
-    return this.__categoryId;
+    return parseInt(this.__categoryId || 0);
   };
 
   this.getAddedTimestamp = function () {
-    return this.__added;
+    return parseInt(this.__added || 0);
   };
 
-  this.getAuthorId = function () {
-    return this.__authorId;
+  this.getUserId = function () {
+    return parseInt(this.__userId || 0);
   };
 
   this.getUrl = function () {
@@ -97,11 +92,11 @@ var Post = function ()
   };
 
   this.getRating = function () {
-    return this.__rate;
+    return parseInt(this.__rate || 0);
   };
 
   this.getViews = function () {
-    return this.__views;
+    return parseInt(this.__views || 0);
   };
 };
 

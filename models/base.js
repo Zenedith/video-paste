@@ -29,6 +29,13 @@ Base.prototype.load = function (id, callback) {
   Database.load(this, callback);
 };
 
+Base.prototype.loadMany = function (ids, callback) {
+  var
+    Database = require(process.env.APP_PATH + "/lib/database").Database;
+
+  Database.loadMany(this, ids, callback);
+};
+
 Base.prototype.getDBValue = function (id, field, callback) {
   this.setId(id);
   Database.getValue(this, field, callback);

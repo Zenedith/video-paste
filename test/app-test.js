@@ -3,7 +3,7 @@ var
   qs = require('qs'),
   postId = 1,
   apikey = 'a3ca844f14fbb45b',
-  sessId = '0f9311d1495a9f1155a764e678a70f1ec7a3c7c2',  //expired by one hour
+  sessId = '03f3a43d42a61d6dafdda18210dd538fbee024db',  //expired by one hour
   secure = require("node-secure");
 
 
@@ -262,25 +262,25 @@ var
 //  );
 //};
 //
-//exports.testGetTopLinksValid = function (beforeExit, assert) {
-//
-//  assert.response(app, {
-//    url: '/api/getTopLinks/' + sessId,
-//    method: 'GET',
-//    headers: { 'Content-Type': 'text/html; charset=utf-8' }
-//  }, {
-//    status: 200,
-//    headers: { 'Content-Type': 'application/json; charset=utf-8' }
-//  },
-//  function(res) {
-//    var json = JSON.parse(res.body);
-////    console.log(json);
-//    assert.isNotNull(json.count);
-//    assert.isNotNull(json.pages);
-//    assert.isNotNull(json.currentPage);
-//    assert.isNotNull(json.isNextPage);
-//    assert.isNotNull(json.isPrevPage);
-//    assert.isNotNull(json.result);
-//  }
-//  );
-//};
+exports.testGetTopLinksValid = function (beforeExit, assert) {
+
+  assert.response(app, {
+    url: '/api/getTopLinks/' + sessId + '/0/1/1',
+    method: 'GET',
+    headers: { 'Content-Type': 'text/html; charset=utf-8' }
+  }, {
+    status: 200,
+    headers: { 'Content-Type': 'application/json; charset=utf-8' }
+  },
+  function(res) {
+    var json = JSON.parse(res.body);
+    console.log(json);
+    assert.isNotNull(json.count);
+    assert.isNotNull(json.pages);
+    assert.isNotNull(json.currentPage);
+    assert.isNotNull(json.isNextPage);
+    assert.isNotNull(json.isPrevPage);
+    assert.isNotNull(json.result);
+  }
+  );
+};

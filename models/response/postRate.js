@@ -5,13 +5,13 @@ var postRate = function (postObj)
 {
 //  log.debug('postRate.construct()');
 
-  this.postId = postObj.getId();
-//  this.categoryId = postObj.getCategoryId();
-//  this.added = postObj.getAddedTimestamp();
-//  this.authorId = postObj.getAuthorId();  //TODO author name insted
-//  this.url = postObj.getUrl();
-  this.rate = postObj.getRating();
-//  this.views = postObj.getViews();
+  this.postId = parseInt(postObj.getId());
+//this.categoryId = parseInt(postObj.getCategoryId());
+//this.added = postObj.getAddedTimestamp();
+//this.userId = parseInt(postObj.getUserId());
+//this.url = postObj.getUrl();
+this.rate = parseInt(postObj.getRating());
+//this.views = parseInt(postObj.getViews());
 };
 
 exports.postRate = postRate;

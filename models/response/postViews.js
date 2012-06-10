@@ -10,6 +10,7 @@ var postViews = function (postObj)
 //  this.added = postObj.getAddedTimestamp();
 //  this.userId = parseInt(postObj.getUserId());
 //  this.url = postObj.getUrl();
+//  this.thumbUrl = postObj.getThumbUrl();
 //  this.rate = parseInt(postObj.getRating());
   this.views = parseInt(postObj.getViews());
 };

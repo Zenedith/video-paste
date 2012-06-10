@@ -16,17 +16,19 @@ var Post = function ()
   this.__added = 0;
   this.__userId = 0;
   this.__url = '';
+  this.__thumbUrl = null,
   this.__rate = 1;
   this.__views = 0;
 
-  this.createNewPost = function (url, categoryId, userId, callback) {
+  this.createNewPost = function (urlObj, categoryId, userId, callback) {
     log.debug('Post.createNewPost()');
 
     if (!userId) {
       return callback(error(401, 'Missing userId'), null);
     }
 
-    this.__url = url;
+    this.__url = urlObj.get();
+    this.__thumbUrl = urlObj.getThumbUrl();
     this.__categoryId = parseInt(categoryId) || 0;
     this.__added = Math.round(+new Date()/1000);
     this.__userId = parseInt(userId);
@@ -133,6 +135,20 @@ var Post = function ()
 
   this.getUrl = function () {
     return this.__url;
+  };
+
+  this.getThumbUrl = function () {
+
+    //if no thumb, then try to get it
+    if (this.__thumbUrl === null) {
+      var
+        Url = require(process.env.APP_PATH + "/models/url").Url,
+        urlObj = new Url(this.getUrl());
+
+      this.__thumbUrl = urlObj.getThumbUrl();
+    }
+
+    return this.__thumbUrl;
   };
 
   this.getRating = function () {

@@ -32,6 +32,17 @@ var Url = function (url)
     return false;
   };
 
+  this.getThumbUrl = function () {
+    var
+      matches = [];
+
+    if (matches = this.__url.match(/(https?)\:\/\/www\.youtube\.com\/.+?v=(.+)&?/i)) {
+      return util.format('%s://img.youtube.com/vi/%s/hqdefault.jpg', matches[1], matches[2]);
+    }
+
+    return '';
+  };
+
   this.get = function () {
     return this.__url;
   };

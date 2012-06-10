@@ -10,7 +10,8 @@ var postRate = function (postObj)
 //this.added = postObj.getAddedTimestamp();
 //this.userId = parseInt(postObj.getUserId());
 //this.url = postObj.getUrl();
-this.rate = parseInt(postObj.getRating());
+//this.thumbUrl = postObj.getThumbUrl();
+  this.rate = parseInt(postObj.getRating());
 //this.views = parseInt(postObj.getViews());
 };
 

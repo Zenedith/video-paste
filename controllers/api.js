@@ -310,7 +310,7 @@ var Api_Controller = {
         post = new Post();
 
       try {
-        post.createNewPost(urlObj.get(), categoryId, userId, function (err2, p_obj) {
+        post.createNewPost(urlObj, categoryId, userId, function (err2, p_obj) {
 
           if (err2) {
             return next(err2);

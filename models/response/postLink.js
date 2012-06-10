@@ -11,6 +11,7 @@ var postLink = function (postObj, userNamesObj)
   this.userId = parseInt(postObj.getUserId());
   this.userName = userNamesObj.getName(this.userId);
   this.url = postObj.getUrl();
+  this.thumbUrl = postObj.getThumbUrl();
   this.rate = parseInt(postObj.getRating());
   this.views = parseInt(postObj.getViews());
 };

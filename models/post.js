@@ -63,7 +63,7 @@ var Post = function ()
       add_score_callback = function (err, p_obj) {
 
       if (err) {
-        return callback(err, p_obj);
+        return callback(err, null);
       }
 
       //add score for post

@@ -1,6 +1,6 @@
 {
   "name": "video-paste-api",
-  "description": "My mobile pkp app",
+  "description": "video paste api project",
   "version": "0.2.0",
   "homepage": "https://github.com/Zenedith/video-paste",
   "main":"api",
@@ -31,6 +31,7 @@
     "config" : "",
     "socket.io" : "",
     "node-secure" : "",
+    "ga" : "",
     "loggly" : ""
   }
 }

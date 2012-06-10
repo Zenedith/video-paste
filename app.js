@@ -14,6 +14,7 @@ process.on('uncaughtException', function (err) {
 var
     express = require('express'),
     config = require('config'),
+    GoogleAnalytics = require('ga'),
 //    i18n = require("i18n"),
 //    expressValidator = require('express-validator'),
     Errors = require(process.env.APP_PATH + "/models/errors").Errors,
@@ -87,12 +88,23 @@ if (process.env.NODE_ENV == 'dotcloud') {
 
 //    app.use(express.static(__dirname + '/public'));
 //    app.use(express.compiler({src: __dirname + '/public', enable: ['less'] }));
-
-//    app.use('/api', function(req, res, next) {
 //
-//      //count IP calls
-//      next();
-//    });
+    app.use('/api', function(req, res, next) {
+
+      var
+        ip = req.headers['x-real-ip'] || res.connection.remoteAddress,
+        forwardedFor = req.headers['x-forwarded-for'] || '';
+
+      if (config.app.enable_google_analytics) {
+        ua = "UA-32533263-1",
+        host = req.headers['host'],
+        ga = new GoogleAnalytics(ua, host);
+        ga.trackPage(req.originalUrl);
+      }
+
+//TODO      count IP calls
+      next();
+    });
 
     // position our routes above the error handling middleware,
     // and below our API middleware, since we want the API validation

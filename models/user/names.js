@@ -11,8 +11,12 @@ var User_Names = function(idsObj, callback) {
     _this = this;
 
   user.getNamesByIds(Object.keys(idsObj), function (err, userNames) {
+    if (err) {
+      return callback(err, null);
+    }
+
     _this.userNames = userNames;
-    return callback(err, _this);
+    return callback(null, _this);
   });
 
   this.getName = function (id) {

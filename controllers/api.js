@@ -86,8 +86,8 @@ var Api_Controller = {
       }
 
       var
-        ip = res.connection.remoteAddress,
-        forwardedFor = '',
+        ip = req.headers['x-real-ip'] || res.connection.remoteAddress,
+        forwardedFor = req.headers['x-forwarded-for'] || '',
         Session_Generator = require(process.env.APP_PATH + "/models/session/generator").Session_Generator,
         getSession = require(process.env.APP_PATH + "/models/response/getSession").getSession,
         sess = new Session_Generator();

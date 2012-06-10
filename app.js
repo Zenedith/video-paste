@@ -139,7 +139,7 @@ if (process.env.NODE_ENV == 'dotcloud') {
 
       //if /api call, show json output
       if (/^\/api\//.test(req.originalUrl)) {
-        res.send(err, { 'Content-Type': 'application/json' }, err.code);
+        res.send(err, { 'Content-Type': 'application/json' }, err.status);
         RequestLogger.log(req, err);
       }
       else {

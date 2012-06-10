@@ -2,10 +2,10 @@ var
   app = require(__dirname + '/../app'),
   qs = require('qs'),
 //  postId = 21,
-  postId = 47,
+  postId = 48,
   apikey = 'a3ca844f14fbb45b',
-  sessId = 'bc9b7824e4623554036b9aca3a07b5fb69991c47',  //expired by one hour
-  authorizedSessId = '0327ce87f751023e77e46cd2084eb8159ce41b23',  //expired by one hour
+  sessId = 'b0dd24ca1614aa6387d777d525be4a9b5f72e845',  //expired by one hour
+  authorizedSessId = '16f436bd7be7186dc7b0b4ad4f10b3a9205abf6b',  //expired by one hour
 //  show_response = false,
   show_response = true,
   secure = require("node-secure");
@@ -235,7 +235,7 @@ exports.testPostRateValid = function (beforeExit, assert) {
   var post_data = qs.stringify({rate: 1});
 
   assert.response(app, {
-    url: '/api/postRate/' + authorizedSessId + '/' + postId,
+    url: '/api/postRate/' + authorizedSessId + '/' + 11,
     method: 'POST',
     headers: {
         'Content-Type': 'application/x-www-form-urlencoded',
@@ -255,7 +255,7 @@ exports.testPostRateValid = function (beforeExit, assert) {
       console.log(json);
     }
 
-    assert.equal(json.postId, postId);
+    assert.equal(json.postId, 11);
     assert.ok(json.rate > 0);
   }
   );
@@ -353,7 +353,7 @@ exports.testLoginByFbInvalidKey = function (beforeExit, assert) {
     method: 'GET',
     headers: { 'Content-Type': 'text/html; charset=utf-8' }
   }, {
-    status: 602,
+    status: 400,
     headers: { 'Content-Type': 'application/json; charset=utf-8' }
   },
   function(res) {
@@ -401,7 +401,7 @@ exports.testGetSessionNoKey = function (beforeExit, assert) {
     method: 'GET',
     headers: { 'Content-Type': 'text/html; charset=utf-8' }
   }, {
-    status: 602,
+    status: 400,
     headers: { 'Content-Type': 'application/json; charset=utf-8' }
   },
   function(res) {
@@ -425,7 +425,7 @@ exports.testGetSessionInvalidKey = function (beforeExit, assert) {
     method: 'GET',
     headers: { 'Content-Type': 'text/html; charset=utf-8' }
   }, {
-    status: 602,
+    status: 400,
     headers: { 'Content-Type': 'application/json; charset=utf-8' }
   },
   function(res) {

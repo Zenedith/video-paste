@@ -118,30 +118,54 @@ if (process.env.NODE_ENV == 'dotcloud') {
     // in order, but ONLY those with an arity of 4, ignoring
     // regular middleware.
     app.use(function(err, req, res, next){
-//      log.error(err.message);
-//      console.log('50x');
-//      console.log(err);
 
-      //TODO check API or html
-
-      if (process.env.NODE_ENV != 'development') {
-        err.message = 'Unexpected api problem';
+      //check error type
+      if (!err.hasOwnProperty('code')) {
+        log.error('500: ' + req.originalUrl + ', error: ' + err.message); //log real message
+        err = error(500, 'Unexpexted error occured'); //override message
+      }
+      else {
+        log.error(err.code + ': ' + req.originalUrl + ', error: ' + err.message);
       }
 
-      res.send(err, { 'Content-Type': 'application/json' }, err.code);
-      RequestLogger.log(req, err);
+      //on development show debug stack only if no testing (modeule parent)
+      if (process.env.NODE_ENV === 'development' && !module.parent) {
+        return next(err); //goto express.errorHandler
+      }
+
+      if (/RedisClient/i.test(err.msg)) {
+        err.msg = 'Database problem';
+      }
+
+      //if /api call, show json output
+      if (/^\/api\//.test(req.originalUrl)) {
+        res.send(err, { 'Content-Type': 'application/json' }, err.code);
+        RequestLogger.log(req, err);
+      }
+      else {
+        res.status(500);
+        res.render('info', { title: 'Nieoczekiwany problem (500)' });
+      }
     });
+
+    app.use(express.errorHandler({ showStack: true, dumpExceptions: true }));
 
     // our custom JSON 404 middleware. Since it's placed last
     // it will be the last middleware called, if all others
     // invoke next() and do not respond.
     app.use(function(req, res, next){
-//      console.log('404');
+      log.error('404: ' + req.originalUrl);
 
-      //TODO check API or html
-      var err = error(404, 'Bad method name');
-      res.send(err, { 'Content-Type': 'application/json' }, 404);
-      RequestLogger.log(req, err);
+      //if /api call, show json output
+      if (/^\/api\//.test(req.originalUrl)) {
+        var err = error(404, 'Bad method name');
+        res.send(err, { 'Content-Type': 'application/json' }, 404);
+        RequestLogger.log(req, err);
+      }
+      else {
+        res.status(404);
+        res.render('info', { title: 'Strona nie została odnaleziona (404)' });
+      }
     });
   });
 

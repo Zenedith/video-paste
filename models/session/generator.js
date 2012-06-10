@@ -13,9 +13,7 @@ var Session_Generator = function ()
 
   this.generateSession = function () {
     log.debug('Session_Generator.generateSession()');
-    var sess = crypto.createHmac('sha1', this.salt).update(this.key_salt).digest('hex');
-
-    return sess;
+    return crypto.createHmac('sha1', this.salt).update(this.key_salt).digest('hex');
   };
 
   this.createNewSession = function (key, ip, forwardedFor, userId, callback) {

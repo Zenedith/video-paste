@@ -4,10 +4,10 @@ var
 //  postId = 21,
   postId = 47,
   apikey = 'a3ca844f14fbb45b',
-  sessId = 'cfec983a0652e476f6a82f375480b2bc3a973b82',  //expired by one hour
-  authorizedSessId = 'd4d0bd18a953c72bf4f6b524e1d0f9ceeafab812',  //expired by one hour
-  show_response = false,
-//  show_response = true,
+  sessId = 'bc9b7824e4623554036b9aca3a07b5fb69991c47',  //expired by one hour
+  authorizedSessId = '0327ce87f751023e77e46cd2084eb8159ce41b23',  //expired by one hour
+//  show_response = false,
+  show_response = true,
   secure = require("node-secure");
 
 
@@ -418,6 +418,30 @@ exports.testGetSessionNoKey = function (beforeExit, assert) {
   );
 };
 
+exports.testGetSessionInvalidKey = function (beforeExit, assert) {
+
+  assert.response(app, {
+    url: '/api/getSession/a3ca844f14fbb400',
+    method: 'GET',
+    headers: { 'Content-Type': 'text/html; charset=utf-8' }
+  }, {
+    status: 602,
+    headers: { 'Content-Type': 'application/json; charset=utf-8' }
+  },
+  function(res) {
+    var json = JSON.parse(res.body);
+
+    if (show_response) {
+      console.log('testGetSessionNoKey result: ');
+      console.log(json);
+    }
+
+    assert.equal(json.error, 'ERR_INVALID_KEY');
+    assert.equal(json.code, 602);
+  }
+  );
+};
+
 exports.testPostViewsValid = function (beforeExit, assert) {
 
   var post_data = '';
@@ -508,7 +532,7 @@ exports.testPostViewsInvalidPostId = function (beforeExit, assert) {
 exports.testGetTopLinksValid = function (beforeExit, assert) {
 
   assert.response(app, {
-    url: '/api/getTopLinks/' + sessId + '/0/10/1',
+    url: '/api/getTopLinks/' + sessId + '/0/2/1',
     method: 'GET',
     headers: { 'Content-Type': 'text/html; charset=utf-8' }
   }, {

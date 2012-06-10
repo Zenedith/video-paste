@@ -31,11 +31,22 @@ var Key = function ()
 
   this.isValidKey = function (id, callback) {
     var
+      sanitize = require('validator').sanitize,
+      check = require('validator').check,
       _this = this;
+
+    id = sanitize(id).xss();
+
+    try {
+      check(id).notEmpty().len(16, 16);
+    }
+    catch (e) {
+      return callback(error(602, 'invalid api key: ' + e.message), null);
+    }
 
     this.load(id, function(err, obj) {
 
-      if (obj === null) {
+      if (err || obj === null) {
         return callback(error(602, 'invalid api key'), null);
       }
 

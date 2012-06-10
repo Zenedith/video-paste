@@ -59,6 +59,12 @@ if (process.env.NODE_ENV == 'dotcloud') {
     app.set('view engine', 'jade');
     app.use(express.favicon());
 
+    app.use(express.favicon());
+
+    app.helpers({
+      config: config
+    });
+
     app.set('config', config);
 
     //access.log format (default is full)

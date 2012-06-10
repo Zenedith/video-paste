@@ -34,7 +34,7 @@
     get posted link data by postId
     ```
     ```
-    { postId: int, categoryId: int, added: int, userId: int, userName: string, url: string, rate: int, views: int }
+    { postId: int, categoryId: int, added: int, userId: int, userName: string, url: string, thumbUrl: string, rate: int, views: int }
     ```
     * ERR_BAD_REQUEST
     * ERR_API_INTERNAL_ERROR
@@ -45,7 +45,7 @@
     create post link (url param from POST BODY)
     ```
     ```
-    { postId: int, categoryId: int, added: int, userId: int, userName: string, url: string, rate: int, views: int }
+    { postId: int, categoryId: int, added: int, userId: int, userName: string, url: string, thumbUrl: string, rate: int, views: int }
     ```
     * ERR_BAD_REQUEST
     * ERR_API_INTERNAL_ERROR
@@ -82,7 +82,7 @@
     get top links (only sessionId is required, max limit value: 100)
     ```
     ```
-    {count: int, pages: int, currentPage: int, isNextPage: bool, isPrevPage: bool, result: [{ postId: int, categoryId: int, added: int, userId: int, userName: string, url: string, rate: int, views: int}]
+    {count: int, pages: int, currentPage: int, isNextPage: bool, isPrevPage: bool, result: [{ postId: int, categoryId: int, added: int, userId: int, userName: string, url: string, thumbUrl: string, rate: int, views: int}]
     ```
     * ERR_BAD_REQUEST
     * ERR_API_INTERNAL_ERROR

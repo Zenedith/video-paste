@@ -12,14 +12,15 @@ var Api_Controller = {
       key = new Key_Generator();
 
     key.createNewKey(function (err, obj) {
-      if (!err) {
-        var data = new generateKey(obj);
-        res.json(data);
-        RequestLogger.log(req, data);
-      }
-      else {
+
+      //if something wrong
+      if (err) {
         return next(err);
       }
+
+      var data = new generateKey(obj);
+      res.json(data);
+      RequestLogger.log(req, data);
     });
   },
   //api/loginByFb/:apiKey/:id/:name/:fist_name/:last_name/:locale
@@ -364,6 +365,10 @@ var Api_Controller = {
         getTopLinks = require(process.env.APP_PATH + "/models/response/getTopLinks").getTopLinks,
         Post_List = require(process.env.APP_PATH + "/models/post/list").Post_List,
         postList = new Post_List();
+
+      if (limit > 100) {
+        return next(error(400, 'Bad request (too big limit value)'));
+      }
 
       postList.get(limit, page, function (err2, listObj) {
 

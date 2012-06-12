@@ -139,7 +139,7 @@ if (process.env.NODE_ENV == 'dotcloud') {
 
       //if /api call, show json output
       if (/^\/api\//.test(req.originalUrl)) {
-        res.send(err, { 'Content-Type': 'application/json' }, err.status);
+        res.send(err, { 'Content-Type': 'application/json' }, 200);
         RequestLogger.log(req, err);
       }
       else {
@@ -159,7 +159,7 @@ if (process.env.NODE_ENV == 'dotcloud') {
       //if /api call, show json output
       if (/^\/api\//.test(req.originalUrl)) {
         var err = error(404, 'Bad method name');
-        res.send(err, { 'Content-Type': 'application/json' }, 404);
+        res.send(err, { 'Content-Type': 'application/json' }, 200);
         RequestLogger.log(req, err);
       }
       else {

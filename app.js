@@ -21,8 +21,7 @@ var
     RequestLogger = require(process.env.APP_PATH + "/lib/requestLogger").RequestLogger,
     log = require(process.env.APP_PATH + "/lib/log"),
     controller = require(process.env.APP_PATH + "/lib/controller"),
-    auth = require('connect-auth');
-
+    Auth_Connect = require(process.env.APP_PATH + "/lib/auth/connect").Auth_Connect;
 
 
 //global
@@ -76,25 +75,14 @@ if (process.env.NODE_ENV == 'dotcloud') {
   //  app.use(express.logger({ format: ':method :url' }));
 //    app.use(expressValidator);  //data validator and sanitizer
 
-    var logoutHandler = function (v1, v2, v3) {
-      console.log('logoutHandler');
-      console.log(v1, v2, v3);
-    };
-
     //standard mvc
     app.use(express.cookieParser('my secret here'))
       .use(express.session({secret: "string" }))
       .use(express.bodyParser())
-      .use(express.methodOverride())
-      .use(auth({
-        strategies:[
-            auth.Twitter({consumerKey: config.auth.twitter.consumerkey, consumerSecret: config.auth.twitter.consumersecret}),
-            auth.Facebook({appId : config.auth.facebook.appid, appSecret: config.auth.facebook.appsecret, scope: "email", callback: 'http://localhost:3001/auth/facebook_callback'}),
-            auth.Google2({appId : config.auth.google.clientid, appSecret: config.auth.google.clientsecret, callback: 'http://localhost:3001/auth/google/login', requestEmailPermission: true})
-          ],
-        trace: true,
-        logoutHandler: logoutHandler})
-       );
+      .use(express.methodOverride());
+
+    authConnect = new Auth_Connect();
+    authConnect.initApp(app);
 
 
   // using 'accept-language' header to guess language settings

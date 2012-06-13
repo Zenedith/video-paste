@@ -21,6 +21,43 @@
     * ERR_BAD_REQUEST
     * ERR_API_INTERNAL_ERROR
     * ERR_INVALID_KEY
+    * ERR_LOGIN_FAILED
+
+- /api/loginByGoogle/:apiKey/:id/:name/:given_name/:family_name
+    ```
+    get session for authorized user by google
+    ```
+    ```
+    {sess: string, userId: int}
+    ```
+    * ERR_BAD_REQUEST
+    * ERR_API_INTERNAL_ERROR
+    * ERR_INVALID_KEY
+    * ERR_LOGIN_FAILED
+
+- /api/loginByTwitter/:apiKey/:id/:name
+    ```
+    get session for authorized user by twitter
+    ```
+    ```
+    {sess: string, userId: int}
+    ```
+    * ERR_BAD_REQUEST
+    * ERR_API_INTERNAL_ERROR
+    * ERR_INVALID_KEY
+    * ERR_LOGIN_FAILED
+
+- /api/loginByWindowsLive/:apiKey/:id/:name/:fist_name/:last_name/:locale
+    ```
+    get session for authorized user by windows live
+    ```
+    ```
+    {sess: string, userId: int}
+    ```
+    * ERR_BAD_REQUEST
+    * ERR_API_INTERNAL_ERROR
+    * ERR_INVALID_KEY
+    * ERR_LOGIN_FAILED
 
 - /api/generateKey
     ```
@@ -112,4 +149,5 @@ error value             code value
 * ERR_INVALID_KEY           602
 * ERR_INVALID_SESSION       603
 * ERR_ALREADY_RATED         604
+* ERR_LOGIN_FAILED          605
 ```

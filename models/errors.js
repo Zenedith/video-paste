@@ -35,6 +35,9 @@ var Errors = function (code, msg) {
     case 604:
       err.error = 'ERR_ALREADY_RATED';
       break;
+    case 605:
+      err.error = 'ERR_LOGIN_FAILED';
+      break;
   }
 
   err.data = '';

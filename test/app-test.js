@@ -346,6 +346,28 @@ exports.testPostRateInvalidRate = function (beforeExit, assert) {
 //  }
 //  );
 //};
+//exports.testLoginByGoogleValid = function (beforeExit, assert) {
+//  assert.response(app, {
+//    url: '/api/loginByGoogle/' + apikey + '/6661/zenedith/mat/ste',
+//    method: 'GET',
+//    headers: { 'Content-Type': 'text/html; charset=utf-8' }
+//  }, {
+//    status: 200,
+//    headers: { 'Content-Type': 'application/json; charset=utf-8' }
+//  },
+//  function(res) {
+//    var json = JSON.parse(res.body);
+//
+//    if (show_response) {
+//      console.log('testLoginByFbValid result: ');
+//      console.log(json);
+//    }
+//
+//    assert.isNotNull(json.sess);
+//    assert.isNotNull(json.userId);
+//  }
+//  );
+//};
 
 exports.testLoginByFbInvalidKey = function (beforeExit, assert) {
 

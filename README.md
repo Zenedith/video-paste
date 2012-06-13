@@ -23,6 +23,18 @@
     * ERR_INVALID_KEY
     * ERR_LOGIN_FAILED
 
+- /api/loginByGoogle/:apiKey/:id/:name/:given_name/:family_name
+    ```
+    get session for authorized user by google
+    ```
+    ```
+    {sess: string, userId: int}
+    ```
+    * ERR_BAD_REQUEST
+    * ERR_API_INTERNAL_ERROR
+    * ERR_INVALID_KEY
+    * ERR_LOGIN_FAILED
+
 - /api/generateKey
     ```
     generate valid key (temp)

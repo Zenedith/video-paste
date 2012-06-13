@@ -47,7 +47,7 @@ exports.testPostLinkMissingParams = function (beforeExit, assert) {
         },
     data: post_data
   }, {
-    status: 400,
+    status: 200,
     headers: { 'Content-Type': 'application/json; charset=utf-8' }
   },
   function(res) {
@@ -78,7 +78,7 @@ exports.testPostLinkCreateTestConverter = function (beforeExit, assert) {
     },
     data: post_data
   }, {
-    status: 201,
+    status: 200,
     headers: { 'Content-Type': 'application/json; charset=utf-8' }
   },
   function(res) {
@@ -115,7 +115,7 @@ exports.testPostLinkCreateInvalidUrl = function (beforeExit, assert) {
     },
     data: post_data
   }, {
-    status: 400,
+    status: 200,
     headers: { 'Content-Type': 'application/json; charset=utf-8' }
   },
   function(res) {
@@ -144,7 +144,7 @@ exports.testPostLinkCreate = function (beforeExit, assert) {
     },
     data: post_data
   }, {
-    status: 201,
+    status: 200,
     headers: { 'Content-Type': 'application/json; charset=utf-8' }
   },
   function(res) {
@@ -181,7 +181,7 @@ exports.testGetPostLinkCreateInvalidSess = function (beforeExit, assert) {
         },
     data: post_data
   }, {
-    status: 401,
+    status: 200,
     headers: { 'Content-Type': 'application/json; charset=utf-8' }
   },
   function(res) {
@@ -275,7 +275,7 @@ exports.testPostRateInvalidSess = function (beforeExit, assert) {
     data: post_data
 
   }, {
-    status: 401,
+    status: 200,
     headers: { 'Content-Type': 'application/json; charset=utf-8' }
   },
   function(res) {
@@ -305,7 +305,7 @@ exports.testPostRateInvalidRate = function (beforeExit, assert) {
     data: post_data
 
   }, {
-    status: 400,
+    status: 200,
     headers: { 'Content-Type': 'application/json; charset=utf-8' }
   },
   function(res) {
@@ -353,7 +353,7 @@ exports.testLoginByFbInvalidKey = function (beforeExit, assert) {
     method: 'GET',
     headers: { 'Content-Type': 'text/html; charset=utf-8' }
   }, {
-    status: 400,
+    status: 200,
     headers: { 'Content-Type': 'application/json; charset=utf-8' }
   },
   function(res) {
@@ -401,7 +401,7 @@ exports.testGetSessionNoKey = function (beforeExit, assert) {
     method: 'GET',
     headers: { 'Content-Type': 'text/html; charset=utf-8' }
   }, {
-    status: 400,
+    status: 200,
     headers: { 'Content-Type': 'application/json; charset=utf-8' }
   },
   function(res) {
@@ -425,7 +425,7 @@ exports.testGetSessionInvalidKey = function (beforeExit, assert) {
     method: 'GET',
     headers: { 'Content-Type': 'text/html; charset=utf-8' }
   }, {
-    status: 400,
+    status: 200,
     headers: { 'Content-Type': 'application/json; charset=utf-8' }
   },
   function(res) {
@@ -484,7 +484,7 @@ exports.testPostViewsInvalidPostId = function (beforeExit, assert) {
     },
     data: post_data
     }, {
-      status: 400,
+      status: 200,
       headers: { 'Content-Type': 'application/json; charset=utf-8' }
     },
     function(res) {
@@ -513,7 +513,7 @@ exports.testPostViewsInvalidPostId = function (beforeExit, assert) {
     },
     data: post_data
   }, {
-    status: 400,
+    status: 200,
     headers: { 'Content-Type': 'application/json; charset=utf-8' }
   },
   function(res) {

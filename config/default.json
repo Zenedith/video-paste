@@ -202,36 +202,36 @@
       "description":"get top links",
       "isRegExp" : false
     },
-    "auth_facebook_callback" : {
+    "auth_facebook_login" : {
       "controller": "login",
       "action": "facebook",
-      "url": "auth/facebook_callback",
+      "url": "auth/facebook/login",
       "method":"get",
-      "description":"facebook login callback",
+      "description":"facebook login",
       "isRegExp" : false
     },
-    "auth_google_callback" : {
+    "auth_google_login" : {
       "controller": "login",
       "action": "google",
-      "url": "auth/googlecallback",
+      "url": "auth/google/login",
       "method":"get",
-      "description":"google login callback",
+      "description":"google login",
       "isRegExp" : false
     },
-    "auth_twitter_callback" : {
+    "auth_twitter_login" : {
       "controller": "login",
       "action": "twitter",
-      "url": "auth/twittercallback",
+      "url": "auth/twitter/login",
       "method":"get",
-      "description":"twitter login callback",
+      "description":"twitter login",
       "isRegExp" : false
     },
-    "auth_live_callback" : {
+    "auth_live_login" : {
       "controller": "login",
       "action": "live",
-      "url": "auth/livecallback",
+      "url": "auth/live/login",
       "method":"get",
-      "description":"windows live login callback",
+      "description":"windows live login",
       "isRegExp" : false
     }
   }

@@ -21,6 +21,7 @@
     * ERR_BAD_REQUEST
     * ERR_API_INTERNAL_ERROR
     * ERR_INVALID_KEY
+    * ERR_LOGIN_FAILED
 
 - /api/generateKey
     ```
@@ -112,4 +113,5 @@ error value             code value
 * ERR_INVALID_KEY           602
 * ERR_INVALID_SESSION       603
 * ERR_ALREADY_RATED         604
+* ERR_LOGIN_FAILED          605
 ```

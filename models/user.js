@@ -22,9 +22,6 @@ var User = function ()
   this.createNewFbUser = function (externalId, name, fist_name, last_name, locale, callback) {
     log.debug('User.createNewUser()');
 
-    //TODO validate user data in facbook!
-    // how to prevend frauds?!
-
     this.__account_type = accountType.FACEBOOK;
     this.__created = Math.round(+new Date()/1000);
     this.__externalId = externalId;

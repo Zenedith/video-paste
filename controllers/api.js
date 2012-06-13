@@ -48,27 +48,39 @@ var Api_Controller = {
         accountType = require(process.env.APP_PATH + "/models/user/accountType").accountType,
         user = new User();
 
-      user.getIdByExternalId(fbId, accountType.FACEBOOK, function(err2, id) {
 
-        if (err2) {
-          return next(err2);
+      var
+        User_Validate_Facebook = require(process.env.APP_PATH + "/models/user/validate/facebook").User_Validate_Facebook,
+        userValidateFcebook = new User_Validate_Facebook();
+
+      userValidateFcebook.isValid(fbId, name, fist_name, last_name, function (errFb, data) {
+
+        if (errFb) {
+          return next(errFb);
         }
 
-        //if user not finded, create new
-        if (!id) {
-          user.createNewFbUser(fbId, name, fist_name, last_name, locale, function (err3, obj) {
-            if (!err3) {
-              req.userId = obj.getId(); //add info about user and forward to get session method
-              return Api_Controller.get_session(req, res, next);
-            }
+        user.getIdByExternalId(fbId, accountType.FACEBOOK, function(err2, id) {
 
-            return next(err3);
-          });
-        }
-        else {
-          req.userId = id; //add info about user and forward to get session method
-          return Api_Controller.get_session(req, res, next);
-        }
+          if (err2) {
+            return next(err2);
+          }
+
+          //if user not finded, create new
+          if (!id) {
+            user.createNewFbUser(fbId, name, fist_name, last_name, locale, function (err3, obj) {
+              if (!err3) {
+                req.userId = obj.getId(); //add info about user and forward to get session method
+                return Api_Controller.get_session(req, res, next);
+              }
+
+              return next(err3);
+            });
+          }
+          else {
+            req.userId = id; //add info about user and forward to get session method
+            return Api_Controller.get_session(req, res, next);
+          }
+        });
       });
     });
   },

@@ -10,6 +10,13 @@
     "use_loggly_frontend" : false,
     "enable_google_analytics" : true
   },
+  "auth": {
+    "facebook": {
+      "appid": "",
+      "appsecret": "",
+      "accesstoken": ""
+    }
+  },
   "db": {
     "use" : "redis",
     "prefix" : "vpa",
@@ -122,6 +129,14 @@
       "url": "api/getTopLinks/:sessionId",
       "method":"get",
       "description":"get top links",
+      "isRegExp" : false
+    },
+    "auth_facebook_callback" : {
+      "controller": "login",
+      "action": "facebook",
+      "url": "auth/facebook_callback",
+      "method":"get",
+      "description":"facebook login callback",
       "isRegExp" : false
     }
   }

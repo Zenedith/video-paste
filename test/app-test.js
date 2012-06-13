@@ -322,29 +322,30 @@ exports.testPostRateInvalidRate = function (beforeExit, assert) {
 );
 };
 
-exports.testLoginByFbValid = function (beforeExit, assert) {
-
-  assert.response(app, {
-    url: '/api/loginByFb/' + apikey + '/6661/zenedith/mat/ste/pl_PL',
-    method: 'GET',
-    headers: { 'Content-Type': 'text/html; charset=utf-8' }
-  }, {
-    status: 200,
-    headers: { 'Content-Type': 'application/json; charset=utf-8' }
-  },
-  function(res) {
-    var json = JSON.parse(res.body);
-
-    if (show_response) {
-      console.log('testLoginByFbValid result: ');
-      console.log(json);
-    }
-
-    assert.isNotNull(json.sess);
-    assert.isNotNull(json.userId);
-  }
-  );
-};
+//TODO get test data from config
+//exports.testLoginByFbValid = function (beforeExit, assert) {
+//
+//  assert.response(app, {
+//    url: '/api/loginByFb/' + apikey + '/6661/zenedith/mat/ste/pl_PL',
+//    method: 'GET',
+//    headers: { 'Content-Type': 'text/html; charset=utf-8' }
+//  }, {
+//    status: 200,
+//    headers: { 'Content-Type': 'application/json; charset=utf-8' }
+//  },
+//  function(res) {
+//    var json = JSON.parse(res.body);
+//
+//    if (show_response) {
+//      console.log('testLoginByFbValid result: ');
+//      console.log(json);
+//    }
+//
+//    assert.isNotNull(json.sess);
+//    assert.isNotNull(json.userId);
+//  }
+//  );
+//};
 
 exports.testLoginByFbInvalidKey = function (beforeExit, assert) {
 

@@ -6,18 +6,17 @@ var
   secure = require("node-secure");
 
 var Login_Controller = {
-  google: function(req, res) {
-    authConnect.updateAccessToken('google2', req, res);
+  login: function(req, res) {
+
+    var
+      service = req.params.service;
+
+    if (service === 'google') {
+      service = 'google2';
+    }
+
+    auth.updateAccessToken(service, req, res);
   },
-  facebook: function(req, res) {
-    authConnect.updateAccessToken('facebook', req, res);
-  },
-  twitter: function(req, res) {
-    authConnect.updateAccessToken('twitter', req, res);
-  },
-  live: function(req, res) {
-    authConnect.updateAccessToken('live', req, res);
-  }
 };
 
 

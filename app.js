@@ -21,7 +21,8 @@ var
     RequestLogger = require(process.env.APP_PATH + "/lib/requestLogger").RequestLogger,
     log = require(process.env.APP_PATH + "/lib/log"),
     controller = require(process.env.APP_PATH + "/lib/controller"),
-    Auth_Connect = require(process.env.APP_PATH + "/lib/auth/connect").Auth_Connect;
+    Auth_Authom = require(process.env.APP_PATH + "/lib/auth/authom").Auth_Authom;
+//    Auth_Connect = require(process.env.APP_PATH + "/lib/auth/connect").Auth_Connect;
 
 
 //global
@@ -81,8 +82,9 @@ if (process.env.NODE_ENV == 'dotcloud') {
       .use(express.bodyParser())
       .use(express.methodOverride());
 
-    authConnect = new Auth_Connect();
-    authConnect.initApp(app);
+//    auth = new Auth_Connect();
+    auth = new Auth_Authom();
+    auth.initApp(app);
 
 
   // using 'accept-language' header to guess language settings

@@ -24,6 +24,8 @@
     },
     "twitter": {
       "accesstoken": "",
+      "accesstokensecret": "",
+      "accesstoken": "",
       "accesstokensecret": ""
     },
     "live": {
@@ -200,38 +202,6 @@
       "url": "api/getTopLinks/:sessionId",
       "method":"get",
       "description":"get top links",
-      "isRegExp" : false
-    },
-    "auth_facebook_login" : {
-      "controller": "login",
-      "action": "facebook",
-      "url": "auth/facebook/login",
-      "method":"get",
-      "description":"facebook login",
-      "isRegExp" : false
-    },
-    "auth_google_login" : {
-      "controller": "login",
-      "action": "google",
-      "url": "auth/google/login",
-      "method":"get",
-      "description":"google login",
-      "isRegExp" : false
-    },
-    "auth_twitter_login" : {
-      "controller": "login",
-      "action": "twitter",
-      "url": "auth/twitter/login",
-      "method":"get",
-      "description":"twitter login",
-      "isRegExp" : false
-    },
-    "auth_live_login" : {
-      "controller": "login",
-      "action": "live",
-      "url": "auth/live/login",
-      "method":"get",
-      "description":"windows live login",
       "isRegExp" : false
     }
   }

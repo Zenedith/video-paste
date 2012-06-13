@@ -15,6 +15,12 @@
       "appid": "",
       "appsecret": "",
       "accesstoken": ""
+    },
+    "google": {
+      "clientid": "",
+      "clientsecret": "",
+      "email": "",
+      "accesstoken": ""
     }
   },
   "db": {
@@ -57,6 +63,14 @@
       "url": "api/loginByFb/:apiKey/:id/:name/:fist_name/:last_name/:locale",
       "method":"get",
       "description":"login by fb",
+      "isRegExp" : false
+    },
+    "login_google" : {
+      "controller": "api",
+      "action": "login_google",
+      "url": "api/loginByGoogle/:apiKey/:id/:name/:given_name/:family_name",
+      "method":"get",
+      "description":"login by google",
       "isRegExp" : false
     },
     "generate_key" : {
@@ -137,6 +151,14 @@
       "url": "auth/facebook_callback",
       "method":"get",
       "description":"facebook login callback",
+      "isRegExp" : false
+    },
+    "auth_google_callback" : {
+      "controller": "login",
+      "action": "google",
+      "url": "auth/googlecallback",
+      "method":"get",
+      "description":"google login callback",
       "isRegExp" : false
     }
   }

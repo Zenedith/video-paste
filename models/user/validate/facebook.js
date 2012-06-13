@@ -1,22 +1,31 @@
 var
-  OAuth = require("oauth").OAuth2,
   config = require("config"),
+  User_Validate_Oauth = require(process.env.APP_PATH + "/models/user/validate/oauth").User_Validate_Oauth,
   log = require(process.env.APP_PATH + "/lib/log"),
   secure = require("node-secure");
 
 var User_Validate_Facebook = function () {
   log.debug('User_Validate_Facebook.construct()');
 
-  this.oAuth = new OAuth(config.auth.appid, config.auth.appsecret,  "https://graph.facebook.com");
+  var
+    clientId = config.auth.facebook.appid,
+    clientSecret = config.auth.facebook.appsecret,
+    baseSite = "https://graph.facebook.com";
+
+  User_Validate_Oauth.call(this, clientId, clientSecret, baseSite);  //call parent constructor
+
+  if (config.auth.facebook.accesstoken) {
+    this.setAccessToken(config.auth.facebook.accesstoken);
+  }
 
   this.isValid = function (id, name, fist_name, last_name, callback) {
-    log.debug('User_Validate_Facebook.isValid(' + id + ')');
-    this.oAuth.getProtectedResource('https://graph.facebook.com/' + id, config.auth.accesstoken, function (err, data) {
+    log.debug('User_Validate_Facebook.isValid(' + id + ',' + name + ',' + fist_name + ',' + last_name + ')');
 
-      //TODO access token is wrong...get new!
+    //call parent
+    User_Validate_Oauth.prototype.isValid.call(this, '/' + id, function (err, data) {
 
       if (err) {
-        log.debug('User_Validate_Facebook.isValid FAIELD: ' + err.data);
+        log.debug('User_Validate_Facebook.isValid FAILELD: ' + err.data);
         return callback(error(605, 'User not authorized on facebook'), null);
       }
 
@@ -31,13 +40,10 @@ var User_Validate_Facebook = function () {
     });
   };
 
-//  this.renewAccessToken = function (callback) {
-//    this.oAuth.getOAuthAccessToken(true, {}, function(err, access_token, refresh_token ){
-//      return callback(err, access_token);
-//    });
-//  };
-
 };
+
+User_Validate_Facebook.prototype.__proto__ = User_Validate_Oauth.prototype;
+
 
 exports.User_Validate_Facebook = User_Validate_Facebook;
 secure.secureMethods(exports);

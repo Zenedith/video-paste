@@ -51,9 +51,9 @@ var Api_Controller = {
 
       var
         User_Validate_Facebook = require(process.env.APP_PATH + "/models/user/validate/facebook").User_Validate_Facebook,
-        userValidateFcebook = new User_Validate_Facebook();
+        userValidateFacebook = new User_Validate_Facebook();
 
-      userValidateFcebook.isValid(fbId, name, fist_name, last_name, function (errFb, data) {
+      userValidateFacebook.isValid(fbId, name, fist_name, last_name, function (errFb, data) {
 
         if (errFb) {
           return next(errFb);
@@ -67,7 +67,7 @@ var Api_Controller = {
 
           //if user not finded, create new
           if (!id) {
-            user.createNewFbUser(fbId, name, fist_name, last_name, locale, function (err3, obj) {
+            user.createNewAccount(accountType.FACEBOOK, fbId, name, fist_name, last_name, locale, function (err3, obj) {
               if (!err3) {
                 req.userId = obj.getId(); //add info about user and forward to get session method
                 return Api_Controller.get_session(req, res, next);
@@ -78,6 +78,72 @@ var Api_Controller = {
           }
           else {
             req.userId = id; //add info about user and forward to get session method
+
+            //TODO check to update user data with new ones!
+
+            return Api_Controller.get_session(req, res, next);
+          }
+        });
+      });
+    });
+  },
+  //api/loginByGoogle/:apiKey/:id/:name/:given_name/:family_name
+  login_google: function (req, res, next) {
+    var
+      apiKey = req.params.apiKey,
+      Key = require(process.env.APP_PATH + "/models/key").Key,
+      key_obj = new Key();
+
+    //validate key
+    key_obj.isValidKey(apiKey, function (err, obj) {
+
+      //if something wrong
+      if (err) {
+        return next(err);
+      }
+
+      var
+        gId = req.params.id,
+        name = req.params.name,
+        fist_name = req.params.given_name,
+        last_name = req.params.family_name,
+        locale = '',
+        User = require(process.env.APP_PATH + "/models/user").User,
+        accountType = require(process.env.APP_PATH + "/models/user/accountType").accountType,
+        user = new User();
+
+      var
+        User_Validate_Google = require(process.env.APP_PATH + "/models/user/validate/google").User_Validate_Google,
+        userValidateGoogle = new User_Validate_Google();
+
+      userValidateGoogle.isValid(gId, name, fist_name, last_name, function (errG, data) {
+
+        if (errG) {
+          return next(errG);
+        }
+
+        user.getIdByExternalId(gId, accountType.GOOGLE, function(err2, id) {
+
+          if (err2) {
+            return next(err2);
+          }
+
+          //if user not finded, create new
+          if (!id) {
+            user.createNewAccount(accountType.GOOGLE, gId, name, fist_name, last_name, locale, function (err3, obj) {
+              if (!err3) {
+                req.userId = obj.getId(); //add info about user and forward to get session method
+                return Api_Controller.get_session(req, res, next);
+              }
+
+              return next(err3);
+            });
+          }
+          else {
+            req.userId = id; //add info about user and forward to get session method
+
+            //TODO check to update user data with new ones!
+
             return Api_Controller.get_session(req, res, next);
           }
         });

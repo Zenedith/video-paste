@@ -2,7 +2,8 @@ var
   secure = require("node-secure");
 
 var accountType = {
-  FACEBOOK: 'facebook'
+  FACEBOOK: 'facebook',
+  GOOGLE: 'google'
 };
 
 exports.accountType = accountType;

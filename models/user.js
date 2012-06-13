@@ -19,10 +19,10 @@ var User = function ()
   this.__last_name = '';
   this.__locale = '';
 
-  this.createNewFbUser = function (externalId, name, fist_name, last_name, locale, callback) {
+  this.createNewAccount = function (accountType, externalId, name, fist_name, last_name, locale, callback) {
     log.debug('User.createNewUser()');
 
-    this.__account_type = accountType.FACEBOOK;
+    this.__account_type = accountType;
     this.__created = Math.round(+new Date()/1000);
     this.__externalId = externalId;
     this.__name = name;

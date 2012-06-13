@@ -21,6 +21,10 @@
       "clientsecret": "",
       "email": "",
       "accesstoken": ""
+    },
+    "twitter": {
+      "accesstoken": "",
+      "accesstokensecret": ""
     }
   },
   "db": {
@@ -71,6 +75,14 @@
       "url": "api/loginByGoogle/:apiKey/:id/:name/:given_name/:family_name",
       "method":"get",
       "description":"login by google",
+      "isRegExp" : false
+    },
+    "login_twitter" : {
+      "controller": "api",
+      "action": "login_twitter",
+      "url": "api/loginByTwitter/:apiKey/:id/:name",
+      "method":"get",
+      "description":"login by twitter",
       "isRegExp" : false
     },
     "generate_key" : {
@@ -159,6 +171,14 @@
       "url": "auth/googlecallback",
       "method":"get",
       "description":"google login callback",
+      "isRegExp" : false
+    },
+    "auth_google_callback" : {
+      "controller": "login",
+      "action": "twitter",
+      "url": "auth/twittercallback",
+      "method":"get",
+      "description":"twitter login callback",
       "isRegExp" : false
     }
   }

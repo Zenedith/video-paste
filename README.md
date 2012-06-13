@@ -35,6 +35,18 @@
     * ERR_INVALID_KEY
     * ERR_LOGIN_FAILED
 
+- /api/loginByTwitter/:apiKey/:id/:name
+    ```
+    get session for authorized user by twitter
+    ```
+    ```
+    {sess: string, userId: int}
+    ```
+    * ERR_BAD_REQUEST
+    * ERR_API_INTERNAL_ERROR
+    * ERR_INVALID_KEY
+    * ERR_LOGIN_FAILED
+
 - /api/generateKey
     ```
     generate valid key (temp)

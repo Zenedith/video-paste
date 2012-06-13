@@ -8,6 +8,9 @@ var Login_Controller = {
   },
   facebook: function(req, res) {
     res.render('index/index', {title: 'video-paste api'});
+  },
+  twitter: function(req, res) {
+    res.render('index/index', {title: 'video-paste api'});
   }
 };
 

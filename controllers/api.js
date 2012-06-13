@@ -46,10 +46,7 @@ var Api_Controller = {
         locale = req.params.locale,
         User = require(process.env.APP_PATH + "/models/user").User,
         accountType = require(process.env.APP_PATH + "/models/user/accountType").accountType,
-        user = new User();
-
-
-      var
+        user = new User(),
         User_Validate_Facebook = require(process.env.APP_PATH + "/models/user/validate/facebook").User_Validate_Facebook,
         userValidateFacebook = new User_Validate_Facebook();
 
@@ -68,6 +65,67 @@ var Api_Controller = {
           //if user not finded, create new
           if (!id) {
             user.createNewAccount(accountType.FACEBOOK, fbId, name, fist_name, last_name, locale, function (err3, obj) {
+              if (!err3) {
+                req.userId = obj.getId(); //add info about user and forward to get session method
+                return Api_Controller.get_session(req, res, next);
+              }
+
+              return next(err3);
+            });
+          }
+          else {
+            req.userId = id; //add info about user and forward to get session method
+
+            //TODO check to update user data with new ones!
+
+            return Api_Controller.get_session(req, res, next);
+          }
+        });
+      });
+    });
+  },
+  //api/loginByWindowsLive/:apiKey/:id/:name/:fist_name/:last_name/:locale
+  login_winlive: function (req, res, next) {
+    var
+      apiKey = req.params.apiKey,
+      Key = require(process.env.APP_PATH + "/models/key").Key,
+      key_obj = new Key();
+
+    //validate key
+    key_obj.isValidKey(apiKey, function (err, obj) {
+
+      //if something wrong
+      if (err) {
+        return next(err);
+      }
+
+      var
+        mId = req.params.id,
+        name = req.params.name || null,
+        fist_name = req.params.fist_name || null,
+        last_name = req.params.last_name || null,
+        locale = req.params.locale || '',
+        User = require(process.env.APP_PATH + "/models/user").User,
+        accountType = require(process.env.APP_PATH + "/models/user/accountType").accountType,
+        user = new User(),
+        User_Validate_Live = require(process.env.APP_PATH + "/models/user/validate/live").User_Validate_Live,
+        userValidateLive = new User_Validate_Live();
+
+      userValidateLive.isValid(mId, name, fist_name, last_name, function (errFb, data) {
+
+        if (errFb) {
+          return next(errFb);
+        }
+
+        user.getIdByExternalId(mId, accountType.WINDOWS_LIVE, function(err2, id) {
+
+          if (err2) {
+            return next(err2);
+          }
+
+          //if user not finded, create new
+          if (!id) {
+            user.createNewAccount(accountType.WINDOWS_LIVE, mId, name, fist_name, last_name, locale, function (err3, obj) {
               if (!err3) {
                 req.userId = obj.getId(); //add info about user and forward to get session method
                 return Api_Controller.get_session(req, res, next);
@@ -110,9 +168,7 @@ var Api_Controller = {
         locale = '',
         User = require(process.env.APP_PATH + "/models/user").User,
         accountType = require(process.env.APP_PATH + "/models/user/accountType").accountType,
-        user = new User();
-
-      var
+        user = new User(),
         User_Validate_Google = require(process.env.APP_PATH + "/models/user/validate/google").User_Validate_Google,
         userValidateGoogle = new User_Validate_Google();
 
@@ -131,6 +187,69 @@ var Api_Controller = {
           //if user not finded, create new
           if (!id) {
             user.createNewAccount(accountType.GOOGLE, gId, name, fist_name, last_name, locale, function (err3, obj) {
+              if (!err3) {
+                req.userId = obj.getId(); //add info about user and forward to get session method
+                return Api_Controller.get_session(req, res, next);
+              }
+
+              return next(err3);
+            });
+          }
+          else {
+            req.userId = id; //add info about user and forward to get session method
+
+            //TODO check to update user data with new ones!
+
+            return Api_Controller.get_session(req, res, next);
+          }
+        });
+      });
+    });
+  },
+  //api/loginByTwitter/:apiKey/:id/:name
+  login_twitter: function (req, res, next) {
+    var
+      apiKey = req.params.apiKey,
+      Key = require(process.env.APP_PATH + "/models/key").Key,
+      key_obj = new Key();
+
+    //validate key
+    key_obj.isValidKey(apiKey, function (err, obj) {
+
+      //if something wrong
+      if (err) {
+        return next(err);
+      }
+
+      var
+        tId = req.params.id,
+        name = req.params.name,
+        fist_name = '',
+        last_name = '',
+        locale = '',
+        User = require(process.env.APP_PATH + "/models/user").User,
+        accountType = require(process.env.APP_PATH + "/models/user/accountType").accountType,
+        user = new User();
+
+      var
+      User_Validate_Twitter = require(process.env.APP_PATH + "/models/user/validate/twitter").User_Validate_Twitter,
+        userValidateTwitter = new User_Validate_Twitter();
+
+      userValidateTwitter.isValid(tId, name, function (errT, data) {
+
+        if (errT) {
+          return next(errT);
+        }
+
+        user.getIdByExternalId(tId, accountType.TWITTER, function(err2, id) {
+
+          if (err2) {
+            return next(err2);
+          }
+
+          //if user not finded, create new
+          if (!id) {
+            user.createNewAccount(accountType.TWITTER, tId, name, fist_name, last_name, locale, function (err3, obj) {
               if (!err3) {
                 req.userId = obj.getId(); //add info about user and forward to get session method
                 return Api_Controller.get_session(req, res, next);

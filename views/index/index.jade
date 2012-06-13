@@ -101,6 +101,28 @@ div.content
         li ERR_INVALID_KEY
         li ERR_LOGIN_FAILED
   div.method
+    div.method_url /api/loginByTwitter/:apiKey/:id/:name
+    div.method_type GET
+    div.method_desc get session for authorized user by twitter
+    div.method_sample_response {sess: string, userId: int}
+    div.method_error_codes
+      ul
+        li ERR_BAD_REQUEST
+        li ERR_API_INTERNAL_ERROR
+        li ERR_INVALID_KEY
+        li ERR_LOGIN_FAILED
+  div.method
+    div.method_url /api/loginByWindowsLive/:apiKey/:id/:name/:fist_name/:last_name/:locale
+    div.method_type GET
+    div.method_desc get session for authorized user by windows live
+    div.method_sample_response {sess: string, userId: int}
+    div.method_error_codes
+      ul
+        li ERR_BAD_REQUEST
+        li ERR_API_INTERNAL_ERROR
+        li ERR_INVALID_KEY
+        li ERR_LOGIN_FAILED
+  div.method
     div.method_url /api/generateKey
     div.method_type GET
     div.method_desc generate valid key (temp)

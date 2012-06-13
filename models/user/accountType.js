@@ -3,7 +3,9 @@ var
 
 var accountType = {
   FACEBOOK: 'facebook',
-  GOOGLE: 'google'
+  GOOGLE: 'google',
+  TWITTER: 'twitter',
+  WINDOWS_LIVE: 'live'
 };
 
 exports.accountType = accountType;

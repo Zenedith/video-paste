@@ -80,7 +80,7 @@ div.content
         li ERR_INVALID_KEY
   div.method
     div.method_url /api/loginByFb/:apiKey/:id/:name/:fist_name/:last_name/:locale
-    div.method_type GET
+    div.method_type POST
     div.method_desc get session for authorized user by facebook
     div.method_sample_response {sess: string, userId: int}
     div.method_error_codes
@@ -91,7 +91,7 @@ div.content
         li ERR_LOGIN_FAILED
   div.method
     div.method_url /api/loginByGoogle/:apiKey/:id/:name/:given_name/:family_name
-    div.method_type GET
+    div.method_type POST
     div.method_desc get session for authorized user by google
     div.method_sample_response {sess: string, userId: int}
     div.method_error_codes
@@ -102,7 +102,7 @@ div.content
         li ERR_LOGIN_FAILED
   div.method
     div.method_url /api/loginByTwitter/:apiKey/:id/:name
-    div.method_type GET
+    div.method_type POST
     div.method_desc get session for authorized user by twitter
     div.method_sample_response {sess: string, userId: int}
     div.method_error_codes
@@ -113,7 +113,7 @@ div.content
         li ERR_LOGIN_FAILED
   div.method
     div.method_url /api/loginByWindowsLive/:apiKey/:id/:name/:fist_name/:last_name/:locale
-    div.method_type GET
+    div.method_type POST
     div.method_desc get session for authorized user by windows live
     div.method_sample_response {sess: string, userId: int}
     div.method_error_codes

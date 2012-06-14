@@ -1,6 +1,6 @@
 # Available api methods
 
-- /api/getSession/:apiKey
+- GET /api/getSession/:apiKey
     ```
     get session for unauthorized user
     ```
@@ -11,7 +11,7 @@
     * ERR_API_INTERNAL_ERROR
     * ERR_INVALID_KEY
 
-- /api/loginByFb/:apiKey/:id/:name/:fist_name/:last_name/:locale
+- POST /api/loginByFb/:apiKey/:id/:name/:fist_name/:last_name/:locale
     ```
     get session for authorized user by facebook
     ```
@@ -23,7 +23,7 @@
     * ERR_INVALID_KEY
     * ERR_LOGIN_FAILED
 
-- /api/loginByGoogle/:apiKey/:id/:name/:given_name/:family_name
+- POST /api/loginByGoogle/:apiKey/:id/:name/:given_name/:family_name
     ```
     get session for authorized user by google
     ```
@@ -35,7 +35,7 @@
     * ERR_INVALID_KEY
     * ERR_LOGIN_FAILED
 
-- /api/loginByTwitter/:apiKey/:id/:name
+- POST /api/loginByTwitter/:apiKey/:id/:name
     ```
     get session for authorized user by twitter
     ```
@@ -47,7 +47,7 @@
     * ERR_INVALID_KEY
     * ERR_LOGIN_FAILED
 
-- /api/loginByWindowsLive/:apiKey/:id/:name/:fist_name/:last_name/:locale
+- POST /api/loginByWindowsLive/:apiKey/:id/:name/:fist_name/:last_name/:locale
     ```
     get session for authorized user by windows live
     ```
@@ -59,14 +59,14 @@
     * ERR_INVALID_KEY
     * ERR_LOGIN_FAILED
 
-- /api/generateKey
+- GET /api/generateKey
     ```
     generate valid key (temp)
     ```
     ```
     {key: string}
     ```
-- /api/postLink/:sessionId/:postId
+- GET /api/postLink/:sessionId/:postId
     ```
     get posted link data by postId
     ```
@@ -77,7 +77,7 @@
     * ERR_API_INTERNAL_ERROR
     * ERR_INVALID_KEY
     * ERR_INVALID_SESSION
-- /api/postLink/:sessionId
+- POST /api/postLink/:sessionId
     ```
     create post link (url param from POST BODY)
     ```
@@ -89,7 +89,7 @@
     * ERR_INVALID_KEY
     * ERR_INVALID_SESSION
     * ERR_UNAUTHORIZED
-- /api/postViews/:sessionId/:postId
+- POST /api/postViews/:sessionId/:postId
     ```
     increse post link views count
     ```
@@ -101,7 +101,7 @@
     * ERR_API_INTERNAL_ERROR
     * ERR_INVALID_KEY
     * ERR_INVALID_SESSION
-- /api/postRate/:sessionId/:postId
+- POST /api/postRate/:sessionId/:postId
     ```
     rate post link (rate [-1, 1] param from POST BODY)
     ```
@@ -114,7 +114,7 @@
     * ERR_INVALID_SESSION
     * ERR_UNAUTHORIZED
     * ERR_ALREADY_RATED
-- /api/getTopLinks/:sessionId/:categoryId/:limit/:page
+- GET /api/getTopLinks/:sessionId/:categoryId/:limit/:page
     ```
     get top links (only sessionId is required, max limit value: 100)
     ```

@@ -72,7 +72,7 @@
       "controller": "api",
       "action": "login_fb",
       "url": "api/loginByFb/:apiKey/:id/:name/:fist_name/:last_name/:locale",
-      "method":"get",
+      "method":"post",
       "description":"login by fb",
       "isRegExp" : false
     },
@@ -80,7 +80,7 @@
       "controller": "api",
       "action": "login_google",
       "url": "api/loginByGoogle/:apiKey/:id/:name/:given_name/:family_name",
-      "method":"get",
+      "method":"post",
       "description":"login by google",
       "isRegExp" : false
     },
@@ -88,7 +88,7 @@
       "controller": "api",
       "action": "login_twitter",
       "url": "api/loginByTwitter/:apiKey/:id/:name",
-      "method":"get",
+      "method":"post",
       "description":"login by twitter",
       "isRegExp" : false
     },
@@ -96,7 +96,7 @@
       "controller": "api",
       "action": "login_winlive",
       "url": "api/loginByWindowsLive/:apiKey/:id/:name/:fist_name/:last_name/:locale",
-      "method":"get",
+      "method":"post",
       "description":"login by windows live",
       "isRegExp" : false
     },
@@ -104,7 +104,7 @@
       "controller": "api",
       "action": "login_winlive",
       "url": "api/loginByWindowsLive/:apiKey/:id/:name/:fist_name/:last_name",
-      "method":"get",
+      "method":"post",
       "description":"login by windows live",
       "isRegExp" : false
     },
@@ -112,7 +112,7 @@
       "controller": "api",
       "action": "login_winlive",
       "url": "api/loginByWindowsLive/:apiKey/:id/:name/:fist_name",
-      "method":"get",
+      "method":"post",
       "description":"login by windows live",
       "isRegExp" : false
     },
@@ -120,7 +120,7 @@
       "controller": "api",
       "action": "login_winlive",
       "url": "api/loginByWindowsLive/:apiKey/:id/:name",
-      "method":"get",
+      "method":"post",
       "description":"login by windows live",
       "isRegExp" : false
     },
@@ -128,7 +128,7 @@
       "controller": "api",
       "action": "login_winlive",
       "url": "api/loginByWindowsLive/:apiKey/:id",
-      "method":"get",
+      "method":"post",
       "description":"login by windows live",
       "isRegExp" : false
     },

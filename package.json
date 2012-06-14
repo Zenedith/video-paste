@@ -1,7 +1,7 @@
 {
   "name": "video-paste-api",
   "description": "video paste api project",
-  "version": "0.2.0",
+  "version": "0.0.3",
   "homepage": "https://github.com/Zenedith/video-paste",
   "main":"api",
   "author": "Mateusz Stępniak (zenedith@wp.pl)",

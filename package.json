@@ -35,6 +35,7 @@
     "loggly" : "",
     "oauth" : "",
     "connect-auth" : "",
-    "authom" : ""
+    "authom" : "",
+    "async" : ""
   }
 }

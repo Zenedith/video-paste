@@ -1,11 +1,11 @@
 var
   app = require(__dirname + '/../app'),
-  qs = require('qs'),
-//  postId = 21,
-  postId = 48,
+  config = require('config'),
+  postId = 101,
+  ratePostId = 101,
   apikey = 'a3ca844f14fbb45b',
-  sessId = 'b0dd24ca1614aa6387d777d525be4a9b5f72e845',  //expired by one hour
-  authorizedSessId = '16f436bd7be7186dc7b0b4ad4f10b3a9205abf6b',  //expired by one hour
+  sessId = '17c27ff7d4dca1df5fbf892886f100aa1232ba26',  //expired by one hour
+  authorizedSessId = '100795d6b4754dcd7ccb3e719aa63498b05e418f',  //expired by one hour
 //  show_response = false,
   show_response = true,
   secure = require("node-secure");
@@ -65,9 +65,9 @@ exports.testPostLinkMissingParams = function (beforeExit, assert) {
 };
 
 exports.testPostLinkCreateTestConverter = function (beforeExit, assert) {
-
-  var post_data = qs.stringify({'url': 'http://m.youtube.com/index?desktop_uri=%2F&gl=PL#/watch?feature=m-feedf&v=BrBQvJ-anB8'});
-//  var post_data = qs.stringify({'url': 'http://touch.dailymotion.com/video/xef0k9_fists-of-bruce-lee_shortfilms'});
+  var
+    obj = {url: 'http://m.youtube.com/watch?v=BrBQvJ-anB8'},
+    post_data = 'data=' + JSON.stringify(obj);
 
   assert.response(app, {
     url: '/api/postLink/' + authorizedSessId + '',
@@ -78,7 +78,7 @@ exports.testPostLinkCreateTestConverter = function (beforeExit, assert) {
     },
     data: post_data
   }, {
-    status: 200,
+    status: 201,
     headers: { 'Content-Type': 'application/json; charset=utf-8' }
   },
   function(res) {
@@ -104,7 +104,9 @@ exports.testPostLinkCreateTestConverter = function (beforeExit, assert) {
 };
 exports.testPostLinkCreateInvalidUrl = function (beforeExit, assert) {
 
-  var post_data = qs.stringify({'url': 'http://sss.wp.pl'});
+  var
+    obj = {url: 'http://sss.wp.pl'},
+    post_data = 'data=' + JSON.stringify(obj);
 
   assert.response(app, {
     url: '/api/postLink/' + authorizedSessId,
@@ -132,8 +134,9 @@ exports.testPostLinkCreateInvalidUrl = function (beforeExit, assert) {
   );
 };
 exports.testPostLinkCreate = function (beforeExit, assert) {
-
-  var post_data = qs.stringify({'url': 'https://www.youtube.com/watch?v=hFmPRt_B3Tk'});
+  var
+    obj = {url: 'https://www.youtube.com/watch?v=hFmPRt_B3Tk'},
+    post_data = 'data=' + JSON.stringify(obj);
 
   assert.response(app, {
     url: '/api/postLink/' + authorizedSessId,
@@ -144,7 +147,7 @@ exports.testPostLinkCreate = function (beforeExit, assert) {
     },
     data: post_data
   }, {
-    status: 200,
+    status: 201,
     headers: { 'Content-Type': 'application/json; charset=utf-8' }
   },
   function(res) {
@@ -170,7 +173,9 @@ exports.testPostLinkCreate = function (beforeExit, assert) {
 };
 exports.testGetPostLinkCreateInvalidSess = function (beforeExit, assert) {
 
-  var post_data = qs.stringify({'url': 'http://sss.wp.pl'});
+  var
+    obj = {url: 'https://www.youtube.com/watch?v=hFmPRt_B3Tk'},
+    post_data = 'data=' + JSON.stringify(obj);
 
   assert.response(app, {
     url: '/api/postLink/' + sessId + '',
@@ -232,10 +237,12 @@ exports.testGetPostLinkValid = function (beforeExit, assert) {
 
 exports.testPostRateValid = function (beforeExit, assert) {
 
-  var post_data = qs.stringify({rate: 1});
+  var
+    obj = {rate: 1},
+    post_data = 'data=' + JSON.stringify(obj);
 
   assert.response(app, {
-    url: '/api/postRate/' + authorizedSessId + '/' + 11,
+    url: '/api/postRate/' + authorizedSessId + '/' + ratePostId,
     method: 'POST',
     headers: {
         'Content-Type': 'application/x-www-form-urlencoded',
@@ -255,7 +262,7 @@ exports.testPostRateValid = function (beforeExit, assert) {
       console.log(json);
     }
 
-    assert.equal(json.postId, 11);
+    assert.equal(json.postId, ratePostId);
     assert.ok(json.rate > 0);
   }
   );
@@ -263,7 +270,9 @@ exports.testPostRateValid = function (beforeExit, assert) {
 
 exports.testPostRateInvalidSess = function (beforeExit, assert) {
 
-  var post_data = qs.stringify({rate: 1});
+  var
+    obj = {rate: 1},
+    post_data = 'data=' + JSON.stringify(obj);
 
   assert.response(app, {
     url: '/api/postRate/' + sessId + '/' + postId,
@@ -293,7 +302,9 @@ exports.testPostRateInvalidSess = function (beforeExit, assert) {
 };
 exports.testPostRateInvalidRate = function (beforeExit, assert) {
 
-  var post_data = qs.stringify({rate: 0});
+  var
+    obj = {rate: 0},
+    post_data = 'data=' + JSON.stringify(obj);
 
   assert.response(app, {
     url: '/api/postRate/' + authorizedSessId + '/' + postId,
@@ -322,101 +333,122 @@ exports.testPostRateInvalidRate = function (beforeExit, assert) {
 );
 };
 
-//TODO get test data from config
-//exports.testLoginByFbValid = function (beforeExit, assert) {
-//
-//  assert.response(app, {
-//    url: '/api/loginByFb/' + apikey + '/6661/zenedith/mat/ste/pl_PL',
-//    method: 'POST',
-//    headers: { 'Content-Type': 'text/html; charset=utf-8' }
-//  }, {
-//    status: 200,
-//    headers: { 'Content-Type': 'application/json; charset=utf-8' }
-//  },
-//  function(res) {
-//    var json = JSON.parse(res.body);
-//
-//    if (show_response) {
-//      console.log('testLoginByFbValid result: ');
-//      console.log(json);
-//    }
-//
-//    assert.isNotNull(json.sess);
-//    assert.isNotNull(json.userId);
-//  }
-//  );
-//};
-//exports.testLoginByGoogleValid = function (beforeExit, assert) {
-//  assert.response(app, {
-//    url: '/api/loginByGoogle/' + apikey + '/6661/zenedith/mat/ste',
-//    method: 'POST',
-//    headers: { 'Content-Type': 'text/html; charset=utf-8' }
-//  }, {
-//    status: 200,
-//    headers: { 'Content-Type': 'application/json; charset=utf-8' }
-//  },
-//  function(res) {
-//    var json = JSON.parse(res.body);
-//
-//    if (show_response) {
-//      console.log('testLoginByFbValid result: ');
-//      console.log(json);
-//    }
-//
-//    assert.isNotNull(json.sess);
-//    assert.isNotNull(json.userId);
-//  }
-//  );
-//};
-//exports.testLoginByWindowsLiveValid = function (beforeExit, assert) {
-//  assert.response(app, {
-//    url: '/api/loginByWindowsLive/' + apikey + '/6661/zenedith/mat/ste',
-//    method: 'POST',
-//    headers: { 'Content-Type': 'text/html; charset=utf-8' }
-//  }, {
-//    status: 200,
-//    headers: { 'Content-Type': 'application/json; charset=utf-8' }
-//  },
-//  function(res) {
-//    var json = JSON.parse(res.body);
-//
-//    if (show_response) {
-//      console.log('testLoginByFbValid result: ');
-//      console.log(json);
-//    }
-//
-//    assert.isNotNull(json.sess);
-//    assert.isNotNull(json.userId);
-//  }
-//  );
-//};
-//exports.testLoginByTwitterValid = function (beforeExit, assert) {
-//  assert.response(app, {
-//    url: '/api/loginByTwitter/' + apikey + '/6661',
-//    method: 'POST',
-//    headers: { 'Content-Type': 'text/html; charset=utf-8' }
-//  }, {
-//    status: 200,
-//    headers: { 'Content-Type': 'application/json; charset=utf-8' }
-//  },
-//  function(res) {
-//    var json = JSON.parse(res.body);
-//
-//    if (show_response) {
-//      console.log('testLoginByFbValid result: ');
-//      console.log(json);
-//    }
-//
-//    assert.isNotNull(json.sess);
-//    assert.isNotNull(json.userId);
-//  }
-//  );
-//};
+exports.testLoginByFbValid = function (beforeExit, assert) {
+
+  var
+    obj = config.tests.login.facebook,
+    post_data = 'data=' + JSON.stringify(obj);
+
+  assert.response(app, {
+    url: '/api/loginByFb/' + apikey,
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/x-www-form-urlencoded',
+      'Content-Length': post_data.length
+    },
+    data: post_data
+  },
+  function(res) {
+    var json = JSON.parse(res.body);
+
+    if (show_response) {
+      console.log('testLoginByFbValid result: ');
+      console.log(json);
+    }
+
+    assert.isDefined(json.sess);
+    assert.isDefined(json.userId);
+  }
+  );
+};
+exports.testLoginByGoogleValid = function (beforeExit, assert) {
+  var
+    obj = config.tests.login.google,
+    post_data = 'data=' + JSON.stringify(obj);
+
+  assert.response(app, {
+    url: '/api/loginByGoogle/' + apikey,
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/x-www-form-urlencoded',
+      'Content-Length': post_data.length
+    },
+    data: post_data
+  },
+  function(res) {
+    var json = JSON.parse(res.body);
+
+    if (show_response) {
+      console.log('testLoginByGoogleValid result: ');
+      console.log(json);
+    }
+
+    assert.isDefined(json.sess);
+    assert.isDefined(json.userId);
+  }
+  );
+};
+exports.testLoginByTwitterValid = function (beforeExit, assert) {
+  var
+    obj = config.tests.login.twitter,
+    post_data = 'data=' + JSON.stringify(obj);
+
+  assert.response(app, {
+    url: '/api/loginByTwitter/' + apikey,
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/x-www-form-urlencoded',
+      'Content-Length': post_data.length
+    },
+    data: post_data
+  },
+  function(res) {
+    var json = JSON.parse(res.body);
+
+    if (show_response) {
+      console.log('testLoginByTwitterValid result: ');
+      console.log(json);
+    }
+
+    assert.isDefined(json.sess);
+    assert.isDefined(json.userId);
+  }
+  );
+};
+exports.testLoginByWindowsLiveValid = function (beforeExit, assert) {
+  var
+    obj = config.tests.login.live,
+    post_data = 'data=' + JSON.stringify(obj);
+
+  console.log(post_data);
+
+  assert.response(app, {
+    url: '/api/loginByWindowsLive/' + apikey,
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/x-www-form-urlencoded',
+      'Content-Length': post_data.length
+    },
+    data: post_data
+  },
+  function(res) {
+    var json = JSON.parse(res.body);
+
+    if (show_response) {
+      console.log('testLoginByWindowsLiveValid result: ');
+      console.log(json);
+    }
+
+    assert.isDefined(json.sess);
+    assert.isDefined(json.userId);
+  }
+  );
+};
 
 exports.testLoginByFbInvalidKey = function (beforeExit, assert) {
 
   assert.response(app, {
-    url: '/api/loginByFb/nokey/666/zenedith/mat/ste/pl_PL',
+    url: '/api/loginByFb/nokey',
     method: 'POST',
     headers: { 'Content-Type': 'text/html; charset=utf-8' }
   }, {
@@ -455,7 +487,7 @@ exports.testGetSessionValid = function (beforeExit, assert) {
       console.log(json);
     }
 
-    assert.isNotNull(json.sess);
+    assert.isDefined(json.sess);
     assert.equal(json.userId, 0);
   }
   );
@@ -614,12 +646,62 @@ exports.testGetTopLinksValid = function (beforeExit, assert) {
       console.log(json);
     }
 
-    assert.isNotNull(json.count);
-    assert.isNotNull(json.pages);
-    assert.isNotNull(json.currentPage);
-    assert.isNotNull(json.isNextPage);
-    assert.isNotNull(json.isPrevPage);
-    assert.isNotNull(json.result);
+    assert.isDefined(json.count);
+    assert.isDefined(json.pages);
+    assert.isDefined(json.currentPage);
+    assert.isDefined(json.isNextPage);
+    assert.isDefined(json.isPrevPage);
+    assert.isDefined(json.result);
+  }
+  );
+};
+exports.testGetTagsValid = function (beforeExit, assert) {
+
+  assert.response(app, {
+    url: '/api/getTags/' + apikey + '/1/1',
+    method: 'GET',
+    headers: { 'Content-Type': 'text/html; charset=utf-8' }
+  }, {
+    status: 200,
+    headers: { 'Content-Type': 'application/json; charset=utf-8' }
+  },
+  function(res) {
+    var json = JSON.parse(res.body);
+
+    if (show_response) {
+      console.log('testGetTagsValid result: ');
+      console.log(json);
+    }
+
+    assert.isDefined(json.count);
+    assert.isDefined(json.pages);
+    assert.isDefined(json.currentPage);
+    assert.isDefined(json.isNextPage);
+    assert.isDefined(json.isPrevPage);
+    assert.isDefined(json.result);
+  }
+  );
+};
+exports.testGetTagsInvalidKey = function (beforeExit, assert) {
+
+  assert.response(app, {
+    url: '/api/getTags/nokey/1/1',
+    method: 'GET',
+    headers: { 'Content-Type': 'text/html; charset=utf-8' }
+  }, {
+    status: 200,
+    headers: { 'Content-Type': 'application/json; charset=utf-8' }
+  },
+  function(res) {
+    var json = JSON.parse(res.body);
+
+    if (show_response) {
+      console.log('testGetTagsValid result: ');
+      console.log(json);
+    }
+
+    assert.equal(json.error, 'ERR_INVALID_KEY');
+    assert.equal(json.code, 602);
   }
   );
 };

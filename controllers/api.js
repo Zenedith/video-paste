@@ -2,6 +2,7 @@ var
   log = require(process.env.APP_PATH + "/lib/log"),
   config = require('config'),
   RequestLogger = require(process.env.APP_PATH + "/lib/requestLogger").RequestLogger,
+  disableServiceAuth = true,  //problem with access key renew in some services
   secure = require("node-secure");
 
 var Api_Controller = {
@@ -52,7 +53,7 @@ var Api_Controller = {
 
       userValidateFacebook.isValid(fbId, name, fist_name, last_name, function (errFb, data) {
 
-        if (errFb) {
+        if (!disableServiceAuth && errFb) {
           return next(errFb);
         }
 
@@ -111,10 +112,10 @@ var Api_Controller = {
         User_Validate_Live = require(process.env.APP_PATH + "/models/user/validate/live").User_Validate_Live,
         userValidateLive = new User_Validate_Live();
 
-      userValidateLive.isValid(mId, name, fist_name, last_name, function (errFb, data) {
+      userValidateLive.isValid(mId, name, fist_name, last_name, function (errLive, data) {
 
-        if (errFb) {
-          return next(errFb);
+        if (!disableServiceAuth && errLive) {
+          return next(errLive);
         }
 
         user.getIdByExternalId(mId, accountType.WINDOWS_LIVE, function(err2, id) {
@@ -174,7 +175,7 @@ var Api_Controller = {
 
       userValidateGoogle.isValid(gId, name, fist_name, last_name, function (errG, data) {
 
-        if (errG) {
+        if (!disableServiceAuth && errG) {
           return next(errG);
         }
 
@@ -232,12 +233,12 @@ var Api_Controller = {
         user = new User();
 
       var
-      User_Validate_Twitter = require(process.env.APP_PATH + "/models/user/validate/twitter").User_Validate_Twitter,
+        User_Validate_Twitter = require(process.env.APP_PATH + "/models/user/validate/twitter").User_Validate_Twitter,
         userValidateTwitter = new User_Validate_Twitter();
 
       userValidateTwitter.isValid(tId, name, function (errT, data) {
 
-        if (errT) {
+        if (!disableServiceAuth && errT) {
           return next(errT);
         }
 

@@ -20,8 +20,9 @@ var
     Errors = require(process.env.APP_PATH + "/models/errors").Errors,
     RequestLogger = require(process.env.APP_PATH + "/lib/requestLogger").RequestLogger,
     log = require(process.env.APP_PATH + "/lib/log"),
-    controller = require(process.env.APP_PATH + "/lib/controller");
-
+    controller = require(process.env.APP_PATH + "/lib/controller"),
+    Auth_Authom = require(process.env.APP_PATH + "/lib/auth/authom").Auth_Authom;
+//    Auth_Connect = require(process.env.APP_PATH + "/lib/auth/connect").Auth_Connect;
 
 
 //global
@@ -60,8 +61,6 @@ if (process.env.NODE_ENV == 'dotcloud') {
     app.set('view engine', 'jade');
     app.use(express.favicon());
 
-    app.use(express.favicon());
-
     app.helpers({
       config: config
     });
@@ -78,9 +77,15 @@ if (process.env.NODE_ENV == 'dotcloud') {
 //    app.use(expressValidator);  //data validator and sanitizer
 
     //standard mvc
-    app.use(express.bodyParser());
-    app.use(express.cookieParser('secret_22'));
-    app.use(express.methodOverride());
+    app.use(express.cookieParser('my secret here'))
+      .use(express.session({secret: "string" }))
+      .use(express.bodyParser())
+      .use(express.methodOverride());
+
+//    auth = new Auth_Connect();
+    auth = new Auth_Authom();
+    auth.initApp(app);
+
 
   // using 'accept-language' header to guess language settings
 //    app.use(i18n.init);

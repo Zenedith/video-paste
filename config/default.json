@@ -10,6 +10,30 @@
     "use_loggly_frontend" : false,
     "enable_google_analytics" : true
   },
+  "auth": {
+    "facebook": {
+      "appid": "",
+      "appsecret": "",
+      "accesstoken": ""
+    },
+    "google": {
+      "clientid": "",
+      "clientsecret": "",
+      "email": "",
+      "accesstoken": ""
+    },
+    "twitter": {
+      "accesstoken": "",
+      "accesstokensecret": "",
+      "accesstoken": "",
+      "accesstokensecret": ""
+    },
+    "live": {
+      "clientid": "",
+      "clientsecret": "",
+      "accesstoken": ""
+    }
+  },
   "db": {
     "use" : "redis",
     "prefix" : "vpa",
@@ -48,8 +72,64 @@
       "controller": "api",
       "action": "login_fb",
       "url": "api/loginByFb/:apiKey/:id/:name/:fist_name/:last_name/:locale",
-      "method":"get",
+      "method":"post",
       "description":"login by fb",
+      "isRegExp" : false
+    },
+    "login_google" : {
+      "controller": "api",
+      "action": "login_google",
+      "url": "api/loginByGoogle/:apiKey/:id/:name/:given_name/:family_name",
+      "method":"post",
+      "description":"login by google",
+      "isRegExp" : false
+    },
+    "login_twitter" : {
+      "controller": "api",
+      "action": "login_twitter",
+      "url": "api/loginByTwitter/:apiKey/:id/:name",
+      "method":"post",
+      "description":"login by twitter",
+      "isRegExp" : false
+    },
+    "login_winlive" : {
+      "controller": "api",
+      "action": "login_winlive",
+      "url": "api/loginByWindowsLive/:apiKey/:id/:name/:fist_name/:last_name/:locale",
+      "method":"post",
+      "description":"login by windows live",
+      "isRegExp" : false
+    },
+    "login_winlive_default1" : {
+      "controller": "api",
+      "action": "login_winlive",
+      "url": "api/loginByWindowsLive/:apiKey/:id/:name/:fist_name/:last_name",
+      "method":"post",
+      "description":"login by windows live",
+      "isRegExp" : false
+    },
+    "login_winlive_default2" : {
+      "controller": "api",
+      "action": "login_winlive",
+      "url": "api/loginByWindowsLive/:apiKey/:id/:name/:fist_name",
+      "method":"post",
+      "description":"login by windows live",
+      "isRegExp" : false
+    },
+    "login_winlive_default3" : {
+      "controller": "api",
+      "action": "login_winlive",
+      "url": "api/loginByWindowsLive/:apiKey/:id/:name",
+      "method":"post",
+      "description":"login by windows live",
+      "isRegExp" : false
+    },
+    "login_winlive_default4" : {
+      "controller": "api",
+      "action": "login_winlive",
+      "url": "api/loginByWindowsLive/:apiKey/:id",
+      "method":"post",
+      "description":"login by windows live",
       "isRegExp" : false
     },
     "generate_key" : {

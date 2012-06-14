@@ -71,7 +71,6 @@ div.content
   div.method
     div.method_url /api/getSession/:apiKey
     div.method_type GET
-    div.method_status 200
     div.method_desc get session for unauthorized user
     div.method_sample_response {sess: string, userId: int}
     div.method_error_codes
@@ -81,8 +80,7 @@ div.content
         li ERR_INVALID_KEY
   div.method
     div.method_url /api/loginByFb/:apiKey/:id/:name/:fist_name/:last_name/:locale
-    div.method_type GET
-    div.method_status 200
+    div.method_type POST
     div.method_desc get session for authorized user by facebook
     div.method_sample_response {sess: string, userId: int}
     div.method_error_codes
@@ -90,17 +88,49 @@ div.content
         li ERR_BAD_REQUEST
         li ERR_API_INTERNAL_ERROR
         li ERR_INVALID_KEY
+        li ERR_LOGIN_FAILED
+  div.method
+    div.method_url /api/loginByGoogle/:apiKey/:id/:name/:given_name/:family_name
+    div.method_type POST
+    div.method_desc get session for authorized user by google
+    div.method_sample_response {sess: string, userId: int}
+    div.method_error_codes
+      ul
+        li ERR_BAD_REQUEST
+        li ERR_API_INTERNAL_ERROR
+        li ERR_INVALID_KEY
+        li ERR_LOGIN_FAILED
+  div.method
+    div.method_url /api/loginByTwitter/:apiKey/:id/:name
+    div.method_type POST
+    div.method_desc get session for authorized user by twitter
+    div.method_sample_response {sess: string, userId: int}
+    div.method_error_codes
+      ul
+        li ERR_BAD_REQUEST
+        li ERR_API_INTERNAL_ERROR
+        li ERR_INVALID_KEY
+        li ERR_LOGIN_FAILED
+  div.method
+    div.method_url /api/loginByWindowsLive/:apiKey/:id/:name/:fist_name/:last_name/:locale
+    div.method_type POST
+    div.method_desc get session for authorized user by windows live
+    div.method_sample_response {sess: string, userId: int}
+    div.method_error_codes
+      ul
+        li ERR_BAD_REQUEST
+        li ERR_API_INTERNAL_ERROR
+        li ERR_INVALID_KEY
+        li ERR_LOGIN_FAILED
   div.method
     div.method_url /api/generateKey
     div.method_type GET
-    div.method_status 200
     div.method_desc generate valid key (temp)
     div.method_sample_response {key: string}
     div.method_error_codes
   div.method
     div.method_url /api/postLink/:sessionId/:postId
     div.method_type GET
-    div.method_status 200
     div.method_desc get posted link data by postId
     div.method_sample_response { postId: int, categoryId: int, added: int, userId: int, userName: string, url: string, thumbUrl: string, rate: int, views: int }
     div.method_error_codes
@@ -112,7 +142,6 @@ div.content
   div.method
     div.method_url /api/postLink/:sessionId
     div.method_type POST
-    div.method_status 201
     div.method_desc create post link (url param from POST BODY)
     div.method_sample_response { postId: int, categoryId: int, added: int, userId: int, userName: string, url: string, thumbUrl: string, rate: int, views: int }
     div.method_error_codes
@@ -125,7 +154,6 @@ div.content
   div.method
     div.method_url /api/postViews/:sessionId/:postId
     div.method_type POST
-    div.method_status 200
     div.method_desc increse post link views count
     div.method_sample_response { postId: int, views: int }
     div.method_error_codes
@@ -137,7 +165,6 @@ div.content
   div.method
     div.method_url /api/postRate/:sessionId/:postId
     div.method_type POST
-    div.method_status 200
     div.method_desc rate post link  (rate [-1, 1] param from POST BODY)
     div.method_sample_response { postId: int, rate: int }
     div.method_error_codes
@@ -151,7 +178,6 @@ div.content
   div.method
     div.method_url /api/getTopLinks/:sessionId/:categoryId/:limit/:page
     div.method_type GET
-    div.method_status 200
     div.method_desc get top links (only sessionId is required, max limit value: 100)
     div.method_sample_response {count: int, pages: int, currentPage: int, isNextPage: bool, isPrevPage: bool, result: [{ postId: int, categoryId: int, added: int, userId: int, userName: string, url: string, thumbUrl: string, rate: int, views: int}]
     div.method_error_codes
@@ -208,3 +234,6 @@ div.content
     div.err
       div.err_error ERR_ALREADY_RATED
       div.err_code 604
+    div.err
+      div.err_error ERR_LOGIN_FAILED
+      div.err_code 605

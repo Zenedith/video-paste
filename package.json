@@ -32,6 +32,9 @@
     "socket.io" : "",
     "node-secure" : "",
     "ga" : "",
-    "loggly" : ""
+    "loggly" : "",
+    "oauth" : "",
+    "connect-auth" : "",
+    "authom" : ""
   }
 }

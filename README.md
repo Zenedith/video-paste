@@ -1,6 +1,6 @@
 # Available api methods
 
-- /api/getSession/:apiKey
+- GET /api/getSession/:apiKey
     ```
     get session for unauthorized user
     ```
@@ -11,7 +11,7 @@
     * ERR_API_INTERNAL_ERROR
     * ERR_INVALID_KEY
 
-- /api/loginByFb/:apiKey/:id/:name/:fist_name/:last_name/:locale
+- POST /api/loginByFb/:apiKey/:id/:name/:fist_name/:last_name/:locale
     ```
     get session for authorized user by facebook
     ```
@@ -21,15 +21,52 @@
     * ERR_BAD_REQUEST
     * ERR_API_INTERNAL_ERROR
     * ERR_INVALID_KEY
+    * ERR_LOGIN_FAILED
 
-- /api/generateKey
+- POST /api/loginByGoogle/:apiKey/:id/:name/:given_name/:family_name
+    ```
+    get session for authorized user by google
+    ```
+    ```
+    {sess: string, userId: int}
+    ```
+    * ERR_BAD_REQUEST
+    * ERR_API_INTERNAL_ERROR
+    * ERR_INVALID_KEY
+    * ERR_LOGIN_FAILED
+
+- POST /api/loginByTwitter/:apiKey/:id/:name
+    ```
+    get session for authorized user by twitter
+    ```
+    ```
+    {sess: string, userId: int}
+    ```
+    * ERR_BAD_REQUEST
+    * ERR_API_INTERNAL_ERROR
+    * ERR_INVALID_KEY
+    * ERR_LOGIN_FAILED
+
+- POST /api/loginByWindowsLive/:apiKey/:id/:name/:fist_name/:last_name/:locale
+    ```
+    get session for authorized user by windows live
+    ```
+    ```
+    {sess: string, userId: int}
+    ```
+    * ERR_BAD_REQUEST
+    * ERR_API_INTERNAL_ERROR
+    * ERR_INVALID_KEY
+    * ERR_LOGIN_FAILED
+
+- GET /api/generateKey
     ```
     generate valid key (temp)
     ```
     ```
     {key: string}
     ```
-- /api/postLink/:sessionId/:postId
+- GET /api/postLink/:sessionId/:postId
     ```
     get posted link data by postId
     ```
@@ -40,7 +77,7 @@
     * ERR_API_INTERNAL_ERROR
     * ERR_INVALID_KEY
     * ERR_INVALID_SESSION
-- /api/postLink/:sessionId
+- POST /api/postLink/:sessionId
     ```
     create post link (url param from POST BODY)
     ```
@@ -52,7 +89,7 @@
     * ERR_INVALID_KEY
     * ERR_INVALID_SESSION
     * ERR_UNAUTHORIZED
-- /api/postViews/:sessionId/:postId
+- POST /api/postViews/:sessionId/:postId
     ```
     increse post link views count
     ```
@@ -64,7 +101,7 @@
     * ERR_API_INTERNAL_ERROR
     * ERR_INVALID_KEY
     * ERR_INVALID_SESSION
-- /api/postRate/:sessionId/:postId
+- POST /api/postRate/:sessionId/:postId
     ```
     rate post link (rate [-1, 1] param from POST BODY)
     ```
@@ -77,7 +114,7 @@
     * ERR_INVALID_SESSION
     * ERR_UNAUTHORIZED
     * ERR_ALREADY_RATED
-- /api/getTopLinks/:sessionId/:categoryId/:limit/:page
+- GET /api/getTopLinks/:sessionId/:categoryId/:limit/:page
     ```
     get top links (only sessionId is required, max limit value: 100)
     ```
@@ -112,4 +149,5 @@ error value             code value
 * ERR_INVALID_KEY           602
 * ERR_INVALID_SESSION       603
 * ERR_ALREADY_RATED         604
+* ERR_LOGIN_FAILED          605
 ```

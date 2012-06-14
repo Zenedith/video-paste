@@ -22,7 +22,7 @@ var User_Validate_Facebook = function () {
     log.debug('User_Validate_Facebook.isValid(' + id + ',' + name + ',' + fist_name + ',' + last_name + ')');
 
     //call parent
-    User_Validate_Oauth.prototype.isValid.call(this, '/' + id, function (err, data) {
+    User_Validate_Oauth.prototype.isValid.call(this, baseSite + '/' + id, function (err, data) {
 
       if (err) {
         log.debug('User_Validate_Facebook.isValid FAILELD: ' + err.data);
@@ -39,8 +39,23 @@ var User_Validate_Facebook = function () {
       return callback(null, data);
     });
   };
-
 };
+
+User_Validate_Facebook.prototype.setAccessToken = function(accessToken) {
+  log.debug('User_Validate_Facebook.setAccessToken(' + accessToken + ')');
+
+  if (accessToken) {
+    User_Validate_Oauth.prototype.setAccessToken.call(this, accessToken);
+    config.auth.facebook.accesstoken = accessToken;
+  }
+};
+
+User_Validate_Facebook.prototype.renewAccessToken = function (callback) {
+  log.debug('User_Validate_Facebook.renewAccessToken()');
+
+  return callback(error(500, 'Unable to authorize facebook account'), null);
+};
+
 
 User_Validate_Facebook.prototype.__proto__ = User_Validate_Oauth.prototype;
 

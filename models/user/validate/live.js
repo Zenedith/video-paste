@@ -25,14 +25,15 @@ var User_Validate_Live = function () {
     User_Validate_Oauth.prototype.isValid.call(this, 'https://apis.live.net/v5.0/' + id, function (err, data) {
 
       if (err) {
-        log.debug('User_Validate_Live.isValid FAILELD: ' + err.data);
+        var
+          msg = err.data || err.msg;
+
+        log.debug('User_Validate_Live.isValid FAILELD: ' + msg);
         return callback(error(605, 'User not authorized on windows live'), null);
       }
 
       //do json decode after we know that is no err
       data = JSON.parse(data);
-
-      console.log(err, data);
 
       if (data.name !== name || data.first_name !== fist_name || data.last_name !== last_name) {
         return callback(error(605, 'User not authorized on windows live'), null);
@@ -42,6 +43,22 @@ var User_Validate_Live = function () {
     });
   };
 
+};
+
+User_Validate_Live.prototype.renewAccessToken = function (callback) {
+  log.debug('User_Validate_Live.renewAccessToken()');
+
+  return callback(error(500, 'Unable to authorize microsoft live account'), null);
+};
+
+
+User_Validate_Live.prototype.setAccessToken = function(accessToken) {
+  log.debug('User_Validate_Live.setAccessToken(' + accessToken + ')');
+
+  if (accessToken) {
+    User_Validate_Oauth.prototype.setAccessToken.call(this, accessToken);
+    config.auth.live.accesstoken = accessToken;
+  }
 };
 
 User_Validate_Live.prototype.__proto__ = User_Validate_Oauth.prototype;

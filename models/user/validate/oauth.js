@@ -12,16 +12,20 @@ var User_Validate_Oauth = function (clientId, clientSecret, baseSite, authorizeP
   this.accessToken = '';
   this.baseSite = baseSite;
   this.oAuth = new OAuth(clientId, clientSecret, baseSite, authorizePath, accessTokenPath);
+};
 
-  this.setAccessToken = function(accessToken) {
+User_Validate_Oauth.prototype.renewAccessToken = function (callback) {
+  //TODO call cron to update /auth/:service/login
+  access_token = null;
+  return callback(null, access_token);
+};
+
+User_Validate_Oauth.prototype.setAccessToken = function(accessToken) {
+  log.debug('User_Validate_Oauth.setAccessToken(' + accessToken + ')');
+
+  if (accessToken) {
     this.accessToken = accessToken;
-  };
-
-  this.renewAccessToken = function (callback) {
-    //TODO call cron to update /auth/:service/login
-    access_token = null;
-    return callback(null, access_token);
-  };
+  }
 };
 
 User_Validate_Oauth.prototype.isValid = function (path, callback) {
@@ -31,7 +35,7 @@ User_Validate_Oauth.prototype.isValid = function (path, callback) {
     _this = this,
     main_call = function (accessToken) {
 
-      _this.oAuth.getProtectedResource(_this.baseSite + path, accessToken, function (err2, data) {
+      _this.oAuth.getProtectedResource(path, accessToken, function (err2, data) {
 
         if (err2) {
           return callback(err2, null);

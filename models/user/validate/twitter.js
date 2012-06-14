@@ -8,14 +8,14 @@ var User_Validate_Twitter = function () {
   log.debug('User_Validate_Twitter.construct()');
 
   var
-    clientId = config.auth.facebook.appid,
-    clientSecret = config.auth.facebook.appsecret,
+    consumerkey = config.auth.twitter.consumerkey,
+    consumersecret = config.auth.twitter.consumersecret,
     baseSite = "";
 
-  User_Validate_Oauth.call(this, clientId, clientSecret, baseSite);  //call parent constructor
+  User_Validate_Oauth.call(this, consumerkey, consumersecret, baseSite);  //call parent constructor
 
-  if (config.auth.facebook.accesstoken) {
-    this.setAccessToken(config.auth.facebook.accesstoken);
+  if (config.auth.twitter.accesstoken) {
+    this.setAccessToken(config.auth.twitter.accesstoken);
   }
 
   this.isValid = function (id, name, callback) {
@@ -31,7 +31,6 @@ var User_Validate_Twitter = function () {
 
       //do json decode after we know that is no err
       data = JSON.parse(data);
-      console.log(data);
 
       if (data.name !== name) {
         return callback(error(605, 'User not authorized on twitter'), null);
@@ -41,6 +40,22 @@ var User_Validate_Twitter = function () {
     });
   };
 
+};
+
+User_Validate_Twitter.prototype.renewAccessToken = function (callback) {
+  log.debug('User_Validate_Twitter.renewAccessToken()');
+
+  return callback(error(500, 'Unable to authorize twitter account'), null);
+};
+
+
+User_Validate_Twitter.prototype.setAccessToken = function(accessToken) {
+  log.debug('User_Validate_Twitter.setAccessToken(' + accessToken + ')');
+
+  if (accessToken) {
+    User_Validate_Oauth.prototype.setAccessToken.call(this, accessToken);
+    config.auth.twitter.accesstoken = accessToken;
+  }
 };
 
 User_Validate_Twitter.prototype.__proto__ = User_Validate_Oauth.prototype;

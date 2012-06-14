@@ -20,7 +20,7 @@ var Post = function ()
   this.__rate = 1;
   this.__views = 0;
 
-  this.createNewPost = function (urlObj, categoryId, userId, callback) {
+  this.createNewPost = function (urlObj, categoryId, tags, userId, callback) {
     log.debug('Post.createNewPost()');
 
     if (!userId) {
@@ -40,19 +40,38 @@ var Post = function ()
         return callback(err, null);
       }
 
-      //add user to already rated this post (has posted it)
+      var
+        Tag = require(process.env.APP_PATH + "/models/tag").Tag;
+
+      //async: add user to already rated this post (has posted it)
       p_obj.addUserToAlreadyRatedSet(p_obj.getUserId(), function (err2, res) {
-
         if (err2) {
-          return callback(err2, null);
+          log.crit(err2);
         }
-
-        //add score for post
-        Database.addObjectScore(p_obj, '__rate', function (err3, res2) {
-          return callback(err3, p_obj);
-        });
       });
 
+      //async: update tags
+      for (var i in tags) {
+        var
+          postId = p_obj.getId(),
+          tag = new Tag();
+
+        tag.addTag(tags[i], postId, function (err3, res3) {
+          if (err3) {
+            log.crit(err3);
+          }
+        });
+      }
+
+//      //async: add score for post
+      Database.addObjectScore(p_obj, '__rate', function (err4, res4) {
+        if (err4) {
+          log.crit(err4);
+        }
+      });
+
+      //return, created object, don't wait for async methods
+      return callback(null, p_obj);
     });
   };
 

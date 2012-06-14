@@ -43,8 +43,6 @@ var Post_List = function ()
       _this = this,
       offset = parseInt((page - 1) * limit);
 
-//    console.log('offset: ' + offset, (offset + limit - 1));
-
     //get post ids
     Database.getObjectScoreList(this, '__rate', offset, (offset + limit), function (err, resList) {
 

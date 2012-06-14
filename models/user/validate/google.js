@@ -31,6 +31,10 @@ var User_Validate_Google = function () {
 
          data = JSON.parse(data);
 
+         if (!data.entry || !data.entry.name) {
+           return callback(error(605, 'User not authorized on google'), null);
+         }
+
          if (data.entry.name.formatted !== name || data.entry.name.givenName !== fist_name || data.entry.name.familyName !== last_name) {
            return callback(error(605, 'User not authorized on google'), null);
          }

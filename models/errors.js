@@ -38,6 +38,9 @@ var Errors = function (code, msg) {
     case 605:
       err.error = 'ERR_LOGIN_FAILED';
       break;
+    case 606:
+      err.error = 'ERR_INVALID_TAG_NAME';
+      break;
   }
 
   err.data = '';

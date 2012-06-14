@@ -13,37 +13,47 @@ style
     border: 1px solid #CCC;
     text-align: center;
    }
-     .method {
+   .method {
     clear: both;
     background-color: whiteSmoke;
     border: 1px solid #CCC;
     height: 150px;
+    margin-bottom: 30px;
   }
   ul {
     margin: 0;
     padding: 0;
     list-style: none;
   }
-  .method_url, .method_type, .method_status, .method_desc, .method_sample_response, .err_error, .err_code {
+  .method_url, .method_type, .method_status, .method_desc, .err_error, .err_code {
     float: left;
     padding: 2px 10px;
   }
   .method_error_codes {
     float: right;
-    padding: 2px 10px;
+    padding: 16px 25px;
   }
   .method_url {
-    width: 390px;
+    width: 325px;
   }
   .method_desc {
-    width: 410px;
+    width: 440px;
+  }
+  .left {
+    float: left;
+    width: 880px;
   }
   .method_sample_response {
     padding: 10px;
-    width: 800px;
-    height: 100px;
+    height: 40px;
+    background-color: white;
+  }
+  .method_post_data {
+    padding: 10px;
+    height: 40px;
     clear: both;
     background-color: white;
+    border-bottom: 1px solid #CCC;
   }
 
   .error_response {
@@ -69,104 +79,134 @@ div.content
   h1.info Available api methods
 
   div.method
-    div.method_url /api/getSession/:apiKey
-    div.method_type GET
-    div.method_desc get session for unauthorized user
-    div.method_sample_response {sess: string, userId: int}
+    div.left
+      div.method_type GET
+      div.method_url /api/getSession/:apiKey
+      div.method_desc get session for unauthorized user
+      div.method_post_data
+      div.method_sample_response RESPONSE: {sess: string, userId: int}
     div.method_error_codes
       ul
         li ERR_BAD_REQUEST
         li ERR_API_INTERNAL_ERROR
         li ERR_INVALID_KEY
+
   div.method
-    div.method_url /api/loginByFb/:apiKey/:id/:name/:fist_name/:last_name/:locale
-    div.method_type POST
-    div.method_desc get session for authorized user by facebook
-    div.method_sample_response {sess: string, userId: int}
-    div.method_error_codes
-      ul
-        li ERR_BAD_REQUEST
-        li ERR_API_INTERNAL_ERROR
-        li ERR_INVALID_KEY
-        li ERR_LOGIN_FAILED
-  div.method
-    div.method_url /api/loginByGoogle/:apiKey/:id/:name/:given_name/:family_name
-    div.method_type POST
-    div.method_desc get session for authorized user by google
-    div.method_sample_response {sess: string, userId: int}
+    div.left
+      div.method_type POST
+      div.method_url /api/loginByFb/:apiKey
+      div.method_desc get session for authorized user by facebook
+      div.method_post_data POST JSON: data={id: string, name: string, fist_name: string, last_name: string, locale: string}
+      div.method_sample_response RESPONSE: {sess: string, userId: int}
     div.method_error_codes
       ul
         li ERR_BAD_REQUEST
         li ERR_API_INTERNAL_ERROR
         li ERR_INVALID_KEY
         li ERR_LOGIN_FAILED
+
   div.method
-    div.method_url /api/loginByTwitter/:apiKey/:id/:name
-    div.method_type POST
-    div.method_desc get session for authorized user by twitter
-    div.method_sample_response {sess: string, userId: int}
+    div.left
+      div.method_type POST
+      div.method_url /api/loginByGoogle/:apiKey
+      div.method_desc get session for authorized user by google
+      div.method_post_data POST JSON: data={id: string, name: string, given_name: string, family_name: string}
+      div.method_sample_response RESPONSE: {sess: string, userId: int}
     div.method_error_codes
       ul
         li ERR_BAD_REQUEST
         li ERR_API_INTERNAL_ERROR
         li ERR_INVALID_KEY
         li ERR_LOGIN_FAILED
+
   div.method
-    div.method_url /api/loginByWindowsLive/:apiKey/:id/:name/:fist_name/:last_name/:locale
-    div.method_type POST
-    div.method_desc get session for authorized user by windows live
-    div.method_sample_response {sess: string, userId: int}
+    div.left
+      div.method_type POST
+      div.method_url /api/loginByTwitter/:apiKey
+      div.method_desc get session for authorized user by twitter
+      div.method_post_data POST JSON: data={id: string, name: string}
+      div.method_sample_response RESPONSE: {sess: string, userId: int}
     div.method_error_codes
       ul
         li ERR_BAD_REQUEST
         li ERR_API_INTERNAL_ERROR
         li ERR_INVALID_KEY
         li ERR_LOGIN_FAILED
+
   div.method
-    div.method_url /api/generateKey
-    div.method_type GET
-    div.method_desc generate valid key (temp)
-    div.method_sample_response {key: string}
+    div.left
+      div.method_type POST
+      div.method_url /api/loginByWindowsLive/:apiKey
+      div.method_desc get session for authorized user by windows live
+      div.method_post_data POST JSON: data={id: string, name: string, fist_name: string, last_name: string, locale: string}
+      div.method_sample_response RESPONSE: {sess: string, userId: int}
     div.method_error_codes
+      ul
+        li ERR_BAD_REQUEST
+        li ERR_API_INTERNAL_ERROR
+        li ERR_INVALID_KEY
+        li ERR_LOGIN_FAILED
+
   div.method
-    div.method_url /api/postLink/:sessionId/:postId
-    div.method_type GET
-    div.method_desc get posted link data by postId
-    div.method_sample_response { postId: int, categoryId: int, added: int, userId: int, userName: string, url: string, thumbUrl: string, rate: int, views: int }
+    div.left
+      div.method_type GET
+      div.method_url /api/generateKey
+      div.method_desc generate valid key (temp)
+      div.method_post_data
+      div.method_sample_response RESPONSE: {key: string}
+    div.method_error_codes
+
+  div.method
+    div.left
+      div.method_type GET
+      div.method_url /api/postLink/:sessionId/:postId
+      div.method_desc get posted link data by postId
+      div.method_post_data
+      div.method_sample_response RESPONSE: { postId: int, categoryId: int, added: int, userId: int, userName: string, url: string, thumbUrl: string, rate: int, views: int }
     div.method_error_codes
       ul
         li ERR_BAD_REQUEST
         li ERR_API_INTERNAL_ERROR
         li ERR_INVALID_KEY
         li ERR_INVALID_SESSION
+
   div.method
-    div.method_url /api/postLink/:sessionId
-    div.method_type POST
-    div.method_desc create post link (url param from POST BODY)
-    div.method_sample_response { postId: int, categoryId: int, added: int, userId: int, userName: string, url: string, thumbUrl: string, rate: int, views: int }
+    div.left
+      div.method_type POST
+      div.method_url /api/postLink/:sessionId
+      div.method_desc create post link
+      div.method_post_data POST JSON: data={url: string, tags: [tagName: string]}
+      div.method_sample_response RESPONSE: { postId: int, categoryId: int, added: int, userId: int, userName: string, url: string, thumbUrl: string, rate: int, views: int }
     div.method_error_codes
       ul
         li ERR_BAD_REQUEST
         li ERR_API_INTERNAL_ERROR
         li ERR_INVALID_KEY
         li ERR_INVALID_SESSION
+        li ERR_INVALID_TAG_NAME
         li ERR_UNAUTHORIZED
+
   div.method
-    div.method_url /api/postViews/:sessionId/:postId
-    div.method_type POST
-    div.method_desc increse post link views count
-    div.method_sample_response { postId: int, views: int }
+    div.left
+      div.method_type POST
+      div.method_url /api/postViews/:sessionId/:postId
+      div.method_desc increse post link views count
+      div.method_post_data POST JSON: data={}
+      div.method_sample_response RESPONSE: { postId: int, views: int }
     div.method_error_codes
       ul
         li ERR_BAD_REQUEST
         li ERR_API_INTERNAL_ERROR
         li ERR_INVALID_KEY
         li ERR_INVALID_SESSION
+
   div.method
-    div.method_url /api/postRate/:sessionId/:postId
-    div.method_type POST
-    div.method_desc rate post link  (rate [-1, 1] param from POST BODY)
-    div.method_sample_response { postId: int, rate: int }
+    div.left
+      div.method_type POST
+      div.method_url /api/postRate/:sessionId/:postId
+      div.method_desc rate post link  (rate [-1, 1])
+      div.method_post_data POST JSON: data={rate: int}
+      div.method_sample_response RESPONSE: { postId: int, rate: int }
     div.method_error_codes
       ul
         li ERR_BAD_REQUEST
@@ -175,11 +215,14 @@ div.content
         li ERR_INVALID_SESSION
         li ERR_UNAUTHORIZED
         li ERR_ALREADY_RATED
+
   div.method
-    div.method_url /api/getTopLinks/:sessionId/:categoryId/:limit/:page
-    div.method_type GET
-    div.method_desc get top links (only sessionId is required, max limit value: 100)
-    div.method_sample_response {count: int, pages: int, currentPage: int, isNextPage: bool, isPrevPage: bool, result: [{ postId: int, categoryId: int, added: int, userId: int, userName: string, url: string, thumbUrl: string, rate: int, views: int}]
+    div.left
+      div.method_type GET
+      div.method_url /api/getTopLinks/:sessionId/:categoryId/:limit/:page
+      div.method_desc get top links (only sessionId is required, max limit value: 100)
+      div.method_post_data
+      div.method_sample_response RESPONSE: {count: int, pages: int, currentPage: int, isNextPage: bool, isPrevPage: bool, result: [{ postId: int, categoryId: int, added: int, userId: int, userName: string, url: string, thumbUrl: string, rate: int, views: int}]}
     div.method_error_codes
       ul
         li ERR_BAD_REQUEST
@@ -187,6 +230,18 @@ div.content
         li ERR_INVALID_KEY
         li ERR_INVALID_SESSION
 
+  div.method
+    div.left
+      div.method_type GET
+      div.method_url /api/getTags/:apiKey/:limit/:page/:searchKey
+      div.method_desc get tags (searchKey tag is optional, max limit value: 100)
+      div.method_post_data
+      div.method_sample_response RESPONSE: {count: int, pages: int, currentPage: int, isNextPage: bool, isPrevPage: bool, result: [tagName:string]}
+    div.method_error_codes
+      ul
+        li ERR_BAD_REQUEST
+        li ERR_API_INTERNAL_ERROR
+        li ERR_INVALID_KEY
 
   h1.info Error handling
 

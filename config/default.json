@@ -10,6 +10,34 @@
     "use_loggly_frontend" : false,
     "enable_google_analytics" : true
   },
+  "tests": {
+    "login": {
+      "facebook": {
+        "id": "",
+        "name": "",
+        "fist_name": "",
+        "last_name": "",
+        "locale": ""
+      },
+      "google": {
+        "id": "",
+        "name": "",
+        "given_name": "",
+        "family_name": ""
+      },
+      "twitter": {
+        "id": "",
+        "name": ""
+      },
+      "live": {
+        "id": "",
+        "name": "",
+        "fist_name": "",
+        "last_name": "",
+        "locale": ""
+      }
+    }
+  },
   "auth": {
     "facebook": {
       "appid": "",
@@ -71,7 +99,7 @@
     "login_fb" : {
       "controller": "api",
       "action": "login_fb",
-      "url": "api/loginByFb/:apiKey/:id/:name/:fist_name/:last_name/:locale",
+      "url": "api/loginByFb/:apiKey",
       "method":"post",
       "description":"login by fb",
       "isRegExp" : false
@@ -79,7 +107,7 @@
     "login_google" : {
       "controller": "api",
       "action": "login_google",
-      "url": "api/loginByGoogle/:apiKey/:id/:name/:given_name/:family_name",
+      "url": "api/loginByGoogle/:apiKey",
       "method":"post",
       "description":"login by google",
       "isRegExp" : false
@@ -87,7 +115,7 @@
     "login_twitter" : {
       "controller": "api",
       "action": "login_twitter",
-      "url": "api/loginByTwitter/:apiKey/:id/:name",
+      "url": "api/loginByTwitter/:apiKey",
       "method":"post",
       "description":"login by twitter",
       "isRegExp" : false
@@ -95,39 +123,7 @@
     "login_winlive" : {
       "controller": "api",
       "action": "login_winlive",
-      "url": "api/loginByWindowsLive/:apiKey/:id/:name/:fist_name/:last_name/:locale",
-      "method":"post",
-      "description":"login by windows live",
-      "isRegExp" : false
-    },
-    "login_winlive_default1" : {
-      "controller": "api",
-      "action": "login_winlive",
-      "url": "api/loginByWindowsLive/:apiKey/:id/:name/:fist_name/:last_name",
-      "method":"post",
-      "description":"login by windows live",
-      "isRegExp" : false
-    },
-    "login_winlive_default2" : {
-      "controller": "api",
-      "action": "login_winlive",
-      "url": "api/loginByWindowsLive/:apiKey/:id/:name/:fist_name",
-      "method":"post",
-      "description":"login by windows live",
-      "isRegExp" : false
-    },
-    "login_winlive_default3" : {
-      "controller": "api",
-      "action": "login_winlive",
-      "url": "api/loginByWindowsLive/:apiKey/:id/:name",
-      "method":"post",
-      "description":"login by windows live",
-      "isRegExp" : false
-    },
-    "login_winlive_default4" : {
-      "controller": "api",
-      "action": "login_winlive",
-      "url": "api/loginByWindowsLive/:apiKey/:id",
+      "url": "api/loginByWindowsLive/:apiKey",
       "method":"post",
       "description":"login by windows live",
       "isRegExp" : false
@@ -202,6 +198,38 @@
       "url": "api/getTopLinks/:sessionId",
       "method":"get",
       "description":"get top links",
+      "isRegExp" : false
+    },
+    "get_tags_search_key" : {
+      "controller": "api",
+      "action": "tags",
+      "url": "api/getTags/:apiKey/:limit/:page/:searchKey",
+      "method":"get",
+      "description":"get tags for search key",
+      "isRegExp" : false
+    },
+    "get_tags" : {
+      "controller": "api",
+      "action": "tags",
+      "url": "api/getTags/:apiKey/:limit/:page",
+      "method":"get",
+      "description":"get tags",
+      "isRegExp" : false
+    },
+    "get_tags_default1" : {
+      "controller": "api",
+      "action": "tags",
+      "url": "api/getTags/:apiKey/:limit",
+      "method":"get",
+      "description":"get tags",
+      "isRegExp" : false
+    },
+    "get_tags_default2" : {
+      "controller": "api",
+      "action": "tags",
+      "url": "api/getTags/:apiKey",
+      "method":"get",
+      "description":"get tags",
       "isRegExp" : false
     }
   }

@@ -426,7 +426,8 @@ var Api_Controller = {
 
       var
         postId = parseInt(req.params.postId) || 0,
-        rate = parseInt(req.body.rate) || 0,
+        input = JSON.parse(req.body.data || '{}'),
+        rate = parseInt(input.rate) || 0,
         userId = obj.getUserId();
 
       if (userId < 1) {
@@ -493,7 +494,8 @@ var Api_Controller = {
       }
 
       var
-        url = req.body.url || '',
+        input = JSON.parse(req.body.data || '{}'),
+        url = input.url || '',
         Url = require(process.env.APP_PATH + "/models/url").Url,
         urlObj = new Url(url);
 
@@ -502,13 +504,14 @@ var Api_Controller = {
       }
 
       var
-        categoryId = parseInt(req.body.categoryId) || 0;
+        categoryId = parseInt(input.categoryId) || 0;
+        tags = input.tags || [];
         postLink = require(process.env.APP_PATH + "/models/response/postLink").postLink,
         Post = require(process.env.APP_PATH + "/models/post").Post,
         post = new Post();
 
       try {
-        post.createNewPost(urlObj, categoryId, userId, function (err2, p_obj) {
+        post.createNewPost(urlObj, categoryId, tags, userId, function (err2, p_obj) {
 
           if (err2) {
             return next(err2);
@@ -586,7 +589,47 @@ var Api_Controller = {
       });
 
     });
-  }
+  },
+  //api/tags/:apiKey
+  tags: function (req, res, next) {
+    var
+      apiKey = req.params.apiKey,
+      Key = require(process.env.APP_PATH + "/models/key").Key,
+      key_obj = new Key();
+
+    //validate key
+    key_obj.isValidKey(apiKey, function (err, obj) {
+
+      //if something wrong
+      if (err) {
+        return next(err);
+      }
+
+      var
+        searchKey = req.params.searchKey || '',
+        limit = parseInt(req.params.limit) || 1,
+        page = parseInt(req.params.page) || 1,
+        getTags = require(process.env.APP_PATH + "/models/response/getTags").getTags;
+        Tag_Search_List = require(process.env.APP_PATH + "/models/tag/search/list").Tag_Search_List,
+        tagSearchList = new Tag_Search_List();
+
+      if (limit > 100) {
+        return next(error(400, 'Bad request (too big limit value)'));
+      }
+
+      tagSearchList.get(searchKey, limit, page, function (err2, listObj) {
+
+        if (err2) {
+          return next(err2);
+        }
+
+        var data = new getTags(listObj);
+        res.json(data);
+        RequestLogger.log(req, data);
+      });
+    });
+  },
+
 };
 
 module.exports = Api_Controller;

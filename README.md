@@ -11,11 +11,14 @@
     * ERR_API_INTERNAL_ERROR
     * ERR_INVALID_KEY
 
-- POST /api/loginByFb/:apiKey/:id/:name/:fist_name/:last_name/:locale
+- POST /api/loginByFb/:apiKey
     ```
     get session for authorized user by facebook
     ```
     ```
+    POST JSON: data={id: int, name: string, fist_name: string, last_name: string, locale: string}
+    ```
+    ```
     {sess: string, userId: int}
     ```
     * ERR_BAD_REQUEST
@@ -23,11 +26,14 @@
     * ERR_INVALID_KEY
     * ERR_LOGIN_FAILED
 
-- POST /api/loginByGoogle/:apiKey/:id/:name/:given_name/:family_name
+- POST /api/loginByGoogle/:apiKey
     ```
     get session for authorized user by google
     ```
     ```
+    POST JSON: data={id: int, name: string, given_name: string, family_name: string}
+    ```
+    ```
     {sess: string, userId: int}
     ```
     * ERR_BAD_REQUEST
@@ -35,11 +41,14 @@
     * ERR_INVALID_KEY
     * ERR_LOGIN_FAILED
 
-- POST /api/loginByTwitter/:apiKey/:id/:name
+- POST /api/loginByTwitter/:apiKey
     ```
     get session for authorized user by twitter
     ```
     ```
+    POST JSON: data={id: int, name: string}
+    ```
+    ```
     {sess: string, userId: int}
     ```
     * ERR_BAD_REQUEST
@@ -47,9 +56,12 @@
     * ERR_INVALID_KEY
     * ERR_LOGIN_FAILED
 
-- POST /api/loginByWindowsLive/:apiKey/:id/:name/:fist_name/:last_name/:locale
+- POST /api/loginByWindowsLive/:apiKey
     ```
     get session for authorized user by windows live
+    ```
+    ```
+    POST JSON: data={id: int, name: string, fist_name: string, last_name: string, locale: string}
     ```
     ```
     {sess: string, userId: int}
@@ -79,7 +91,10 @@
     * ERR_INVALID_SESSION
 - POST /api/postLink/:sessionId
     ```
-    create post link (url param from POST BODY)
+    create post link
+    ```
+    ```
+    POST JSON: data={url: string, tags: [tagName: string]}
     ```
     ```
     { postId: int, categoryId: int, added: int, userId: int, userName: string, url: string, thumbUrl: string, rate: int, views: int }
@@ -88,10 +103,14 @@
     * ERR_API_INTERNAL_ERROR
     * ERR_INVALID_KEY
     * ERR_INVALID_SESSION
+    * ERR_INVALID_TAG_NAME
     * ERR_UNAUTHORIZED
 - POST /api/postViews/:sessionId/:postId
     ```
     increse post link views count
+    ```
+    ```
+    POST JSON: data={}
     ```
     ```
     { postId: int, views: int }
@@ -103,7 +122,10 @@
     * ERR_INVALID_SESSION
 - POST /api/postRate/:sessionId/:postId
     ```
-    rate post link (rate [-1, 1] param from POST BODY)
+    rate post link (rate [-1, 1])
+    ```
+    ```
+    POST JSON: data={rate: int}
     ```
     ```
     { postId: int, rate: int }
@@ -119,12 +141,23 @@
     get top links (only sessionId is required, max limit value: 100)
     ```
     ```
-    {count: int, pages: int, currentPage: int, isNextPage: bool, isPrevPage: bool, result: [{ postId: int, categoryId: int, added: int, userId: int, userName: string, url: string, thumbUrl: string, rate: int, views: int}]
+    {count: int, pages: int, currentPage: int, isNextPage: bool, isPrevPage: bool, result: [{ postId: int, categoryId: int, added: int, userId: int, userName: string, url: string, thumbUrl: string, rate: int, views: int}]}
     ```
     * ERR_BAD_REQUEST
     * ERR_API_INTERNAL_ERROR
     * ERR_INVALID_KEY
     * ERR_INVALID_SESSION
+
+- GET /api/getTags/:apiKey/:limit/:page/:searchKey
+    ```
+    get tags (searchKey tag is optional, max limit value: 100)
+    ```
+    ```
+    {count: int, pages: int, currentPage: int, isNextPage: bool, isPrevPage: bool, result: [tagName:string]}
+    ```
+    * ERR_BAD_REQUEST
+    * ERR_API_INTERNAL_ERROR
+    * ERR_INVALID_KEY
 
 # Error handling
 

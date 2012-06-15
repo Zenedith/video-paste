@@ -1,0 +1,3 @@
+[submodule "external/redis-faina"]
+	path = external/redis-faina
+	url = https://github.com/Instagram/redis-faina.git

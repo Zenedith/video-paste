@@ -1,3 +1,17 @@
+# Available api helpers
+
+- GET /debug/requests
+    ```
+    request and response live debugger
+    ```
+
+# Available tasks
+
+- GET /task/checkNewList
+    ```
+    cleaning older posts from new list
+    ```
+
 # Available api methods
 
 - GET /api/getSession/:apiKey
@@ -147,7 +161,7 @@
     * ERR_API_INTERNAL_ERROR
     * ERR_INVALID_KEY
     * ERR_INVALID_SESSION
-
+    * ERR_EMPTY_RESULTS
 - GET /api/getTags/:apiKey/:limit/:page/:searchKey
     ```
     get tags (searchKey tag is optional, max limit value: 100)
@@ -158,7 +172,18 @@
     * ERR_BAD_REQUEST
     * ERR_API_INTERNAL_ERROR
     * ERR_INVALID_KEY
-
+- GET /api/getNewLinks/:sessionId/:categoryId/:limit/:page
+    ```
+    get new links ordered from newer to older (only sessionId is required, max limit value: 100)
+    ```
+    ```
+    {count: int, pages: int, currentPage: int, isNextPage: bool, isPrevPage: bool, result: [{ postId: int, categoryId: int, added: int, userId: int, userName: string, url: string, thumbUrl: string, rate: int, views: int}]}
+    ```
+    * ERR_BAD_REQUEST
+    * ERR_API_INTERNAL_ERROR
+    * ERR_INVALID_KEY
+    * ERR_INVALID_SESSION
+    * ERR_EMPTY_RESULTS
 # Error handling
 
 ```
@@ -183,4 +208,5 @@ error value             code value
 * ERR_INVALID_SESSION       603
 * ERR_ALREADY_RATED         604
 * ERR_LOGIN_FAILED          605
+* ERR_INVALID_TAG_NAME      606
 ```

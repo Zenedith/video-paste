@@ -13,6 +13,10 @@ style
     border: 1px solid #CCC;
     text-align: center;
    }
+   .item {
+    border: 1px solid #CCC;
+    margin-bottom: 30px;
+  }
    .method {
     clear: both;
     background-color: whiteSmoke;
@@ -76,6 +80,16 @@ style
   }
 
 div.content
+  h1.info Available api helpers
+  div.item
+    div GET /debug/requests
+    div DESC: request and response live debugger
+
+  h1.info Available tasks
+  div.item
+    div GET /task/checkNewList
+    div DESC: cleaning older posts from new list
+
   h1.info Available api methods
 
   div.method
@@ -229,6 +243,7 @@ div.content
         li ERR_API_INTERNAL_ERROR
         li ERR_INVALID_KEY
         li ERR_INVALID_SESSION
+        li ERR_EMPTY_RESULTS
 
   div.method
     div.left
@@ -242,6 +257,21 @@ div.content
         li ERR_BAD_REQUEST
         li ERR_API_INTERNAL_ERROR
         li ERR_INVALID_KEY
+
+  div.method
+    div.left
+      div.method_type GET
+      div.method_url /api/getNewLinks/:sessionId/:categoryId/:limit/:page
+      div.method_desc get new links ordered from newer to older (only sessionId is required, max limit value: 100)
+      div.method_post_data
+      div.method_sample_response RESPONSE: {count: int, pages: int, currentPage: int, isNextPage: bool, isPrevPage: bool, result: [{ postId: int, categoryId: int, added: int, userId: int, userName: string, url: string, thumbUrl: string, rate: int, views: int}]}
+    div.method_error_codes
+      ul
+        li ERR_BAD_REQUEST
+        li ERR_API_INTERNAL_ERROR
+        li ERR_INVALID_KEY
+        li ERR_INVALID_SESSION
+        li ERR_EMPTY_RESULTS
 
   h1.info Error handling
 
@@ -292,3 +322,6 @@ div.content
     div.err
       div.err_error ERR_LOGIN_FAILED
       div.err_code 605
+    div.err
+      div.err_error ERR_INVALID_TAG_NAME
+      div.err_code 606

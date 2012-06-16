@@ -40,8 +40,9 @@ var Tag_Search = function ()
       async.forEach(
         series,
         function (tag, callbackSeries) {
-          _this.setId(tag);  //tag keyword as id (need to addToObjectSet)
-          Database.addToObjectSet(_this, 'tags', tagName, callbackSeries);
+          var
+            setName = tag + ':tags';
+          Database.addValueToSet(setName, tagName, callbackSeries);
         },
         function (err) {
           if (err) {

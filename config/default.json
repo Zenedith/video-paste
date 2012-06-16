@@ -2,7 +2,7 @@
   "app" : {
     "port" : 0,
     "host" : "",
-    "version" : "0.0.3",
+    "version" : "0.0.4",
     "log_level" : "error",
     "log2file" : true,
     "use_winston" : false,
@@ -168,6 +168,38 @@
       "description":"rate post",
       "isRegExp" : false
     },
+    "get_new_links" : {
+      "controller": "api",
+      "action": "get_new_links",
+      "url": "api/getNewLinks/:sessionId/:categoryId/:limit/:page",
+      "method":"get",
+      "description":"get new links",
+      "isRegExp" : false
+    },
+    "get_new_links_default1" : {
+      "controller": "api",
+      "action": "get_new_links",
+      "url": "api/getNewLinks/:sessionId/:categoryId/:limit",
+      "method":"get",
+      "description":"get new links",
+      "isRegExp" : false
+    },
+    "get_new_links_default2" : {
+      "controller": "api",
+      "action": "get_new_links",
+      "url": "api/getNewLinks/:sessionId/:categoryId",
+      "method":"get",
+      "description":"get new links",
+      "isRegExp" : false
+    },
+    "get_new_links_default3" : {
+      "controller": "api",
+      "action": "get_new_links",
+      "url": "api/getNewLinks/:sessionId",
+      "method":"get",
+      "description":"get new links",
+      "isRegExp" : false
+    },
     "get_top_link" : {
       "controller": "api",
       "action": "get_top_link",
@@ -230,6 +262,14 @@
       "url": "api/getTags/:apiKey",
       "method":"get",
       "description":"get tags",
+      "isRegExp" : false
+    },
+    "task_check_new_list" : {
+      "controller": "task",
+      "action": "check_new_list",
+      "url": "task/checkNewList",
+      "method":"get",
+      "description":"task for clean new list from older items",
       "isRegExp" : false
     }
   }

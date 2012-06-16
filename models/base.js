@@ -12,6 +12,7 @@ Base.prototype.getClassName = function () {
   return this.__className;
 };
 
+// get string id value
 Base.prototype.getId = function () {
   return this.__id;
 };

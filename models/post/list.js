@@ -51,7 +51,7 @@ var Post_List = function ()
       }
 
       if (!resList.length) {
-        return callback(error(601, 'Empty posts results'), null);
+        return callback(error(601, 'Empty posts result for given params'), null);
       }
 
       //get post objects from ids

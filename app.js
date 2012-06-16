@@ -124,6 +124,11 @@ if (process.env.NODE_ENV == 'dotcloud') {
     // regular middleware.
     app.use(function(err, req, res, next){
 
+      //on development show debug stack only if no testing (modeule parent)
+      if (process.env.NODE_ENV === 'development' && !module.parent) {
+        return next(err); //goto express.errorHandler
+      }
+
       //check error type
       if (!err.hasOwnProperty('code')) {
         log.error('500: ' + req.originalUrl + ', error: ' + err.message); //log real message
@@ -131,11 +136,6 @@ if (process.env.NODE_ENV == 'dotcloud') {
       }
       else {
         log.error(err.code + ': ' + req.originalUrl + ', error: ' + err.message);
-      }
-
-      //on development show debug stack only if no testing (modeule parent)
-      if (process.env.NODE_ENV === 'development' && !module.parent) {
-        return next(err); //goto express.errorHandler
       }
 
       if (/RedisClient/i.test(err.msg)) {

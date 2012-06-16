@@ -2,10 +2,10 @@ var
   app = require(__dirname + '/../app'),
   config = require('config'),
   postId = 101,
-  ratePostId = 101,
+  ratePostId = 99,
   apikey = 'a3ca844f14fbb45b',
-  sessId = '17c27ff7d4dca1df5fbf892886f100aa1232ba26',  //expired by one hour
-  authorizedSessId = '100795d6b4754dcd7ccb3e719aa63498b05e418f',  //expired by one hour
+  sessId = 'e86d4903fec7a6acd46df456a5ae1535b5225cd5',  //expired by one hour
+  authorizedSessId = 'e020154a0af6cf2b8ddfc15a7bd19a42efafce1f',  //expired by one hour
 //  show_response = false,
   show_response = true,
   secure = require("node-secure");
@@ -14,6 +14,28 @@ var
 exports.testSecureGlobals = function (beforeExit, assert) {
   console.log('testSecureGlobals');
   assert.ok(secure.isSecure());
+};
+
+exports.testTaskCleanNewList = function (beforeExit, assert) {
+  assert.response(app, {
+    url: '/task/checkNewList',
+    method: 'GET',
+    headers: { 'Content-Type': 'text/html; charset=utf-8' }
+  }, {
+    status: 200,
+    headers: { 'Content-Type': 'application/json; charset=utf-8' },
+  },
+  function(res) {
+    var json = JSON.parse(res.body);
+
+    if (show_response) {
+      console.log('testTaskCleanNewList result: ');
+      console.log(json);
+    }
+
+    assert.isDefined(json.removedCount);
+  }
+  );
 };
 
 exports.testIndexController = function (beforeExit, assert) {
@@ -133,9 +155,9 @@ exports.testPostLinkCreateInvalidUrl = function (beforeExit, assert) {
   }
   );
 };
-exports.testPostLinkCreate = function (beforeExit, assert) {
+exports.testPostLinkCreateValid = function (beforeExit, assert) {
   var
-    obj = {url: 'https://www.youtube.com/watch?v=hFmPRt_B3Tk'},
+    obj = {url: 'https://www.youtube.com/watch?v=hFmPRt_B3Tk', tags: ['funy', 'test']},
     post_data = 'data=' + JSON.stringify(obj);
 
   assert.response(app, {
@@ -154,7 +176,7 @@ exports.testPostLinkCreate = function (beforeExit, assert) {
     var json = JSON.parse(res.body);
 
     if (show_response) {
-      console.log('testPostLinkCreate result: ');
+      console.log('testPostLinkCreateValid result: ');
       console.log(json);
     }
 
@@ -361,6 +383,7 @@ exports.testLoginByFbValid = function (beforeExit, assert) {
   }
   );
 };
+
 exports.testLoginByGoogleValid = function (beforeExit, assert) {
   var
     obj = config.tests.login.google,
@@ -652,6 +675,79 @@ exports.testGetTopLinksValid = function (beforeExit, assert) {
     assert.isDefined(json.isNextPage);
     assert.isDefined(json.isPrevPage);
     assert.isDefined(json.result);
+  }
+  );
+};
+exports.testGetTopLinksInvalidLimit = function (beforeExit, assert) {
+
+  assert.response(app, {
+    url: '/api/getTopLinks/' + sessId + '/0/211/1',
+    method: 'GET',
+    headers: { 'Content-Type': 'text/html; charset=utf-8' }
+  }, {
+    status: 200,
+    headers: { 'Content-Type': 'application/json; charset=utf-8' }
+  },
+  function(res) {
+    var json = JSON.parse(res.body);
+
+    if (show_response) {
+      console.log('testGetTopLinksInvalidLimit result: ');
+      console.log(json);
+    }
+
+    assert.equal(json.error, 'ERR_BAD_REQUEST');
+    assert.equal(json.code, 400);
+  }
+  );
+};
+exports.testGetNewLinksValid = function (beforeExit, assert) {
+
+  assert.response(app, {
+    url: '/api/getNewLinks/' + sessId + '/0/2/1',
+    method: 'GET',
+    headers: { 'Content-Type': 'text/html; charset=utf-8' }
+  }, {
+    status: 200,
+    headers: { 'Content-Type': 'application/json; charset=utf-8' }
+  },
+  function(res) {
+    var json = JSON.parse(res.body);
+
+    if (show_response) {
+      console.log('testGetNewLinksValid result: ');
+      console.log(json);
+    }
+
+    assert.isDefined(json.count);
+    assert.isDefined(json.pages);
+    assert.isDefined(json.currentPage);
+    assert.isDefined(json.isNextPage);
+    assert.isDefined(json.isPrevPage);
+    assert.isDefined(json.result);
+  }
+  );
+};
+exports.testGetNewLinksInvalidLimit = function (beforeExit, assert) {
+
+  assert.response(app, {
+    url: '/api/getNewLinks/' + sessId + '/0/211/1',
+    method: 'GET',
+    headers: { 'Content-Type': 'text/html; charset=utf-8' }
+  }, {
+    status: 200,
+    headers: { 'Content-Type': 'application/json; charset=utf-8' }
+  },
+  function(res) {
+    var json = JSON.parse(res.body);
+
+    if (show_response) {
+      console.log('testGetNewLinksInvalidLimit result: ');
+      console.log(json);
+    }
+
+    assert.equal(json.error, 'ERR_BAD_REQUEST');
+    assert.equal(json.code, 400);
   }
   );
 };

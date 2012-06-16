@@ -16,13 +16,13 @@ var Tag_Search_List = function ()
 
     var
       _this = this,
-      offset = parseInt((page - 1) * limit);
+      offset = parseInt((page - 1) * limit)
+      setName = searchKey + ':tags';
 
     //get tags matching to searchKey
     if (searchKey) {
-      this.setId(searchKey);  //tag search keyword as id
 
-      Database.getObjectsFromSet(this, 'tags', function (err, data) {
+      Database.getValuesFromSet(setName, function (err, data) {
 
         if (err) {
           return callback(err, null);

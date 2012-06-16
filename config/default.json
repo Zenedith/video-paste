@@ -263,6 +263,14 @@
       "method":"get",
       "description":"get tags",
       "isRegExp" : false
+    },
+    "task_check_new_list" : {
+      "controller": "task",
+      "action": "check_new_list",
+      "url": "task/checkNewList",
+      "method":"get",
+      "description":"task for clean new list from older items",
+      "isRegExp" : false
     }
   }
 }

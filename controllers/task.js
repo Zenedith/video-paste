@@ -17,7 +17,7 @@ var Task_Controller = {
       };
 
       res.json(data);
-//      RequestLogger.log(req, data);
+      RequestLogger.log(req, data);
     });
   }
 

@@ -16,6 +16,28 @@ exports.testSecureGlobals = function (beforeExit, assert) {
   assert.ok(secure.isSecure());
 };
 
+exports.testTaskCleanNewList = function (beforeExit, assert) {
+  assert.response(app, {
+    url: '/task/checkNewList',
+    method: 'GET',
+    headers: { 'Content-Type': 'text/html; charset=utf-8' }
+  }, {
+    status: 200,
+    headers: { 'Content-Type': 'application/json; charset=utf-8' },
+  },
+  function(res) {
+    var json = JSON.parse(res.body);
+
+    if (show_response) {
+      console.log('testTaskCleanNewList result: ');
+      console.log(json);
+    }
+
+    assert.isDefined(json.removedCount);
+  }
+  );
+};
+
 exports.testIndexController = function (beforeExit, assert) {
   assert.response(app, {
     url: '/',

@@ -13,6 +13,10 @@ style
     border: 1px solid #CCC;
     text-align: center;
    }
+   .item {
+    border: 1px solid #CCC;
+    margin-bottom: 30px;
+  }
    .method {
     clear: both;
     background-color: whiteSmoke;
@@ -76,6 +80,16 @@ style
   }
 
 div.content
+  h1.info Available api helpers
+  div.item
+    div GET /debug/requests
+    div DESC: request and response live debugger
+
+  h1.info Available tasks
+  div.item
+    div GET /task/checkNewList
+    div DESC: cleaning older posts from new list
+
   h1.info Available api methods
 
   div.method

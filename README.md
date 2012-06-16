@@ -1,3 +1,17 @@
+# Available api helpers
+
+- GET /debug/requests
+    ```
+    request and response live debugger
+    ```
+
+# Available tasks
+
+- GET /task/checkNewList
+    ```
+    cleaning older posts from new list
+    ```
+
 # Available api methods
 
 - GET /api/getSession/:apiKey

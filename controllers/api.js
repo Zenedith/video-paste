@@ -3,6 +3,7 @@ var
   config = require('config'),
   RequestLogger = require(process.env.APP_PATH + "/lib/requestLogger").RequestLogger,
   disableServiceAuth = true,  //problem with access key renew in some services
+  sanitize = require('validator').sanitize,
   secure = require("node-secure");
 
 var Api_Controller = {
@@ -40,7 +41,17 @@ var Api_Controller = {
       }
 
       var
-        input = JSON.parse(req.body.data || '{}'),
+        input = JSON.parse(req.body.data || '{}');
+
+      for (var k in input) {
+        input[k] = sanitize(input[k]).xss();
+
+        if (!input[k]) {
+          return next(error(400, 'Bad request (bad ' + k + ' value)'));
+        }
+      }
+
+      var
         fbId = input.id,
         name = input.name,
         fist_name = input.fist_name,
@@ -51,6 +62,7 @@ var Api_Controller = {
         user = new User(),
         User_Validate_Facebook = require(process.env.APP_PATH + "/models/user/validate/facebook").User_Validate_Facebook,
         userValidateFacebook = new User_Validate_Facebook();
+
 
       userValidateFacebook.isValid(fbId, name, fist_name, last_name, function (errFb, data) {
 
@@ -102,7 +114,17 @@ var Api_Controller = {
       }
 
       var
-        input = JSON.parse(req.body.data || '{}'),
+        input = JSON.parse(req.body.data || '{}');
+
+      for (var k in input) {
+        input[k] = sanitize(input[k]).xss();
+
+        if (!input[k]) {
+          return next(error(400, 'Bad request (bad ' + k + ' value)'));
+        }
+      }
+
+      var
         mId = input.id,
         name = input.name || null,
         fist_name = input.fist_name || null,
@@ -164,7 +186,17 @@ var Api_Controller = {
       }
 
       var
-        input = JSON.parse(req.body.data || '{}'),
+        input = JSON.parse(req.body.data || '{}');
+
+      for (var k in input) {
+        input[k] = sanitize(input[k]).xss();
+
+        if (!input[k]) {
+          return next(error(400, 'Bad request (bad ' + k + ' value)'));
+        }
+      }
+
+      var
         gId = input.id,
         name = input.name,
         fist_name = input.given_name,
@@ -226,7 +258,17 @@ var Api_Controller = {
       }
 
       var
-        input = JSON.parse(req.body.data || '{}'),
+        input = JSON.parse(req.body.data || '{}');
+
+      for (var k in input) {
+        input[k] = sanitize(input[k]).xss();
+
+        if (!input[k]) {
+          return next(error(400, 'Bad request (bad ' + k + ' value)'));
+        }
+      }
+
+      var
         tId = input.id,
         name = input.name,
         fist_name = '',
@@ -327,7 +369,7 @@ var Api_Controller = {
         postId = parseInt(req.params.postId) || 0;
 
       if (postId < 1) {
-        return next(error(400, 'Bad Request (postId)'));
+        return next(error(400, 'Bad request (bad postId value)'));
       }
 
       var
@@ -389,7 +431,7 @@ var Api_Controller = {
 
 
       if (postId < 1) {
-        return next(error(400, 'Bad Request (postId)'));
+        return next(error(400, 'Bad request (bad postId value)'));
       }
 
       var
@@ -406,7 +448,7 @@ var Api_Controller = {
           RequestLogger.log(req, data);
         }
         else {
-          return next(error(400, 'Bad Request (postId)'));
+          return next(error(400, 'Bad request (bad postId value)'));
         }
       });
     });
@@ -575,7 +617,7 @@ var Api_Controller = {
         return next(error(400, 'Bad request (too big limit value)'));
       }
 
-      postList.get(limit, page, function (err2, listObj) {
+      postList.getByRate(limit, page, function (err2, listObj) {
 
         if (err2) {
           return next(err2);
@@ -667,6 +709,15 @@ var Api_Controller = {
         return next(error(400, 'Bad request (too big limit value)'));
       }
 
+      //searchKey is optional
+      if (searchKey) {
+        searchKey = sanitize(searchKey).xss();
+
+        if (!searchKey) {
+          return next(error(400, 'Bad request (bad searchKey value)'));
+        }
+      }
+
       tagSearchList.get(searchKey, limit, page, function (err2, listObj) {
 
         if (err2) {
@@ -679,7 +730,55 @@ var Api_Controller = {
       });
     });
   },
+  //api/getLinksByTag/:sessionId/:tagName/:limit/:page
+  getLinksByTag: function (req, res, next) {
+    var
+      Session = require(process.env.APP_PATH + "/models/session").Session,
+      sess_obj = new Session(),
+      sessionId = req.params.sessionId;
 
+    //validate session and key
+    sess_obj.isValidSession(sessionId, function (err, obj) {
+
+      //if something wrong
+      if (err) {
+        return next(err);
+      }
+
+      var
+        tagName = req.params.tagName || '',
+        limit = parseInt(req.params.limit) || 1,
+        page = parseInt(req.params.page) || 1,
+        getLinksByTag = require(process.env.APP_PATH + "/models/response/getLinksByTag").getLinksByTag;
+        Post_List = require(process.env.APP_PATH + "/models/post/list").Post_List,
+        postList = new Post_List();
+
+      if (limit > 100) {
+        return next(error(400, 'Bad request (too big limit value)'));
+      }
+
+      tagName = sanitize(tagName).xss();
+
+      if (!tagName) {
+        return next(error(400, 'Bad request (bad tagName value)'));
+      }
+
+      postList.searchByTag(tagName, page, limit, function(err2, listObj) {
+        if (err2) {
+          return next(err2);
+        }
+
+        new getLinksByTag(listObj, function (err3, data){
+          if (err3) {
+            return next(err3);
+          }
+
+          res.json(data);
+          RequestLogger.log(req, data);
+        });
+      });
+    });
+  }
 };
 
 module.exports = Api_Controller;

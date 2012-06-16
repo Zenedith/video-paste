@@ -36,8 +36,9 @@ var Post_List = function ()
     });
   };
 
-  this.get = function (limit, page, callback) {
-    log.debug('Post_List.get(' + limit + ', ' + page + ')');
+  //get posts by rate
+  this.getByRate = function (limit, page, callback) {
+    log.debug('Post_List.getByRate(' + limit + ', ' + page + ')');
 
     var
       _this = this,
@@ -67,6 +68,45 @@ var Post_List = function ()
         Database.getObjectScoreCount(_this, '__rate', -1, -1, function (err3, count) {
           if (err3) {
             return callback(err3, null);
+          }
+
+          var
+            list = new List(limit, page, count, data);
+
+          return callback(null, list);
+        });
+      });
+    });
+  };
+
+  //get posts by tag name ordered by id desc
+  this.searchByTag = function (tagName, page, limit, callback) {
+    log.debug('Post_List.get(' + tagName + ', ' + page + ', ' + limit + ')');
+
+    var
+      _this = this,
+      setName = tagName + ':postId',
+      offset = parseInt((page - 1) * limit);
+
+    //check how many items on list for tag
+    Database.countValuesInSet(setName, function (errCount, count) {
+
+      if (errCount) {
+        return callback(errCount, null);
+      }
+
+      //get post ids for tag name
+      Database.getSortedValuesFromSet(setName, offset, limit, 'DESC', function (errSearch, resList) {
+
+        if (errSearch) {
+          return callback(errSearch, null);
+        }
+
+        //get post objects from ids
+        _this.getObjectsFromIds(resList, function (err2, data) {
+
+          if (err2) {
+            return callback(err2, null);
           }
 
           var

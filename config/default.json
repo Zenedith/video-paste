@@ -271,6 +271,38 @@
       "method":"get",
       "description":"task for clean new list from older items",
       "isRegExp" : false
+    },
+    "get_post_by_tag" : {
+      "controller": "api",
+      "action": "getLinksByTag",
+      "url": "api/getLinksByTag/:sessionId/:tagName/:limit/:page",
+      "method":"get",
+      "description":"get links for tag",
+      "isRegExp" : false
+    },
+    "get_post_by_tag_default1" : {
+      "controller": "api",
+      "action": "getLinksByTag",
+      "url": "api/getLinksByTag/:sessionId/:tagName/:limit",
+      "method":"get",
+      "description":"get links for tag",
+      "isRegExp" : false
+    },
+    "get_post_by_tag_default2" : {
+      "controller": "api",
+      "action": "getLinksByTag",
+      "url": "api/getLinksByTag/:sessionId/:tagName",
+      "method":"get",
+      "description":"get links for tag",
+      "isRegExp" : false
+    },
+    "get_post_by_tag_default3" : {
+      "controller": "api",
+      "action": "getLinksByTag",
+      "url": "api/getLinksByTag/:sessionId",
+      "method":"get",
+      "description":"get links for tag",
+      "isRegExp" : false
     }
   }
 }

@@ -2,10 +2,11 @@ var
   app = require(__dirname + '/../app'),
   config = require('config'),
   postId = 101,
-  ratePostId = 99,
+  ratePostId = 96,
   apikey = 'a3ca844f14fbb45b',
-  sessId = 'e86d4903fec7a6acd46df456a5ae1535b5225cd5',  //expired by one hour
-  authorizedSessId = 'e020154a0af6cf2b8ddfc15a7bd19a42efafce1f',  //expired by one hour
+  sessId = '99d41de80973bb58580f6f9dd96a2734427d929c',  //expired by one hour
+  authorizedSessId = 'bd0e84ff62eef94c4b4c32462e34bef1658e1dc1',  //expired by one hour
+  searchByTag = 'test',
 //  show_response = false,
   show_response = true,
   secure = require("node-secure");
@@ -224,7 +225,6 @@ exports.testGetPostLinkCreateInvalidSess = function (beforeExit, assert) {
   }
 );
 };
-
 exports.testGetPostLinkValid = function (beforeExit, assert) {
 
   assert.response(app, {
@@ -798,6 +798,33 @@ exports.testGetTagsInvalidKey = function (beforeExit, assert) {
 
     assert.equal(json.error, 'ERR_INVALID_KEY');
     assert.equal(json.code, 602);
+  }
+  );
+};
+exports.testGetNewLinksValid = function (beforeExit, assert) {
+
+  assert.response(app, {
+    url: '/api/getLinksByTag/' + sessId + '/' + searchByTag +'/2/1',
+    method: 'GET',
+    headers: { 'Content-Type': 'text/html; charset=utf-8' }
+  }, {
+    status: 200,
+    headers: { 'Content-Type': 'application/json; charset=utf-8' }
+  },
+  function(res) {
+    var json = JSON.parse(res.body);
+
+    if (show_response) {
+      console.log('testGetNewLinksValid result: ');
+      console.log(json);
+    }
+
+    assert.isDefined(json.count);
+    assert.isDefined(json.pages);
+    assert.isDefined(json.currentPage);
+    assert.isDefined(json.isNextPage);
+    assert.isDefined(json.isPrevPage);
+    assert.isDefined(json.result);
   }
   );
 };

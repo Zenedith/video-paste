@@ -63,10 +63,17 @@ var Post = function ()
         });
       }
 
-//      //async: add score for post
+      //async: add score for post
       Database.addObjectScore(p_obj, '__rate', function (err4, res4) {
         if (err4) {
           log.crit(err4);
+        }
+      });
+
+      //async: add post to new set
+      p_obj.addPostToNewSet(function (err5, res5) {
+        if (err5) {
+          log.crit(err5);
         }
       });
 
@@ -132,12 +139,25 @@ var Post = function ()
     Database.incrObject(this, '__views', callback);
   };
 
+  this.addPostToNewSet = function (callback) {
+    var
+      setName = 'new:posts';
+
+    Database.addValueToSet(setName, this.getId(), callback);
+  };
+
   this.addUserToAlreadyRatedSet = function (userId, callback) {
-    Database.addToObjectSet(this, 'rated', userId, callback);
+    var
+      setName = 'post:' + this.getId() + ':rated';
+
+    Database.addValueToSet(setName, userId, callback);
   };
 
   this.checkIfUserAlreadyRated = function (userId, callback) {
-    Database.isObjectInSet(this, 'rated', userId, callback);
+    var
+      setName = 'post:' + this.getId() + ':rated';
+
+    Database.isValueInSet(setName, userId, callback);
   };
 
   this.getCategoryId = function () {
@@ -179,6 +199,10 @@ var Post = function ()
   };
 };
 
+//override: get int id value
+Post.prototype.getId = function () {
+  return parseInt(this.__id);
+};
 
 //extending base class
 //util.inherits(Post, Base);

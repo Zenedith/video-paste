@@ -168,6 +168,38 @@
       "description":"rate post",
       "isRegExp" : false
     },
+    "get_new_links" : {
+      "controller": "api",
+      "action": "get_new_links",
+      "url": "api/getNewLinks/:sessionId/:categoryId/:limit/:page",
+      "method":"get",
+      "description":"get new links",
+      "isRegExp" : false
+    },
+    "get_new_links_default1" : {
+      "controller": "api",
+      "action": "get_new_links",
+      "url": "api/getNewLinks/:sessionId/:categoryId/:limit",
+      "method":"get",
+      "description":"get new links",
+      "isRegExp" : false
+    },
+    "get_new_links_default2" : {
+      "controller": "api",
+      "action": "get_new_links",
+      "url": "api/getNewLinks/:sessionId/:categoryId",
+      "method":"get",
+      "description":"get new links",
+      "isRegExp" : false
+    },
+    "get_new_links_default3" : {
+      "controller": "api",
+      "action": "get_new_links",
+      "url": "api/getNewLinks/:sessionId",
+      "method":"get",
+      "description":"get new links",
+      "isRegExp" : false
+    },
     "get_top_link" : {
       "controller": "api",
       "action": "get_top_link",

@@ -24,10 +24,11 @@ var Tag = function ()
       return callback(error(606, 'invalid tagName: ' + e.message), null);
     }
 
-    this.setId(tagName);  //tag name as id
+    var
+      setName = tagName + ':postId';
 
     //add postId to set connected with tagName
-    Database.addToObjectSet(this, 'postId', postId, function (err, res){
+    Database.addValueToSet(setName, postId, function (err, res){
       if (err) {
         return callback(err, null);
       }

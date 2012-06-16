@@ -594,6 +594,52 @@ var Api_Controller = {
 
     });
   },
+  //get top link:  /api/getNewLinks/:sessionId/:categoryId/:limit/:page
+  get_new_links: function(req, res, next) {
+    var
+      Session = require(process.env.APP_PATH + "/models/session").Session,
+      sess_obj = new Session(),
+      sessionId = req.params.sessionId;
+
+    //validate session and key
+    sess_obj.isValidSession(sessionId, function (err, obj) {
+
+      //if something wrong
+      if (err) {
+        return next(err);
+      }
+
+      var
+//        categoryId = parseInt(req.params.categoryId) || 0,
+        limit = parseInt(req.params.limit) || 1,
+        page = parseInt(req.params.page) || 1,
+        getNewLinks = require(process.env.APP_PATH + "/models/response/getNewLinks").getNewLinks,
+        Post_List_New = require(process.env.APP_PATH + "/models/post/list/new").Post_List_New,
+        postListNew = new Post_List_New();
+
+      if (limit > 100) {
+        return next(error(400, 'Bad request (too big limit value)'));
+      }
+
+      postListNew.get(limit, page, function (err2, listObj) {
+
+        if (err2) {
+          return next(err2);
+        }
+
+        new getNewLinks(listObj, function (err3, data){
+          if (err3) {
+            return next(err3);
+          }
+
+          res.json(data);
+          RequestLogger.log(req, data);
+        });
+
+      });
+
+    });
+  },
   //api/tags/:apiKey
   tags: function (req, res, next) {
     var

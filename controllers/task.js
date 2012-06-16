@@ -1,6 +1,7 @@
 var
   log = require(process.env.APP_PATH + "/lib/log"),
   config = require('config'),
+  RequestLogger = require(process.env.APP_PATH + "/lib/requestLogger").RequestLogger,
   secure = require("node-secure");
 
 var Task_Controller = {

@@ -149,7 +149,7 @@ if (process.env.NODE_ENV == 'dotcloud') {
       }
       else {
         res.status(500);
-        res.render('info', { title: 'Nieoczekiwany problem (500)' });
+        res.render('info', { title: 'Unexpected problem (500)' });
       }
     });
 
@@ -169,7 +169,7 @@ if (process.env.NODE_ENV == 'dotcloud') {
       }
       else {
         res.status(404);
-        res.render('info', { title: 'Strona nie została odnaleziona (404)' });
+        res.render('info', { title: 'Cannot find page (404)' });
       }
     });
   });

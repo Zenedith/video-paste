@@ -1,14 +1,14 @@
 var
   app = require(__dirname + '/../app'),
   config = require('config'),
-  postId = 101,
-  ratePostId = 96,
+  postId = 180,
+  ratePostId = 17,
   apikey = 'a3ca844f14fbb45b',
-  sessId = '99d41de80973bb58580f6f9dd96a2734427d929c',  //expired by one hour
-  authorizedSessId = 'bd0e84ff62eef94c4b4c32462e34bef1658e1dc1',  //expired by one hour
+  sessId = '48930c0d1cf9b932a26068191a15945b262b068d',  //expired by one hour
+  authorizedSessId = 'fc2a58072c37b83234f671d48b381da6cd650021',  //expired by one hour
   searchByTag = 'test',
-//  show_response = false,
-  show_response = true,
+  show_response = false,
+//  show_response = true,
   secure = require("node-secure");
 
 
@@ -122,6 +122,7 @@ exports.testPostLinkCreateTestConverter = function (beforeExit, assert) {
     assert.isDefined(json.url);
     assert.isDefined(json.rate);
     assert.isDefined(json.views);
+    assert.isDefined(json.tags);
   }
   );
 };
@@ -158,7 +159,7 @@ exports.testPostLinkCreateInvalidUrl = function (beforeExit, assert) {
 };
 exports.testPostLinkCreateValid = function (beforeExit, assert) {
   var
-    obj = {url: 'https://www.youtube.com/watch?v=hFmPRt_B3Tk', tags: ['funy', 'test']},
+    obj = {url: 'https://www.youtube.com/watch?v=hFmPRt_B3Tk', tags: ['new', 'one']},
     post_data = 'data=' + JSON.stringify(obj);
 
   assert.response(app, {
@@ -191,6 +192,7 @@ exports.testPostLinkCreateValid = function (beforeExit, assert) {
     assert.isDefined(json.url);
     assert.isDefined(json.rate);
     assert.isDefined(json.views);
+    assert.isDefined(json.tags);
   }
   );
 };
@@ -253,6 +255,7 @@ exports.testGetPostLinkValid = function (beforeExit, assert) {
     assert.isDefined(json.url);
     assert.isDefined(json.rate);
     assert.isDefined(json.views);
+    assert.isDefined(json.tags);
   }
 );
 };
@@ -704,7 +707,7 @@ exports.testGetTopLinksInvalidLimit = function (beforeExit, assert) {
 exports.testGetNewLinksValid = function (beforeExit, assert) {
 
   assert.response(app, {
-    url: '/api/getNewLinks/' + sessId + '/0/2/1',
+    url: '/api/getNewLinks/' + sessId + '/0/10/1',
     method: 'GET',
     headers: { 'Content-Type': 'text/html; charset=utf-8' }
   }, {
@@ -801,7 +804,7 @@ exports.testGetTagsInvalidKey = function (beforeExit, assert) {
   }
   );
 };
-exports.testGetNewLinksValid = function (beforeExit, assert) {
+exports.testGetLinksByTagValid = function (beforeExit, assert) {
 
   assert.response(app, {
     url: '/api/getLinksByTag/' + sessId + '/' + searchByTag +'/2/1',
@@ -815,7 +818,7 @@ exports.testGetNewLinksValid = function (beforeExit, assert) {
     var json = JSON.parse(res.body);
 
     if (show_response) {
-      console.log('testGetNewLinksValid result: ');
+      console.log('testGetLinksByTagValid result: ');
       console.log(json);
     }
 

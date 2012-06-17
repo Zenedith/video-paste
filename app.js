@@ -124,7 +124,7 @@ if (process.env.NODE_ENV == 'dotcloud') {
     // regular middleware.
     app.use(function(err, req, res, next){
 
-      //on development show debug stack only if no testing (modeule parent)
+//      on development show debug stack only if no testing (modeule parent)
       if (process.env.NODE_ENV === 'development' && !module.parent) {
         return next(err); //goto express.errorHandler
       }

@@ -101,9 +101,15 @@ var Post = function ()
           return callback(err2, null);
         }
 
+        //async: set as rated from userId
         p_obj.addUserToAlreadyRatedSet(userId, function (err3, res) {
-          return callback(err3, p_obj);
+          if (err3) {
+            log.crit(err3);
+          }
         });
+
+        //dont wait to set rated
+        return callback(null, p_obj);
       });
     };
 
@@ -197,12 +203,14 @@ var Post = function ()
   this.getViews = function () {
     return parseInt(this.__views) || 0;
   };
+
 };
 
 //override: get int id value
 Post.prototype.getId = function () {
   return parseInt(this.__id);
 };
+
 
 //extending base class
 //util.inherits(Post, Base);

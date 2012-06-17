@@ -13,6 +13,8 @@ var Post_List = function ()
   Post.call(this);  //call parent constructor
 
   this.getObjectsFromIds = function (ids, callback) {
+    log.debug('Post_List.getObjectsFromIds()');
+
     this.loadMany(ids, function (err, resList) {
       if (err) {
         return callback(err, null);

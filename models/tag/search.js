@@ -1,5 +1,5 @@
 var
-  Tag = require(process.env.APP_PATH + "/models/tag").Tag,
+  Base = require(process.env.APP_PATH + "/models/base").Base,
   log = require(process.env.APP_PATH + "/lib/log"),
   Database = require(process.env.APP_PATH + "/lib/database").Database,
   async = require("async"),
@@ -9,7 +9,7 @@ var Tag_Search = function ()
 {
   log.debug('Tag_Search.construct()');
 
-  Tag.call(this);  //call parent constructor
+  Base.call(this);  //call parent constructor
 
   this.__className = "Tag_Search";
 
@@ -57,8 +57,8 @@ var Tag_Search = function ()
 
 
 //extending base class
-//util.inherits(Tag_Search, Tag);
-Tag_Search.prototype.__proto__ = Tag.prototype;
+//util.inherits(Tag_Search, Base);
+Tag_Search.prototype.__proto__ = Base.prototype;
 
 
 exports.Tag_Search = Tag_Search;

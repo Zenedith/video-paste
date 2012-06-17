@@ -1,5 +1,4 @@
 var
-  Base = require(process.env.APP_PATH + "/models/base").Base,
   log = require(process.env.APP_PATH + "/lib/log"),
   Database = require(process.env.APP_PATH + "/lib/database").Database,
   sanitize = require('validator').sanitize,
@@ -9,8 +8,6 @@ var
 var Tag = function ()
 {
   log.debug('Tag.construct()');
-
-  this.__className = "Tag";
 
   this.addTag = function (tagName, postId, callback) {
     log.debug('Tag.updateTagScore(' + tagName + ', ' + postId + ')');
@@ -25,6 +22,7 @@ var Tag = function ()
     }
 
     var
+      listName = postId + ':tags',
       setName = tagName + ':postId';
 
     //add postId to set connected with tagName
@@ -32,6 +30,13 @@ var Tag = function ()
       if (err) {
         return callback(err, null);
       }
+
+      //async
+      Database.appendValueToList(listName, tagName, function (err4, res4) {
+        if (err4) {
+          log.crit(err4);
+        }
+      });
 
       //create search keys from tag name
       var
@@ -41,12 +46,14 @@ var Tag = function ()
       return tagSearch.updateKeywords(tagName, callback);
     });
   };
+
+  this.getTags = function (postId, callback) {
+    var
+      listName = postId + ':tags';
+
+    Database.getValuesFromList(listName, 0, -1, callback);
+  };
 };
-
-
-//extending base class
-Tag.prototype.__proto__ = Base.prototype;
-
 
 exports.Tag = Tag;
 secure.secureMethods(exports);

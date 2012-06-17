@@ -1,7 +1,7 @@
 //var
 //  log = require(process.env.APP_PATH + "/lib/log");
 
-var postLink = function (postObj, userNamesObj)
+var postLink = function (postObj, userNamesObj, postTagsObj)
 {
 //  log.debug('postLink.construct()');
 
@@ -14,6 +14,8 @@ var postLink = function (postObj, userNamesObj)
   this.thumbUrl = postObj.getThumbUrl();
   this.rate = parseInt(postObj.getRating());
   this.views = parseInt(postObj.getViews());
+  this.tags = postTagsObj.getTags(postObj.getId());
+
 };
 
 exports.postLink = postLink;

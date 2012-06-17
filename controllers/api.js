@@ -374,7 +374,6 @@ var Api_Controller = {
 
       var
         Post = require(process.env.APP_PATH + "/models/post").Post,
-        postLink = require(process.env.APP_PATH + "/models/response/postLink").postLink,
         post = new Post();
 
       post.load(postId, function (err2, p_obj) {
@@ -384,19 +383,16 @@ var Api_Controller = {
         }
 
         var
-          User_Names = require(process.env.APP_PATH + "/models/user/names").User_Names,
-          usersIds = {};
+          decorator_PostLinkTagsAndUserNames = require(process.env.APP_PATH + "/models/decorator/postLinkTagsAndUserNames").decorator_PostLinkTagsAndUserNames;
 
-        usersIds[p_obj.getUserId()] = ''; //add post user id
-
-        new User_Names(usersIds, function (err3, userNamesObj) {
+        decorator_PostLinkTagsAndUserNames([p_obj], function (err3, decoratedPosts) {
 
           if (err3) {
             return next(err3);
           }
 
           var
-            data = new postLink(p_obj, userNamesObj);
+            data = decoratedPosts[0];
 
           res.json(data);
           RequestLogger.log(req, data);
@@ -404,8 +400,6 @@ var Api_Controller = {
       });
     });
   },
-
-
   //api/postViews/:sessionId/:postId
   post_view: function(req, res, next) {
     var
@@ -552,7 +546,6 @@ var Api_Controller = {
       var
         categoryId = parseInt(input.categoryId) || 0;
         tags = input.tags || [];
-        postLink = require(process.env.APP_PATH + "/models/response/postLink").postLink,
         Post = require(process.env.APP_PATH + "/models/post").Post,
         post = new Post();
 
@@ -564,25 +557,21 @@ var Api_Controller = {
           }
 
           var
-            User_Names = require(process.env.APP_PATH + "/models/user/names").User_Names,
-            usersIds = {};
+            _this = this,
+            decorator_PostLinkTagsAndUserNames = require(process.env.APP_PATH + "/models/decorator/postLinkTagsAndUserNames").decorator_PostLinkTagsAndUserNames;
 
-          usersIds[p_obj.getUserId()] = ''; //add post user id
+          decorator_PostLinkTagsAndUserNames([p_obj], function (err, decoratedPosts) {
 
-          new User_Names(usersIds, function (err3, userNamesObj) {
-
-            if (err3) {
-              return next(err3);
+            if (err) {
+              return callback(err, null);
             }
 
             var
-              data = new postLink(p_obj, userNamesObj);
-
+              data = decoratedPosts[0];
 
             res.json(data, 201);
             RequestLogger.log(req, data);
           });
-
         });
       }
       catch (err3) {
@@ -669,7 +658,8 @@ var Api_Controller = {
           return next(err2);
         }
 
-        new getNewLinks(listObj, function (err3, data){
+        new getNewLinks(listObj, function (err3, data) {
+
           if (err3) {
             return next(err3);
           }

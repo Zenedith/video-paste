@@ -5,34 +5,35 @@ var
   check = require('validator').check,
   secure = require("node-secure");
 
-var Tag = function ()
+var Tag = function (tagName)
 {
-  log.debug('Tag.construct()');
+  log.debug('Tag.construct(' + tagName + ')');
 
-  this.addTag = function (tagName, postId, callback) {
-    log.debug('Tag.updateTagScore(' + tagName + ', ' + postId + ')');
+  this.tagName = sanitize(tagName).xss();
 
-    tagName = sanitize(tagName).xss();
+  this.addToPost = function (postId, callback) {
+    log.debug('Tag.addToPost(' + postId + ')');
 
     try {
-      check(tagName).notEmpty().len(3, 25);
+      check(this.tagName).notEmpty().len(3, 25);
     }
     catch (e) {
       return callback(error(606, 'invalid tagName: ' + e.message), null);
     }
 
     var
+      _this = this,
       listName = postId + ':tags',
-      setName = tagName + ':postId';
+      setName = this.tagName + ':postId';
 
     //add postId to set connected with tagName
-    Database.addValueToSet(setName, postId, function (err, res){
+    Database.addValueToSet(setName, postId, function (err, res) {
       if (err) {
         return callback(err, null);
       }
 
       //async
-      Database.appendValueToList(listName, tagName, function (err4, res4) {
+      Database.appendValueToList(listName, _this.tagName, function (err4, res4) {
         if (err4) {
           log.crit(err4);
         }
@@ -43,15 +44,8 @@ var Tag = function ()
         Tag_Search = require(process.env.APP_PATH + "/models/tag/search").Tag_Search,
         tagSearch = new Tag_Search();
 
-      return tagSearch.updateKeywords(tagName, callback);
+      return tagSearch.updateKeywords(_this.tagName, callback);
     });
-  };
-
-  this.getTags = function (postId, callback) {
-    var
-      listName = postId + ':tags';
-
-    Database.getValuesFromList(listName, 0, -1, callback);
   };
 };
 

@@ -41,6 +41,7 @@ var Post = function ()
       }
 
       var
+        tagsLen = tags.length,
         Tag = require(process.env.APP_PATH + "/models/tag").Tag;
 
       //async: add user to already rated this post (has posted it)
@@ -51,12 +52,12 @@ var Post = function ()
       });
 
       //async: update tags
-      for (var i in tags) {
+      for (var i = 0; i < tagsLen; ++i) {
         var
           postId = p_obj.getId(),
-          tag = new Tag();
+          tag = new Tag(tags[i]);
 
-        tag.addTag(tags[i], postId, function (err3, res3) {
+        tag.addToPost(postId, function (err3, res3) {
           if (err3) {
             log.crit(err3);
           }

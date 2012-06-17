@@ -36,8 +36,6 @@ var Post_Tags = function(idsObj, callback) {
       _this.postsTags[postId] = postTags;
     }
 
-//    console.log(_this.postsTags);
-
     return callback(null, _this);
   });
 

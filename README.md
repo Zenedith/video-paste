@@ -127,7 +127,7 @@
     POST JSON: data={}
     ```
     ```
-    { postId: int, views: int, tags: [tagName: string] }
+    { postId: int, views: int}
     ```
 
     * ERR_BAD_REQUEST

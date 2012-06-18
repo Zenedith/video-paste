@@ -15,34 +15,17 @@ var getTopLinks = function (listObj, callback)
   var
     _this = this,
     resList = listObj.getResults(),
-    usersIds = {},
-    postLink = require(process.env.APP_PATH + "/models/response/postLink").postLink,
-    User_Names = require(process.env.APP_PATH + "/models/user/names").User_Names;
+    decorator_PostLink = require(process.env.APP_PATH + "/models/decorator/postLink").decorator_PostLink;
 
-  //get all users ids
-    for (var lp in resList) {
-      var
-        post = resList[lp],
-        userId = post.getUserId();
+  decorator_PostLink(resList, function (err, data) {
 
-      usersIds[userId] = '';
+    if (err) {
+      return callback(err, null);
     }
 
-    new User_Names(usersIds, function (err, userNamesObj) {
-
-      if (err) {
-        return callback(err, null);
-      }
-
-      for (var lp in resList) {
-        var
-          post = resList[lp];
-
-        _this.result.push(new postLink(post, userNamesObj));
-      }
-
-      return callback(null, _this);
-    });
+    _this.result = data;
+    return callback(null, _this);
+  });
 };
 
 exports.getTopLinks = getTopLinks;

@@ -2,7 +2,7 @@
   "app" : {
     "port" : 0,
     "host" : "",
-    "version" : "0.0.4",
+    "version" : "0.0.5",
     "log_level" : "error",
     "log2file" : true,
     "use_winston" : false,
@@ -154,7 +154,7 @@
     },
     "post_view" : {
       "controller": "api",
-      "action": "post_view",
+      "action": "postViews",
       "url": "api/postViews/:sessionId/:postId",
       "method":"post",
       "description":"post view increase",
@@ -162,7 +162,7 @@
     },
     "post_rate" : {
       "controller": "api",
-      "action": "post_rate",
+      "action": "postRate",
       "url": "api/postRate/:sessionId/:postId",
       "method":"post",
       "description":"rate post",
@@ -234,7 +234,7 @@
     },
     "get_tags_search_key" : {
       "controller": "api",
-      "action": "tags",
+      "action": "getTags",
       "url": "api/getTags/:apiKey/:limit/:page/:searchKey",
       "method":"get",
       "description":"get tags for search key",
@@ -242,7 +242,7 @@
     },
     "get_tags" : {
       "controller": "api",
-      "action": "tags",
+      "action": "getTags",
       "url": "api/getTags/:apiKey/:limit/:page",
       "method":"get",
       "description":"get tags",
@@ -250,7 +250,7 @@
     },
     "get_tags_default1" : {
       "controller": "api",
-      "action": "tags",
+      "action": "getTags",
       "url": "api/getTags/:apiKey/:limit",
       "method":"get",
       "description":"get tags",
@@ -258,7 +258,7 @@
     },
     "get_tags_default2" : {
       "controller": "api",
-      "action": "tags",
+      "action": "getTags",
       "url": "api/getTags/:apiKey",
       "method":"get",
       "description":"get tags",
@@ -270,6 +270,38 @@
       "url": "task/checkNewList",
       "method":"get",
       "description":"task for clean new list from older items",
+      "isRegExp" : false
+    },
+    "get_post_by_tag" : {
+      "controller": "api",
+      "action": "getLinksByTag",
+      "url": "api/getLinksByTag/:sessionId/:tagName/:limit/:page",
+      "method":"get",
+      "description":"get links for tag",
+      "isRegExp" : false
+    },
+    "get_post_by_tag_default1" : {
+      "controller": "api",
+      "action": "getLinksByTag",
+      "url": "api/getLinksByTag/:sessionId/:tagName/:limit",
+      "method":"get",
+      "description":"get links for tag",
+      "isRegExp" : false
+    },
+    "get_post_by_tag_default2" : {
+      "controller": "api",
+      "action": "getLinksByTag",
+      "url": "api/getLinksByTag/:sessionId/:tagName",
+      "method":"get",
+      "description":"get links for tag",
+      "isRegExp" : false
+    },
+    "get_post_by_tag_default3" : {
+      "controller": "api",
+      "action": "getLinksByTag",
+      "url": "api/getLinksByTag/:sessionId",
+      "method":"get",
+      "description":"get links for tag",
       "isRegExp" : false
     }
   }

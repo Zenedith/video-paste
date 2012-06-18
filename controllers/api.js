@@ -3,6 +3,7 @@ var
   config = require('config'),
   RequestLogger = require(process.env.APP_PATH + "/lib/requestLogger").RequestLogger,
   disableServiceAuth = true,  //problem with access key renew in some services
+  sanitize = require('validator').sanitize,
   secure = require("node-secure");
 
 var Api_Controller = {
@@ -40,7 +41,17 @@ var Api_Controller = {
       }
 
       var
-        input = JSON.parse(req.body.data || '{}'),
+        input = JSON.parse(req.body.data || '{}');
+
+      for (var k in input) {
+        input[k] = sanitize(input[k]).xss();
+
+        if (!input[k]) {
+          return next(error(400, 'Bad request (bad ' + k + ' value)'));
+        }
+      }
+
+      var
         fbId = input.id,
         name = input.name,
         fist_name = input.fist_name,
@@ -51,6 +62,7 @@ var Api_Controller = {
         user = new User(),
         User_Validate_Facebook = require(process.env.APP_PATH + "/models/user/validate/facebook").User_Validate_Facebook,
         userValidateFacebook = new User_Validate_Facebook();
+
 
       userValidateFacebook.isValid(fbId, name, fist_name, last_name, function (errFb, data) {
 
@@ -102,7 +114,17 @@ var Api_Controller = {
       }
 
       var
-        input = JSON.parse(req.body.data || '{}'),
+        input = JSON.parse(req.body.data || '{}');
+
+      for (var k in input) {
+        input[k] = sanitize(input[k]).xss();
+
+        if (!input[k]) {
+          return next(error(400, 'Bad request (bad ' + k + ' value)'));
+        }
+      }
+
+      var
         mId = input.id,
         name = input.name || null,
         fist_name = input.fist_name || null,
@@ -164,7 +186,17 @@ var Api_Controller = {
       }
 
       var
-        input = JSON.parse(req.body.data || '{}'),
+        input = JSON.parse(req.body.data || '{}');
+
+      for (var k in input) {
+        input[k] = sanitize(input[k]).xss();
+
+        if (!input[k]) {
+          return next(error(400, 'Bad request (bad ' + k + ' value)'));
+        }
+      }
+
+      var
         gId = input.id,
         name = input.name,
         fist_name = input.given_name,
@@ -226,7 +258,17 @@ var Api_Controller = {
       }
 
       var
-        input = JSON.parse(req.body.data || '{}'),
+        input = JSON.parse(req.body.data || '{}');
+
+      for (var k in input) {
+        input[k] = sanitize(input[k]).xss();
+
+        if (!input[k]) {
+          return next(error(400, 'Bad request (bad ' + k + ' value)'));
+        }
+      }
+
+      var
         tId = input.id,
         name = input.name,
         fist_name = '',
@@ -327,12 +369,11 @@ var Api_Controller = {
         postId = parseInt(req.params.postId) || 0;
 
       if (postId < 1) {
-        return next(error(400, 'Bad Request (postId)'));
+        return next(error(400, 'Bad request (bad postId value)'));
       }
 
       var
         Post = require(process.env.APP_PATH + "/models/post").Post,
-        postLink = require(process.env.APP_PATH + "/models/response/postLink").postLink,
         post = new Post();
 
       post.load(postId, function (err2, p_obj) {
@@ -342,19 +383,16 @@ var Api_Controller = {
         }
 
         var
-          User_Names = require(process.env.APP_PATH + "/models/user/names").User_Names,
-          usersIds = {};
+          decorator_PostLink = require(process.env.APP_PATH + "/models/decorator/postLink").decorator_PostLink;
 
-        usersIds[p_obj.getUserId()] = ''; //add post user id
-
-        new User_Names(usersIds, function (err3, userNamesObj) {
+        decorator_PostLink([p_obj], function (err3, decoratedPosts) {
 
           if (err3) {
             return next(err3);
           }
 
           var
-            data = new postLink(p_obj, userNamesObj);
+            data = decoratedPosts[0];
 
           res.json(data);
           RequestLogger.log(req, data);
@@ -362,10 +400,8 @@ var Api_Controller = {
       });
     });
   },
-
-
   //api/postViews/:sessionId/:postId
-  post_view: function(req, res, next) {
+  postViews: function(req, res, next) {
     var
       Session = require(process.env.APP_PATH + "/models/session").Session,
       sess_obj = new Session(),
@@ -389,32 +425,30 @@ var Api_Controller = {
 
 
       if (postId < 1) {
-        return next(error(400, 'Bad Request (postId)'));
+        return next(error(400, 'Bad request (bad postId value)'));
       }
 
       var
-        Post = require(process.env.APP_PATH + "/models/post").Post,
+        Post_Views = require(process.env.APP_PATH + "/models/post/views").Post_Views,
         postViews = require(process.env.APP_PATH + "/models/response/postViews").postViews,
-        post = new Post();
+        postViewsObj = new Post_Views(postId);
 
-      post.views(postId, function (err, obj) {
-
-        if (!err) {
-          var data = new postViews(obj);
-
-          res.json(data);
-          RequestLogger.log(req, data);
+      postViewsObj.views(function (err2, viewsValue) {
+        if (err2) {
+          return next(err2);
         }
-        else {
-          return next(error(400, 'Bad Request (postId)'));
-        }
+
+        var data = new postViews(postId, viewsValue);
+
+        res.json(data);
+        RequestLogger.log(req, data);
       });
     });
   },
 
   //api/postRate/:sessionId/:postId
   //rate from post body
-  post_rate: function(req, res, next) {
+  postRate: function(req, res, next) {
     var
       Session = require(process.env.APP_PATH + "/models/session").Session,
       sess_obj = new Session(),
@@ -456,20 +490,19 @@ var Api_Controller = {
       }
 
       var
-        Post = require(process.env.APP_PATH + "/models/post").Post,
+        Post_Rate = require(process.env.APP_PATH + "/models/post/rate").Post_Rate,
         postRate = require(process.env.APP_PATH + "/models/response/postRate").postRate,
-        post = new Post();
+        postRateObj = new Post_Rate(postId);
 
-      post.rate(postId, rate, userId, function (err2, obj) {
-        if (!err2) {
-          var data = new postRate(obj);
-
-          res.json(data);
-          RequestLogger.log(req, data);
-        }
-        else {
+      postRateObj.rate(rate, userId, function (err2, rateValue) {
+        if (err2) {
           return next(err2);
         }
+
+        var data = new postRate(postId, rateValue);
+
+        res.json(data);
+        RequestLogger.log(req, data);
       });
     });
   },
@@ -510,7 +543,6 @@ var Api_Controller = {
       var
         categoryId = parseInt(input.categoryId) || 0;
         tags = input.tags || [];
-        postLink = require(process.env.APP_PATH + "/models/response/postLink").postLink,
         Post = require(process.env.APP_PATH + "/models/post").Post,
         post = new Post();
 
@@ -522,25 +554,20 @@ var Api_Controller = {
           }
 
           var
-            User_Names = require(process.env.APP_PATH + "/models/user/names").User_Names,
-            usersIds = {};
+            decorator_PostLink = require(process.env.APP_PATH + "/models/decorator/postLink").decorator_PostLink;
 
-          usersIds[p_obj.getUserId()] = ''; //add post user id
+          decorator_PostLink([p_obj], function (err, decoratedPosts) {
 
-          new User_Names(usersIds, function (err3, userNamesObj) {
-
-            if (err3) {
-              return next(err3);
+            if (err) {
+              return callback(err, null);
             }
 
             var
-              data = new postLink(p_obj, userNamesObj);
-
+              data = decoratedPosts[0];
 
             res.json(data, 201);
             RequestLogger.log(req, data);
           });
-
         });
       }
       catch (err3) {
@@ -569,13 +596,13 @@ var Api_Controller = {
         page = parseInt(req.params.page) || 1,
         getTopLinks = require(process.env.APP_PATH + "/models/response/getTopLinks").getTopLinks,
         Post_List = require(process.env.APP_PATH + "/models/post/list").Post_List,
-        postList = new Post_List();
+        postRateList = new Post_List();
 
       if (limit > 100) {
         return next(error(400, 'Bad request (too big limit value)'));
       }
 
-      postList.get(limit, page, function (err2, listObj) {
+      postRateList.getByRate(limit, page, function (err2, listObj) {
 
         if (err2) {
           return next(err2);
@@ -594,7 +621,7 @@ var Api_Controller = {
 
     });
   },
-  //get top link:  /api/getNewLinks/:sessionId/:categoryId/:limit/:page
+  //get new links:  /api/getNewLinks/:sessionId/:categoryId/:limit/:page
   get_new_links: function(req, res, next) {
     var
       Session = require(process.env.APP_PATH + "/models/session").Session,
@@ -614,20 +641,21 @@ var Api_Controller = {
         limit = parseInt(req.params.limit) || 1,
         page = parseInt(req.params.page) || 1,
         getNewLinks = require(process.env.APP_PATH + "/models/response/getNewLinks").getNewLinks,
-        Post_List_New = require(process.env.APP_PATH + "/models/post/list/new").Post_List_New,
-        postListNew = new Post_List_New();
+        Post_List = require(process.env.APP_PATH + "/models/post/list").Post_List,
+        postListNew = new Post_List();
 
       if (limit > 100) {
         return next(error(400, 'Bad request (too big limit value)'));
       }
 
-      postListNew.get(limit, page, function (err2, listObj) {
+      postListNew.getNew(limit, page, function (err2, listObj) {
 
         if (err2) {
           return next(err2);
         }
 
-        new getNewLinks(listObj, function (err3, data){
+        new getNewLinks(listObj, function (err3, data) {
+
           if (err3) {
             return next(err3);
           }
@@ -640,8 +668,8 @@ var Api_Controller = {
 
     });
   },
-  //api/tags/:apiKey
-  tags: function (req, res, next) {
+  //api/getTags/:apiKey
+  getTags: function (req, res, next) {
     var
       apiKey = req.params.apiKey,
       Key = require(process.env.APP_PATH + "/models/key").Key,
@@ -660,14 +688,23 @@ var Api_Controller = {
         limit = parseInt(req.params.limit) || 1,
         page = parseInt(req.params.page) || 1,
         getTags = require(process.env.APP_PATH + "/models/response/getTags").getTags;
-        Tag_Search_List = require(process.env.APP_PATH + "/models/tag/search/list").Tag_Search_List,
-        tagSearchList = new Tag_Search_List();
+        Tag = require(process.env.APP_PATH + "/models/tag").Tag,
+        tag = new Tag(searchKey);
 
       if (limit > 100) {
         return next(error(400, 'Bad request (too big limit value)'));
       }
 
-      tagSearchList.get(searchKey, limit, page, function (err2, listObj) {
+      //searchKey is optional
+      if (searchKey) {
+        searchKey = sanitize(searchKey).xss();
+
+        if (!searchKey) {
+          return next(error(400, 'Bad request (bad searchKey value)'));
+        }
+      }
+
+      tag.getTags(searchKey, limit, page, function (err2, listObj) {
 
         if (err2) {
           return next(err2);
@@ -679,7 +716,56 @@ var Api_Controller = {
       });
     });
   },
+  //api/getLinksByTag/:sessionId/:tagName/:limit/:page
+  getLinksByTag: function (req, res, next) {
+    var
+      Session = require(process.env.APP_PATH + "/models/session").Session,
+      sess_obj = new Session(),
+      sessionId = req.params.sessionId;
 
+    //validate session and key
+    sess_obj.isValidSession(sessionId, function (err, obj) {
+
+      //if something wrong
+      if (err) {
+        return next(err);
+      }
+
+      var
+        tagName = req.params.tagName || '',
+        limit = parseInt(req.params.limit) || 1,
+        page = parseInt(req.params.page) || 1,
+        getLinksByTag = require(process.env.APP_PATH + "/models/response/getLinksByTag").getLinksByTag;
+        Post_List = require(process.env.APP_PATH + "/models/post/list").Post_List,
+        postList = new Post_List();
+
+      if (limit > 100) {
+        return next(error(400, 'Bad request (too big limit value)'));
+      }
+
+      tagName = sanitize(tagName).xss();
+
+      if (!tagName) {
+        return next(error(400, 'Bad request (bad tagName value)'));
+      }
+
+      postList.getByTag(tagName, limit, page, function(err2, listObj) {
+
+        if (err2) {
+          return next(err2);
+        }
+
+        new getLinksByTag(listObj, function (err3, data){
+          if (err3) {
+            return next(err3);
+          }
+
+          res.json(data);
+          RequestLogger.log(req, data);
+        });
+      });
+    });
+  }
 };
 
 module.exports = Api_Controller;

@@ -1,9 +1,9 @@
 //var
 //  log = require(process.env.APP_PATH + "/lib/log");
 
-var getNewLinks = function (listObj, callback)
+var getLinksByTag = function (listObj, callback)
 {
-//  log.debug('getNewLinks.construct()');
+//  log.debug('getLinksByTag.construct()');
 
   this.count = parseInt(listObj.getCount());
   this.pages = parseInt(listObj.getPages());
@@ -28,4 +28,5 @@ var getNewLinks = function (listObj, callback)
   });
 };
 
-exports.getNewLinks = getNewLinks;
+
+exports.getLinksByTag = getLinksByTag;

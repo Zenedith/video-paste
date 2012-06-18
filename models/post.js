@@ -9,16 +9,12 @@ var Post = function ()
 {
   log.debug('Post.construct()');
 
-  const ALREADY_RATED_FIELD_NAME = 'israted';
-
   this.__className = "Post";
   this.__categoryId = 0;
   this.__added = 0;
   this.__userId = 0;
   this.__url = '';
   this.__thumbUrl = null,
-  this.__rate = 1;
-  this.__views = 0;
 
   this.createNewPost = function (urlObj, categoryId, tags, userId, callback) {
     log.debug('Post.createNewPost()');
@@ -32,7 +28,6 @@ var Post = function ()
     this.__categoryId = parseInt(categoryId) || 0;
     this.__added = Math.round(+new Date()/1000);
     this.__userId = parseInt(userId);
-    this.__rate = 1;
 
     Database.saveObject(this, function (err, p_obj) {
 
@@ -41,37 +36,43 @@ var Post = function ()
       }
 
       var
-        Tag = require(process.env.APP_PATH + "/models/tag").Tag;
+        postId = p_obj.getId(),
+        tagsLen = tags.length,
+        Post_Tag = require(process.env.APP_PATH + "/models/post/tag").Post_Tag,
+        Post_Rate = require(process.env.APP_PATH + "/models/post/rate").Post_Rate,
+        Post_Views = require(process.env.APP_PATH + "/models/post/views").Post_Views,
+        postViews = new Post_Views(postId),
+        postRate = new Post_Rate(postId);
 
       //async: add user to already rated this post (has posted it)
-      p_obj.addUserToAlreadyRatedSet(p_obj.getUserId(), function (err2, res) {
+      postRate.rate(1, p_obj.getUserId(), function (err2, res2) {
         if (err2) {
           log.crit(err2);
         }
       });
 
       //async: update tags
-      for (var i in tags) {
-        var
-          postId = p_obj.getId(),
-          tag = new Tag();
+      for (var i = 0; i < tagsLen; ++i) {
 
-        tag.addTag(tags[i], postId, function (err3, res3) {
+        var
+          postTag = new Post_Tag(tags[i]);
+
+        postTag.addToPost(postId, function (err3, res3) {
           if (err3) {
             log.crit(err3);
           }
         });
       }
 
-      //async: add score for post
-      Database.addObjectScore(p_obj, '__rate', function (err4, res4) {
+      //async: create views counter
+      postViews.createCounter(function (err4, res4) {
         if (err4) {
           log.crit(err4);
         }
       });
 
       //async: add post to new set
-      p_obj.addPostToNewSet(function (err5, res5) {
+      p_obj.addPostToNew(function (err5, res5) {
         if (err5) {
           log.crit(err5);
         }
@@ -82,82 +83,11 @@ var Post = function ()
     });
   };
 
-  this.rate = function (id, rate, userId, callback) {
-    this.setId(id);
-
-    //define callback to incr or decr method
+  this.addPostToNew = function (callback) {
     var
-      _this = this,
-      add_score_callback = function (err, p_obj) {
+      Post_List_New = require(process.env.APP_PATH + "/models/post/list/new").Post_List_New;
 
-      if (err) {
-        return callback(err, null);
-      }
-
-      //add score for post
-      Database.addObjectScore(p_obj, '__rate', function (err2, res) {
-
-        if (err2) {
-          return callback(err2, null);
-        }
-
-        p_obj.addUserToAlreadyRatedSet(userId, function (err3, res) {
-          return callback(err3, p_obj);
-        });
-      });
-    };
-
-    //START
-    //check if user rated before
-    this.checkIfUserAlreadyRated(userId, function (err, res) {
-
-      if (err) {
-        return callback(err, null);
-      }
-
-      //if userId already in set
-      if (res > 0) {
-        return callback(error(604, 'Already rated from given userId'), null);
-      }
-
-      //check what to do based on rate param
-      if (rate > 0) {
-        Database.incrObject(_this, '__rate', add_score_callback);
-      }
-      else if (rate < 0) {
-        Database.decrObject(_this, '__rate', add_score_callback);
-      }
-      else {
-        return callback(error(400, 'Bad Request (rate)'), null);
-      }
-    });
-
-  };
-
-  this.views = function (id, callback) {
-    this.setId(id);
-    Database.incrObject(this, '__views', callback);
-  };
-
-  this.addPostToNewSet = function (callback) {
-    var
-      setName = 'new:posts';
-
-    Database.addValueToSet(setName, this.getId(), callback);
-  };
-
-  this.addUserToAlreadyRatedSet = function (userId, callback) {
-    var
-      setName = 'post:' + this.getId() + ':rated';
-
-    Database.addValueToSet(setName, userId, callback);
-  };
-
-  this.checkIfUserAlreadyRated = function (userId, callback) {
-    var
-      setName = 'post:' + this.getId() + ':rated';
-
-    Database.isValueInSet(setName, userId, callback);
+    Database.addValueToSet(Post_List_New.setNameNew, this.getId(), callback);
   };
 
   this.getCategoryId = function () {
@@ -190,18 +120,38 @@ var Post = function ()
     return this.__thumbUrl;
   };
 
-  this.getRating = function () {
-    return parseInt(this.__rate) || 0;
-  };
-
-  this.getViews = function () {
-    return parseInt(this.__views) || 0;
-  };
 };
 
 //override: get int id value
 Post.prototype.getId = function () {
   return parseInt(this.__id);
+};
+
+
+Post.prototype.getObjectsFromIds = function (ids, callback) {
+  log.debug('Post.getObjectsFromIds()');
+
+  this.loadMany(ids, function (err, resList) {
+    if (err) {
+      return callback(err, null);
+    }
+
+    var
+      data = [];
+
+    for (var lp in resList) {
+      var
+        post = new Post();
+
+      for (var k in resList[lp]) {
+        post[k] = resList[lp][k];
+      }
+
+      data.push(post);
+    }
+
+    return callback(null, data);
+  });
 };
 
 //extending base class

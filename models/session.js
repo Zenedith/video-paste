@@ -59,27 +59,32 @@ var Session = function ()
 
       //check expiration time
       if (obj.getLifeTime() < current_timestamp) {
+        //TODO remove sess
         return callback(error(603, 'sessionId has expired'), null);
       }
 
-      //TODO check key
       var
         Key = require(process.env.APP_PATH + "/models/key").Key,
         key_obj = new Key(),
         apiKey = _this.getApiKey();
 
       //validate key
-      key_obj.isValidKey(apiKey, function (err, _obj_) {
+      key_obj.isValidKey(apiKey, function (err2, obj2) {
 
         //if something wrong
-        if (err) {
-          return next(err);
+        if (err2) {
+          return next(err2);
         }
 
-        //renew session
-        _this.setObjectValueToDB(id, '__lifetime', (current_timestamp + SESSION_LIFETIME), function (err, __obj__) {
-          return callback(err, obj);  //call calback with full loaded obj, not _obj_ or __obj__
+        //async: update last used (renew session)
+        _this.setObjectValueToDB(id, '__lifetime', (current_timestamp + SESSION_LIFETIME), function (err3, obj3) {
+          if (err3) {
+            log.crit(err3);
+          }
         });
+
+        //don't wait to update last used time
+        return callback(err, obj);
       });
     });
   };

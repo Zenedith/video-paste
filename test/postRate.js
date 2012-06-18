@@ -5,7 +5,7 @@ var
 //  show_response = false,
   show_response = true,
   sessId = '5ba879b538a6e43cdc92cb07c3dbac13f42902bc',  //expired by one hour
-  authorizedSessId = '1767953c0856664dca6292412e9d79a944dea2f9';  //expired by one hour
+  authorizedSessId = 'a9e750f97472856f73a0c8cb44fe603bc060adad';  //expired by one hour
 
 exports.testPostRateValid = function (beforeExit, assert) {
 

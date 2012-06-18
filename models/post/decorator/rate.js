@@ -9,22 +9,33 @@ var Post_Decorator_Rate = function(idsObj, callback) {
 
   var
     ids = Object.keys(idsObj),
-    idsLen = ids.length,
-    _this = this;
+    idsLen = ids.length;
 
-  if (idsLen) {
-    Database.getScoreForManyValues(Post_Rate.scoreNameRated, ids, function (err, postRates) {
-      if (err) {
-        return callback(err, null);
+  this.prepareKeys = function () {
+    var
+      scoreSetName = Post_Rate.scoreNameRated,
+      keyFields = [];
+
+    if (idsLen) {
+
+      for (var i = 0; i < idsLen; ++i) {
+        var
+          key = [scoreSetName, ids[i]];
+
+        keyFields.push(key);
       }
+    }
 
-      _this.postRates = postRates;
-      return callback(null, _this);
-    });
-  }
-  else {
-    return callback(null, _this);
-  }
+    return {'zscore' : keyFields};
+  };
+
+  this.load = function (data) {
+    if (idsLen) {
+      for (var i = 0; i < idsLen; ++i) {
+        this.postRates[ids[i]] = data.pop();
+      }
+    }
+  };
 
   this.getRate = function (id) {
     if (this.postRates.hasOwnProperty(id) && this.postRates[id]) {

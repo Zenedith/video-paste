@@ -8,43 +8,37 @@ var Post_Decorator_Tags = function(idsObj, callback) {
   this.postsTags = {};
 
   var
-    listNames = [],
-    start = 0,
-    stop = -1,
     ids = Object.keys(idsObj),
-    idsLen = ids.length,
-    _this = this;
+    idsLen = ids.length;
 
-  if (idsLen) {
+  this.prepareKeys = function () {
+    var
+      start = 0,
+      stop = -1,
+      keyFields = [];
 
-    for (var lp = 0; lp < idsLen; ++lp) {
-      var
-        listName = Post_Tag.getPostTagsListName(ids[lp]);
+    if (idsLen) {
 
-      listNames.push(listName);
+      for (var i = 0; i < idsLen; ++i) {
+        var
+          listName = Post_Tag.getPostTagsListName(ids[i]),
+          key = [listName, start, stop];
+
+        keyFields.push(key);
+      }
     }
 
-    Database.getManyValuesFromLists(listNames, start, stop, function (err, postsTags) {
-      if (err) {
-        return callback(err, null);
+    return {'lrange' : keyFields};
+  };
+
+  this.load = function (data) {
+
+    if (idsLen) {
+      for (var i = 0; i < idsLen; ++i) {
+        this.postsTags[ids[i]] = data.pop();
       }
-
-      //base on idsLen rather than postsTags (this *must* be this same)
-      for (var lp = 0; lp < idsLen; ++lp) {
-        var
-          postId = ids[lp],
-          listName = Post_Tag.getPostTagsListName(postId),
-          postTags = postsTags[listName];
-
-        _this.postsTags[postId] = postTags;
-      }
-
-      return callback(null, _this);
-    });
-  }
-  else {
-    return callback(null, _this);
-  }
+    }
+  };
 
   this.getTags = function (id) {
     if (this.postsTags.hasOwnProperty(id) && this.postsTags[id]) {

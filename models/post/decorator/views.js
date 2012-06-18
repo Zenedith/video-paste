@@ -9,22 +9,34 @@ var Post_Decorator_Views = function(idsObj, callback) {
 
   var
     ids = Object.keys(idsObj),
-    idsLen = ids.length,
-    _this = this;
+    idsLen = ids.length;
 
-  if (idsLen) {
-    Database.getScoreForManyValues(Post_Views.scoreNameViews, ids, function (err, postViews) {
-      if (err) {
-        return callback(err, null);
+  this.prepareKeys = function () {
+    var
+      scoreSetName = Post_Views.scoreNameViews,
+      keyFields = [];
+
+    if (idsLen) {
+
+      for (var i = 0; i < idsLen; ++i) {
+        var
+          key = [scoreSetName, ids[i]];
+
+        keyFields.push(key);
       }
+    }
 
-      _this.postViews = postViews;
-      return callback(null, _this);
-    });
-  }
-  else {
-    return callback(null, _this);
-  }
+    return {'zscore' : keyFields};
+  };
+
+  this.load = function (data) {
+    if (idsLen) {
+      for (var i = 0; i < idsLen; ++i) {
+        this.postViews[ids[i]] = data.pop();
+      }
+    }
+  };
+
 
   this.getViews = function (id) {
     if (this.postViews.hasOwnProperty(id) && this.postViews[id]) {

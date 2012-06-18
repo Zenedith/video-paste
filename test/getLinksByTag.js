@@ -3,8 +3,7 @@ var
   searchByTag = 'alfa',
 //  show_response = false,
   show_response = true,
-  sessId = 'ae9af879cbd68baae3be01d745a813fb697f85ad';  //expired by one hour
-
+  sessId = 'e0c2154c9a5bc1bf5fab42108bf0881ff0172028';  //expired by one hour
 
 exports.testGetLinksByTagValid = function (beforeExit, assert) {
 

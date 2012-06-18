@@ -4,8 +4,8 @@ var
   show_response = true,
   postId = 4,
   apikey = '6254b715bcc5d680',
-  sessId = '5ba879b538a6e43cdc92cb07c3dbac13f42902bc',  //expired by one hour
-  authorizedSessId = 'ae9af879cbd68baae3be01d745a813fb697f85ad';  //expired by one hour;
+  sessId = 'e0c2154c9a5bc1bf5fab42108bf0881ff0172028',  //expired by one hour
+  authorizedSessId = 'a9e750f97472856f73a0c8cb44fe603bc060adad';  //expired by one hour;
 
 exports.testPostLinkCreateValid = function (beforeExit, assert) {
   var

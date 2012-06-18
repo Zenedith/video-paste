@@ -3,21 +3,28 @@ var
   user = new User();
   secure = require("node-secure");
 
-var User_Names = function(idsObj, callback) {
+var Post_Decorator_Names = function(idsObj, callback) {
 
   this.userNames = {};
 
   var
+    ids = Object.keys(idsObj),
+    idsLen = ids.length,
     _this = this;
 
-  user.getNamesByIds(Object.keys(idsObj), function (err, userNames) {
-    if (err) {
-      return callback(err, null);
-    }
+  if (idsLen) {
+    user.getNamesByIds(ids, function (err, userNames) {
+      if (err) {
+        return callback(err, null);
+      }
 
-    _this.userNames = userNames;
+      _this.userNames = userNames;
+      return callback(null, _this);
+    });
+  }
+  else {
     return callback(null, _this);
-  });
+  }
 
   this.getName = function (id) {
     if (this.userNames.hasOwnProperty(id) && this.userNames[id]) {
@@ -28,5 +35,5 @@ var User_Names = function(idsObj, callback) {
   };
 };
 
-exports.User_Names = User_Names;
+exports.Post_Decorator_Names = Post_Decorator_Names;
 secure.secureMethods(exports);

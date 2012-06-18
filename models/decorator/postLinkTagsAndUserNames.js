@@ -3,8 +3,9 @@ var decorator_PostLinkTagsAndUserNames = function (resList, callback)
   var
     data = [],
     postLink = require(process.env.APP_PATH + "/models/response/postLink").postLink,
-    User_Names = require(process.env.APP_PATH + "/models/user/names").User_Names,
-    Post_Tags = require(process.env.APP_PATH + "/models/post/tags").Post_Tags,
+    Post_Decorator_Names = require(process.env.APP_PATH + "/models/post/decorator/names").Post_Decorator_Names,
+    Post_Decorator_Tags = require(process.env.APP_PATH + "/models/post/decorator/tags").Post_Decorator_Tags,
+    Post_Decorator_Rate = require(process.env.APP_PATH + "/models/post/decorator/rate").Post_Decorator_Rate,
     usersIds = {},
     postsIds = {};
 
@@ -18,26 +19,33 @@ var decorator_PostLinkTagsAndUserNames = function (resList, callback)
       postsIds[post.getId()] = '';
     }
 
-    new User_Names(usersIds, function (err, userNamesObj) {
+    new Post_Decorator_Names(usersIds, function (err, userNamesObj) {
 
       if (err) {
         return callback(err, null);
       }
 
-      new Post_Tags(postsIds, function (err2, postTagsObj) {
+      new Post_Decorator_Tags(postsIds, function (err2, postTagsObj) {
 
         if (err2) {
           return callback(err2, null);
         }
 
-        for (var lp in resList) {
-          var
-            post = resList[lp];
+        new Post_Decorator_Rate(postsIds, function (err3, postRateObj) {
 
-          data.push(new postLink(post, userNamesObj, postTagsObj));
-        }
+          if (err3) {
+            return callback(err3, null);
+          }
 
-        return callback(null, data);
+          for (var lp in resList) {
+            var
+              post = resList[lp];
+
+            data.push(new postLink(post, userNamesObj, postTagsObj, postRateObj));
+          }
+
+          return callback(null, data);
+        });
       });
     });
 };

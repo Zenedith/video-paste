@@ -234,7 +234,7 @@
     },
     "get_tags_search_key" : {
       "controller": "api",
-      "action": "tags",
+      "action": "getTags",
       "url": "api/getTags/:apiKey/:limit/:page/:searchKey",
       "method":"get",
       "description":"get tags for search key",
@@ -242,7 +242,7 @@
     },
     "get_tags" : {
       "controller": "api",
-      "action": "tags",
+      "action": "getTags",
       "url": "api/getTags/:apiKey/:limit/:page",
       "method":"get",
       "description":"get tags",
@@ -250,7 +250,7 @@
     },
     "get_tags_default1" : {
       "controller": "api",
-      "action": "tags",
+      "action": "getTags",
       "url": "api/getTags/:apiKey/:limit",
       "method":"get",
       "description":"get tags",
@@ -258,7 +258,7 @@
     },
     "get_tags_default2" : {
       "controller": "api",
-      "action": "tags",
+      "action": "getTags",
       "url": "api/getTags/:apiKey",
       "method":"get",
       "description":"get tags",

@@ -1,0 +1,95 @@
+var
+  app = require(__dirname + '/../app'),
+//  show_response = false,
+  show_response = true,
+  postId = 3,
+  sessId = 'ae9af879cbd68baae3be01d745a813fb697f85ad',  //expired by one hour
+  authorizedSessId = 'ae9af879cbd68baae3be01d745a813fb697f85ad';  //expired by one hour
+
+exports.testPostViewsValid = function (beforeExit, assert) {
+
+  var post_data = '';
+
+  assert.response(app, {
+    url: '/api/postViews/' + authorizedSessId + '/' + postId,
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/x-www-form-urlencoded',
+      'Content-Length': post_data.length
+    },
+    data: post_data
+  }, {
+    status: 200,
+    headers: { 'Content-Type': 'application/json; charset=utf-8' }
+  },
+  function(res) {
+    var json = JSON.parse(res.body);
+
+    if (show_response) {
+      console.log('testPostViewsValid result: ');
+      console.log(json);
+    }
+
+    assert.equal(json.postId, postId);
+    assert.ok(json.views > 0);
+  }
+  );
+};
+exports.testPostViewsInvalidPostId = function (beforeExit, assert) {
+
+  var post_data = '';
+
+  assert.response(app, {
+    url: '/api/postViews/' + sessId + '/-1',
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/x-www-form-urlencoded',
+      'Content-Length': post_data.length
+    },
+    data: post_data
+    }, {
+      status: 200,
+      headers: { 'Content-Type': 'application/json; charset=utf-8' }
+    },
+    function(res) {
+      var json = JSON.parse(res.body);
+
+      if (show_response) {
+        console.log('testPostViewsInvalidPostId result: ');
+        console.log(json);
+      }
+
+      assert.equal(json.error, 'ERR_BAD_REQUEST');
+      assert.equal(json.code, 400);
+    }
+  );
+};
+exports.testPostViewsInvalidPostId = function (beforeExit, assert) {
+
+  var post_data = '';
+
+  assert.response(app, {
+    url: '/api/postViews/' + authorizedSessId + '/-1',
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/x-www-form-urlencoded',
+      'Content-Length': post_data.length
+    },
+    data: post_data
+  }, {
+    status: 200,
+    headers: { 'Content-Type': 'application/json; charset=utf-8' }
+  },
+  function(res) {
+    var json = JSON.parse(res.body);
+
+    if (show_response) {
+      console.log('testPostViewsInvalidPostId result: ');
+      console.log(json);
+    }
+
+    assert.equal(json.error, 'ERR_BAD_REQUEST');
+    assert.equal(json.code, 400);
+  }
+  );
+};

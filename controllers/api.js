@@ -492,20 +492,19 @@ var Api_Controller = {
       }
 
       var
-        Post = require(process.env.APP_PATH + "/models/post").Post,
+        Post_Rate = require(process.env.APP_PATH + "/models/post/rate").Post_Rate,
         postRate = require(process.env.APP_PATH + "/models/response/postRate").postRate,
-        post = new Post();
+        postRateObj = new Post_Rate(postId);
 
-      post.rate(postId, rate, userId, function (err2, obj) {
-        if (!err2) {
-          var data = new postRate(obj);
-
-          res.json(data);
-          RequestLogger.log(req, data);
-        }
-        else {
+      postRateObj.rate(rate, userId, function (err2, rateValue) {
+        if (err2) {
           return next(err2);
         }
+
+        var data = new postRate(postId, rateValue);
+
+        res.json(data);
+        RequestLogger.log(req, data);
       });
     });
   },
@@ -557,7 +556,6 @@ var Api_Controller = {
           }
 
           var
-            _this = this,
             decorator_PostLinkTagsAndUserNames = require(process.env.APP_PATH + "/models/decorator/postLinkTagsAndUserNames").decorator_PostLinkTagsAndUserNames;
 
           decorator_PostLinkTagsAndUserNames([p_obj], function (err, decoratedPosts) {
@@ -600,13 +598,13 @@ var Api_Controller = {
         page = parseInt(req.params.page) || 1,
         getTopLinks = require(process.env.APP_PATH + "/models/response/getTopLinks").getTopLinks,
         Post_List = require(process.env.APP_PATH + "/models/post/list").Post_List,
-        postList = new Post_List();
+        postRateList = new Post_List();
 
       if (limit > 100) {
         return next(error(400, 'Bad request (too big limit value)'));
       }
 
-      postList.getByRate(limit, page, function (err2, listObj) {
+      postRateList.getByRate(limit, page, function (err2, listObj) {
 
         if (err2) {
           return next(err2);
@@ -625,7 +623,7 @@ var Api_Controller = {
 
     });
   },
-  //get top link:  /api/getNewLinks/:sessionId/:categoryId/:limit/:page
+  //get new links:  /api/getNewLinks/:sessionId/:categoryId/:limit/:page
   get_new_links: function(req, res, next) {
     var
       Session = require(process.env.APP_PATH + "/models/session").Session,
@@ -645,14 +643,14 @@ var Api_Controller = {
         limit = parseInt(req.params.limit) || 1,
         page = parseInt(req.params.page) || 1,
         getNewLinks = require(process.env.APP_PATH + "/models/response/getNewLinks").getNewLinks,
-        Post_List_New = require(process.env.APP_PATH + "/models/post/list/new").Post_List_New,
-        postListNew = new Post_List_New();
+        Post_List = require(process.env.APP_PATH + "/models/post/list").Post_List,
+        postListNew = new Post_List();
 
       if (limit > 100) {
         return next(error(400, 'Bad request (too big limit value)'));
       }
 
-      postListNew.get(limit, page, function (err2, listObj) {
+      postListNew.getNew(limit, page, function (err2, listObj) {
 
         if (err2) {
           return next(err2);
@@ -672,8 +670,8 @@ var Api_Controller = {
 
     });
   },
-  //api/tags/:apiKey
-  tags: function (req, res, next) {
+  //api/getTags/:apiKey
+  getTags: function (req, res, next) {
     var
       apiKey = req.params.apiKey,
       Key = require(process.env.APP_PATH + "/models/key").Key,
@@ -692,8 +690,8 @@ var Api_Controller = {
         limit = parseInt(req.params.limit) || 1,
         page = parseInt(req.params.page) || 1,
         getTags = require(process.env.APP_PATH + "/models/response/getTags").getTags;
-        Tag_Search_List = require(process.env.APP_PATH + "/models/tag/search/list").Tag_Search_List,
-        tagSearchList = new Tag_Search_List();
+        Tag = require(process.env.APP_PATH + "/models/tag").Tag,
+        tag = new Tag(searchKey);
 
       if (limit > 100) {
         return next(error(400, 'Bad request (too big limit value)'));
@@ -708,7 +706,7 @@ var Api_Controller = {
         }
       }
 
-      tagSearchList.get(searchKey, limit, page, function (err2, listObj) {
+      tag.getTags(searchKey, limit, page, function (err2, listObj) {
 
         if (err2) {
           return next(err2);
@@ -753,7 +751,8 @@ var Api_Controller = {
         return next(error(400, 'Bad request (bad tagName value)'));
       }
 
-      postList.searchByTag(tagName, page, limit, function(err2, listObj) {
+      postList.getByTag(tagName, limit, page, function(err2, listObj) {
+
         if (err2) {
           return next(err2);
         }

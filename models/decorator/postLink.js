@@ -1,4 +1,4 @@
-var decorator_PostLinkTagsAndUserNames = function (resList, callback)
+var decorator_PostLink = function (resList, callback)
 {
   var
     data = [],
@@ -6,6 +6,7 @@ var decorator_PostLinkTagsAndUserNames = function (resList, callback)
     Post_Decorator_Names = require(process.env.APP_PATH + "/models/post/decorator/names").Post_Decorator_Names,
     Post_Decorator_Tags = require(process.env.APP_PATH + "/models/post/decorator/tags").Post_Decorator_Tags,
     Post_Decorator_Rate = require(process.env.APP_PATH + "/models/post/decorator/rate").Post_Decorator_Rate,
+    Post_Decorator_Views = require(process.env.APP_PATH + "/models/post/decorator/views").Post_Decorator_Views,
     usersIds = {},
     postsIds = {};
 
@@ -18,6 +19,8 @@ var decorator_PostLinkTagsAndUserNames = function (resList, callback)
       usersIds[userId] = '';
       postsIds[post.getId()] = '';
     }
+
+    //TODO DO ONE BIG DATABASE GET INSTED OF THIS!!
 
     new Post_Decorator_Names(usersIds, function (err, userNamesObj) {
 
@@ -37,17 +40,24 @@ var decorator_PostLinkTagsAndUserNames = function (resList, callback)
             return callback(err3, null);
           }
 
-          for (var lp in resList) {
-            var
-              post = resList[lp];
+          new Post_Decorator_Views(postsIds, function (err4, postViewsObj) {
 
-            data.push(new postLink(post, userNamesObj, postTagsObj, postRateObj));
-          }
+            if (err4) {
+              return callback(err4, null);
+            }
 
-          return callback(null, data);
+            for (var lp in resList) {
+              var
+                post = resList[lp];
+
+              data.push(new postLink(post, userNamesObj, postTagsObj, postRateObj, postViewsObj));
+            }
+
+            return callback(null, data);
+          });
         });
       });
     });
 };
 
-exports.decorator_PostLinkTagsAndUserNames = decorator_PostLinkTagsAndUserNames;
+exports.decorator_PostLink = decorator_PostLink;

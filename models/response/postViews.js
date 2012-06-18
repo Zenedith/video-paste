@@ -1,12 +1,12 @@
 //var
 //  log = require(process.env.APP_PATH + "/lib/log");
 
-var postViews = function (postObj)
+var postViews = function (postId, viewsValue)
 {
 //  log.debug('postViews.construct()');
 
-  this.postId = parseInt(postObj.getId());
-  this.views = parseInt(postObj.getViews());
+  this.postId = parseInt(postId);
+  this.views = parseInt(viewsValue);
 };
 
 exports.postViews = postViews;

@@ -383,9 +383,9 @@ var Api_Controller = {
         }
 
         var
-          decorator_PostLinkTagsAndUserNames = require(process.env.APP_PATH + "/models/decorator/postLinkTagsAndUserNames").decorator_PostLinkTagsAndUserNames;
+          decorator_PostLink = require(process.env.APP_PATH + "/models/decorator/postLink").decorator_PostLink;
 
-        decorator_PostLinkTagsAndUserNames([p_obj], function (err3, decoratedPosts) {
+        decorator_PostLink([p_obj], function (err3, decoratedPosts) {
 
           if (err3) {
             return next(err3);
@@ -401,7 +401,7 @@ var Api_Controller = {
     });
   },
   //api/postViews/:sessionId/:postId
-  post_view: function(req, res, next) {
+  postViews: function(req, res, next) {
     var
       Session = require(process.env.APP_PATH + "/models/session").Session,
       sess_obj = new Session(),
@@ -429,28 +429,26 @@ var Api_Controller = {
       }
 
       var
-        Post = require(process.env.APP_PATH + "/models/post").Post,
+        Post_Views = require(process.env.APP_PATH + "/models/post/views").Post_Views,
         postViews = require(process.env.APP_PATH + "/models/response/postViews").postViews,
-        post = new Post();
+        postViewsObj = new Post_Views(postId);
 
-      post.views(postId, function (err, obj) {
-
-        if (!err) {
-          var data = new postViews(obj);
-
-          res.json(data);
-          RequestLogger.log(req, data);
+      postViewsObj.views(function (err2, viewsValue) {
+        if (err2) {
+          return next(err2);
         }
-        else {
-          return next(error(400, 'Bad request (bad postId value)'));
-        }
+
+        var data = new postViews(postId, viewsValue);
+
+        res.json(data);
+        RequestLogger.log(req, data);
       });
     });
   },
 
   //api/postRate/:sessionId/:postId
   //rate from post body
-  post_rate: function(req, res, next) {
+  postRate: function(req, res, next) {
     var
       Session = require(process.env.APP_PATH + "/models/session").Session,
       sess_obj = new Session(),
@@ -556,9 +554,9 @@ var Api_Controller = {
           }
 
           var
-            decorator_PostLinkTagsAndUserNames = require(process.env.APP_PATH + "/models/decorator/postLinkTagsAndUserNames").decorator_PostLinkTagsAndUserNames;
+            decorator_PostLink = require(process.env.APP_PATH + "/models/decorator/postLink").decorator_PostLink;
 
-          decorator_PostLinkTagsAndUserNames([p_obj], function (err, decoratedPosts) {
+          decorator_PostLink([p_obj], function (err, decoratedPosts) {
 
             if (err) {
               return callback(err, null);

@@ -15,9 +15,9 @@ var getTopLinks = function (listObj, callback)
   var
     _this = this,
     resList = listObj.getResults(),
-    decorator_PostLinkTagsAndUserNames = require(process.env.APP_PATH + "/models/decorator/postLinkTagsAndUserNames").decorator_PostLinkTagsAndUserNames;
+    decorator_PostLink = require(process.env.APP_PATH + "/models/decorator/postLink").decorator_PostLink;
 
-  decorator_PostLinkTagsAndUserNames(resList, function (err, data) {
+  decorator_PostLink(resList, function (err, data) {
 
     if (err) {
       return callback(err, null);

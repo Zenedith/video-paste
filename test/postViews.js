@@ -2,7 +2,7 @@ var
   app = require(__dirname + '/../app'),
 //  show_response = false,
   show_response = true,
-  postId = 3,
+  postId = 17,
   sessId = 'ae9af879cbd68baae3be01d745a813fb697f85ad',  //expired by one hour
   authorizedSessId = 'ae9af879cbd68baae3be01d745a813fb697f85ad';  //expired by one hour
 
@@ -35,6 +35,7 @@ exports.testPostViewsValid = function (beforeExit, assert) {
   }
   );
 };
+
 exports.testPostViewsInvalidPostId = function (beforeExit, assert) {
 
   var post_data = '';
@@ -64,12 +65,13 @@ exports.testPostViewsInvalidPostId = function (beforeExit, assert) {
     }
   );
 };
-exports.testPostViewsInvalidPostId = function (beforeExit, assert) {
+
+exports.testPostViewsInvalidPostIdNotExists = function (beforeExit, assert) {
 
   var post_data = '';
 
   assert.response(app, {
-    url: '/api/postViews/' + authorizedSessId + '/-1',
+    url: '/api/postViews/' + authorizedSessId + '/1000000000001',
     method: 'POST',
     headers: {
       'Content-Type': 'application/x-www-form-urlencoded',
@@ -84,7 +86,7 @@ exports.testPostViewsInvalidPostId = function (beforeExit, assert) {
     var json = JSON.parse(res.body);
 
     if (show_response) {
-      console.log('testPostViewsInvalidPostId result: ');
+      console.log('testPostViewsInvalidPostIdNotExists result: ');
       console.log(json);
     }
 

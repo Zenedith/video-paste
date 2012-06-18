@@ -15,7 +15,6 @@ var Post = function ()
   this.__userId = 0;
   this.__url = '';
   this.__thumbUrl = null,
-  this.__views = 0;
 
   this.createNewPost = function (urlObj, categoryId, tags, userId, callback) {
     log.debug('Post.createNewPost()');
@@ -41,6 +40,8 @@ var Post = function ()
         tagsLen = tags.length,
         Post_Tag = require(process.env.APP_PATH + "/models/post/tag").Post_Tag,
         Post_Rate = require(process.env.APP_PATH + "/models/post/rate").Post_Rate,
+        Post_Views = require(process.env.APP_PATH + "/models/post/views").Post_Views,
+        postViews = new Post_Views(postId),
         postRate = new Post_Rate(postId);
 
       //async: add user to already rated this post (has posted it)
@@ -63,21 +64,23 @@ var Post = function ()
         });
       }
 
-      //async: add post to new set
-      p_obj.addPostToNew(function (err4, res4) {
+      //async: create views counter
+      postViews.createCounter(function (err4, res4) {
         if (err4) {
           log.crit(err4);
+        }
+      });
+
+      //async: add post to new set
+      p_obj.addPostToNew(function (err5, res5) {
+        if (err5) {
+          log.crit(err5);
         }
       });
 
       //return, created object, don't wait for async methods
       return callback(null, p_obj);
     });
-  };
-
-  this.views = function (id, callback) {
-    this.setId(id);
-    Database.incrObject(this, '__views', callback);
   };
 
   this.addPostToNew = function (callback) {
@@ -115,10 +118,6 @@ var Post = function ()
     }
 
     return this.__thumbUrl;
-  };
-
-  this.getViews = function () {
-    return parseInt(this.__views) || 0;
   };
 
 };

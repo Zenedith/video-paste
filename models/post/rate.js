@@ -7,6 +7,7 @@ var Post_Rate = function (postId)
 {
   log.debug('Post_Rate.construct(' + postId + ')');
 
+  //local object variable!
   var
     setNameRated = 'post:' + postId + ':rated'; //define set name for users
 
@@ -14,6 +15,7 @@ var Post_Rate = function (postId)
 
   //rate post [callback(err, rateValue)]
   this.rate = function (rate, userId, callback) {
+    log.debug('Post_Views.rate(' + rate + ', ' + userId + ')');
 
     if (rate > 0) {
       rate = 1;

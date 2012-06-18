@@ -154,7 +154,7 @@
     },
     "post_view" : {
       "controller": "api",
-      "action": "post_view",
+      "action": "postViews",
       "url": "api/postViews/:sessionId/:postId",
       "method":"post",
       "description":"post view increase",
@@ -162,7 +162,7 @@
     },
     "post_rate" : {
       "controller": "api",
-      "action": "post_rate",
+      "action": "postRate",
       "url": "api/postRate/:sessionId/:postId",
       "method":"post",
       "description":"rate post",

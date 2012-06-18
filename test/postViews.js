@@ -3,8 +3,7 @@ var
 //  show_response = false,
   show_response = true,
   postId = 17,
-  sessId = 'ae9af879cbd68baae3be01d745a813fb697f85ad',  //expired by one hour
-  authorizedSessId = 'ae9af879cbd68baae3be01d745a813fb697f85ad';  //expired by one hour
+  authorizedSessId = 'a9e750f97472856f73a0c8cb44fe603bc060adad';  //expired by one hour
 
 exports.testPostViewsValid = function (beforeExit, assert) {
 
@@ -41,7 +40,7 @@ exports.testPostViewsInvalidPostId = function (beforeExit, assert) {
   var post_data = '';
 
   assert.response(app, {
-    url: '/api/postViews/' + sessId + '/-1',
+    url: '/api/postViews/' + authorizedSessId + '/-1',
     method: 'POST',
     headers: {
       'Content-Type': 'application/x-www-form-urlencoded',

@@ -55,10 +55,19 @@ var Key = function ()
 
       //check expiration time
       if (obj.getLifeTime() < current_timestamp) {
+        //TODO remove key
         return callback(error(602, 'key has expired'), null);
       }
 
-      _this.setObjectValueToDB(id, '__last_used', current_timestamp, callback);
+      //async: update last used
+      _this.setObjectValueToDB(id, '__last_used', current_timestamp, function(err2, obj) {
+        if (err2) {
+          log.crit(err2);
+        }
+      });
+
+      //don't wait to update last used time
+      return callback(null, obj);
     });
 
   };

@@ -3,28 +3,42 @@ var
   user = new User();
   secure = require("node-secure");
 
-var Post_Decorator_Names = function(idsObj, callback) {
+var Post_Decorator_Names = function(idsObj) {
 
   this.userNames = {};
 
   var
     ids = Object.keys(idsObj),
-    idsLen = ids.length,
-    _this = this;
+    idsLen = ids.length;
 
-  if (idsLen) {
-    user.getNamesByIds(ids, function (err, userNames) {
-      if (err) {
-        return callback(err, null);
+  this.prepareKeys = function () {
+    var
+      ids = Object.keys(idsObj),
+      idsLen = ids.length,
+      classname = user.getClassName(),
+      field = '__name',
+      keyFields = [];
+
+    if (idsLen) {
+
+      for (var i = 0; i < idsLen; ++i) {
+        var
+          key = [classname, ids[i], field];
+
+        keyFields.push(key);
       }
+    }
 
-      _this.userNames = userNames;
-      return callback(null, _this);
-    });
-  }
-  else {
-    return callback(null, _this);
-  }
+    return {'get' : keyFields};
+  };
+
+  this.load = function (data) {
+    if (idsLen) {
+      for (var i = 0; i < idsLen; ++i) {
+        this.userNames[ids[i]] = data.pop();
+      }
+    }
+  };
 
   this.getName = function (id) {
     if (this.userNames.hasOwnProperty(id) && this.userNames[id]) {

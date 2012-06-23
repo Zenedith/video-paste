@@ -5,6 +5,12 @@
   "homepage": "https://github.com/Zenedith/video-paste",
   "main":"api",
   "author": "Mateusz Stępniak (zenedith@wp.pl)",
+  "subdomain": "webapia-video-paste",
+  "analyze": false,
+  "scripts": {
+    "start": "./app.js"
+    }
+  },
   "directories": {
     "config": "./config",
     "controllers": "./controllers",
@@ -21,7 +27,7 @@
      "type" : "git",
      "url" : "https://github.com/Zenedith/video-paste.git"
   },
-  "engines" : { "node" : "0.6" },
+  "engines" : { "node" : "0.6.x" },
   "dependencies" : {
     "validator" : "",
     "express": "",

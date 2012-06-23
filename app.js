@@ -179,7 +179,7 @@ module.exports = app;
 
 //expresso need it
 if (!module.parent) {
-  app.listen(config.app.port || process.env.PORT);
+  app.listen(config.app.port || process.env.PORT || process.env['app_port'] );
   log.debug("Express server listening on port %d in %s mode", app.address().port, app.settings.env);
   log.debug('Using Express %s', express.version);
 }

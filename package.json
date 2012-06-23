@@ -1,47 +1,29 @@
 {
   "name": "video-paste-api",
   "description": "video paste api project",
-  "version": "0.0.6",
+  "subdomain": "webapi-video-paste",
   "homepage": "https://github.com/Zenedith/video-paste",
-  "main":"api",
+  "main": "app.js",
   "author": "Mateusz Stępniak (zenedith@wp.pl)",
-  "subdomain": "webapia-video-paste",
   "analyze": false,
-  "scripts": {
-    "start": "./app.js"
-    }
+  "version": "0.0.6",
+  "engines": {
+    "node": "0.6.x"
   },
-  "directories": {
-    "config": "./config",
-    "controllers": "./controllers",
-    "docs": "./docs",
-    "lib": "./lib",
-    "locales": "./locales",
-    "logs": "./logs",
-    "models": "./models",
-    "public": "./public",
-    "tests": "./test",
-    "views": "./views"
-  },
-  "repository" : {
-     "type" : "git",
-     "url" : "https://github.com/Zenedith/video-paste.git"
-  },
-  "engines" : { "node" : "0.6.x" },
-  "dependencies" : {
-    "validator" : "",
+  "dependencies": {
+    "validator": "",
     "express": "",
     "redis": "",
     "jade": "",
     "log": "",
-    "config" : "",
-    "socket.io" : "",
-    "node-secure" : "",
-    "ga" : "",
-    "loggly" : "",
-    "oauth" : "",
-    "connect-auth" : "",
-    "authom" : "",
-    "async" : ""
+    "config": "",
+    "socket.io": "",
+    "node-secure": "",
+    "ga": "",
+    "loggly": "",
+    "oauth": "",
+    "connect-auth": "",
+    "authom": "",
+    "async": ""
   }
 }

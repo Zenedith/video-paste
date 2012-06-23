@@ -1,0 +1,22 @@
+#
+#  This file contains a list of globally installed and available npm modules.
+#
+
+#  DB drivers.
+redis
+
+#  Other modules (including frameworks, middleware etc).
+async
+connect
+connect-auth
+express
+validator
+jade
+log
+config
+socket.io
+node-secure
+ga
+loggly
+oauth
+authom

@@ -97,7 +97,7 @@ if (process.env.NODE_ENV == 'dotcloud') {
     app.use('/api', function(req, res, next) {
 
       var
-        ip = req.headers['x-real-ip'] || res.connection.remoteAddress,
+        ip = req.headers['x-real-ip'] || req.headers['remote-addr'] || res.connection.remoteAddress,
         forwardedFor = req.headers['x-forwarded-for'] || '';
 
       if (config.app.enable_google_analytics) {
@@ -179,7 +179,10 @@ module.exports = app;
 
 //expresso need it
 if (!module.parent) {
-  app.listen(config.app.port || process.env['app_port'] || process.env.PORT);
+  var
+    port = config.app.port || process.env['app_port'] || process.env.PORT;
+
+  app.listen(port);
   log.debug("Express server listening on port %d in %s mode", app.address().port, app.settings.env);
   log.debug('Using Express %s', express.version);
 }

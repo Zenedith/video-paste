@@ -687,7 +687,7 @@ var Api_Controller = {
         searchKey = req.params.searchKey || '',
         limit = parseInt(req.params.limit) || 1,
         page = parseInt(req.params.page) || 1,
-        getTags = require(process.env.APP_PATH + "/models/response/getTags").getTags;
+        getTags = require(process.env.APP_PATH + "/models/response/getTags").getTags,
         Tag = require(process.env.APP_PATH + "/models/tag").Tag,
         tag = new Tag(searchKey);
 
@@ -735,7 +735,7 @@ var Api_Controller = {
         tagName = req.params.tagName || '',
         limit = parseInt(req.params.limit) || 1,
         page = parseInt(req.params.page) || 1,
-        getLinksByTag = require(process.env.APP_PATH + "/models/response/getLinksByTag").getLinksByTag;
+        getLinksByTag = require(process.env.APP_PATH + "/models/response/getLinksByTag").getLinksByTag,
         Post_List = require(process.env.APP_PATH + "/models/post/list").Post_List,
         postList = new Post_List();
 
@@ -763,6 +763,49 @@ var Api_Controller = {
           res.json(data);
           RequestLogger.log(req, data);
         });
+      });
+    });
+  },
+  //api/profile/:sessionId/:userId
+  profile: function (req, res, next) {
+    var
+      Session = require(process.env.APP_PATH + "/models/session").Session,
+      sess_obj = new Session(),
+      sessionId = req.params.sessionId;
+
+    //validate session and key
+    sess_obj.isValidSession(sessionId, function (err, obj) {
+
+      //if something wrong
+      if (err) {
+        return next(err);
+      }
+
+      //must be authorized user
+      if (obj.getUserId() < 1) {
+        return next(error(401, 'Session not authorized (userId)'));
+      }
+
+      var
+        profile = require(process.env.APP_PATH + "/models/response/profile").profile,
+        User = require(process.env.APP_PATH + "/models/user").User,
+        userId = req.params.userId || obj.getUserId(), //get given user id profile or my profile
+        userObj = new User();
+
+      userObj.load(userId, function (err2, u_obj) {
+        if (err2) {
+          return next(err2);
+        }
+
+        if (!u_obj) {
+          return next(error(607, 'User not exists (userId)'));
+        }
+
+        var
+          data = new profile(u_obj);
+
+        res.json(data);
+        RequestLogger.log(req, data);
       });
     });
   }

@@ -196,6 +196,19 @@
     * ERR_INVALID_KEY
     * ERR_INVALID_SESSION
     * ERR_EMPTY_RESULTS
+- GET /api/profile/:sessionId/:userId
+    ```
+    get given user profile (userId is optional)
+    ```
+    ```
+    {userId: int, name: string, fistName: sstring, lastName: string, accountType: string, posts: [ postId: int ]}
+    ```
+    * ERR_BAD_REQUEST
+    * ERR_API_INTERNAL_ERROR
+    * ERR_INVALID_KEY
+    * ERR_INVALID_SESSION
+    * ERR_UNAUTHORIZED
+    * ERR_INVALID_USER_ID
 
 # Error handling
 
@@ -222,4 +235,5 @@ error value             code value
 * ERR_ALREADY_RATED         604
 * ERR_LOGIN_FAILED          605
 * ERR_INVALID_TAG_NAME      606
+* ERR_INVALID_USER_ID       607
 ```

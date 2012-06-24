@@ -288,6 +288,22 @@ div.content
         li ERR_INVALID_SESSION
         li ERR_EMPTY_RESULTS
 
+  div.method
+    div.left
+      div.method_type GET
+      div.method_url /api/profile/:sessionId/:userId
+      div.method_desc get given user profile (userId is optional)
+      div.method_post_data
+      div.method_sample_response RESPONSE: {userId: int, name: string, fistName: sstring, lastName: string, accountType: string, posts: [ postId: int ]}
+    div.method_error_codes
+      ul
+        li ERR_BAD_REQUEST
+        li ERR_API_INTERNAL_ERROR
+        li ERR_INVALID_KEY
+        li ERR_INVALID_SESSION
+        li ERR_UNAUTHORIZED
+        li ERR_INVALID_USER_ID
+
   h1.info Error handling
 
   div.error_response
@@ -340,3 +356,6 @@ div.content
     div.err
       div.err_error ERR_INVALID_TAG_NAME
       div.err_code 606
+    div.err
+      div.err_error ERR_INVALID_USER_ID
+      div.err_code 607

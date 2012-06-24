@@ -61,6 +61,10 @@ var User = function ()
   this.getLocale = function () {
     return this.__locale;
   };
+
+  this.getAccountType = function () {
+    return this.__account_type;
+  };
 };
 
 //used for searching elem id base on uniq key

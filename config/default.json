@@ -303,6 +303,22 @@
       "method":"get",
       "description":"get links for tag",
       "isRegExp" : false
+    },
+    "user_my_profile" : {
+      "controller": "api",
+      "action": "profile",
+      "url": "api/profile/:sessionId",
+      "method":"get",
+      "description":"get my profile",
+      "isRegExp" : false
+    },
+    "user_profile" : {
+      "controller": "api",
+      "action": "profile",
+      "url": "api/profile/:sessionId/:userId",
+      "method":"get",
+      "description":"get user profile",
+      "isRegExp" : false
     }
   }
 }

@@ -41,6 +41,9 @@ var Errors = function (code, msg) {
     case 606:
       err.error = 'ERR_INVALID_TAG_NAME';
       break;
+    case 607:
+      err.error = 'ERR_INVALID_USER_ID';
+      break;
   }
 
   err.data = '';

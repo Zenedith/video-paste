@@ -2,7 +2,7 @@
   "app" : {
     "port" : 0,
     "host" : "",
-    "version" : "0.0.6",
+    "version" : "0.0.7",
     "log_level" : "error",
     "log2file" : true,
     "use_winston" : false,
@@ -302,6 +302,22 @@
       "url": "api/getLinksByTag/:sessionId",
       "method":"get",
       "description":"get links for tag",
+      "isRegExp" : false
+    },
+    "user_my_profile" : {
+      "controller": "api",
+      "action": "profile",
+      "url": "api/profile/:sessionId",
+      "method":"get",
+      "description":"get my profile",
+      "isRegExp" : false
+    },
+    "user_profile" : {
+      "controller": "api",
+      "action": "profile",
+      "url": "api/profile/:sessionId/:userId",
+      "method":"get",
+      "description":"get user profile",
       "isRegExp" : false
     }
   }

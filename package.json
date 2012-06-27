@@ -6,7 +6,7 @@
   "main": "app.js",
   "author": "Mateusz Stępniak (zenedith@wp.pl)",
   "analyze": false,
-  "version": "0.0.6",
+  "version": "0.0.7",
   "engines": {
     "node": "0.6.x"
   },
@@ -22,7 +22,6 @@
     "ga": "",
     "loggly": "",
     "oauth": "",
-    "connect-auth": "",
     "authom": "",
     "async": ""
   }

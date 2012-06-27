@@ -61,9 +61,12 @@ if (process.env.NODE_ENV == 'dotcloud') {
     app.set('view engine', 'jade');
     app.use(express.favicon());
 
-    app.helpers({
+    app.locals({
       config: config
     });
+//    app.helpers({
+//      config: config
+//    });
 
     app.set('config', config);
 
@@ -183,6 +186,6 @@ if (!module.parent) {
     port = config.app.port || process.env['app_port'] || process.env.PORT;
 
   app.listen(port);
-  log.debug("Express server listening on port %d in %s mode", app.address().port, app.settings.env);
+  log.debug("Express server listening on port %d in %s mode", port, app.settings.env);
   log.debug('Using Express %s', express.version);
 }

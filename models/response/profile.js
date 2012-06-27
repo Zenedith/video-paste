@@ -10,7 +10,7 @@ var profile = function (userObj)
   this.fistName = userObj.getFirstName();
   this.lastName = userObj.getLastName();
   this.accountType = userObj.getAccountType();
-  this.posts = [];
+  this.topPosts = [];
 };
 
 exports.profile = profile;

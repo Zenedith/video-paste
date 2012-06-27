@@ -201,7 +201,7 @@
     get given user profile (userId is optional)
     ```
     ```
-    {userId: int, name: string, fistName: sstring, lastName: string, accountType: string, posts: [ postId: int ]}
+    {userId: int, name: string, fistName: sstring, lastName: string, accountType: string, topPosts: [ postId: int ]}
     ```
     * ERR_BAD_REQUEST
     * ERR_API_INTERNAL_ERROR

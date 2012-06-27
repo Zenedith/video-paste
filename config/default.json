@@ -2,7 +2,7 @@
   "app" : {
     "port" : 0,
     "host" : "",
-    "version" : "0.0.6",
+    "version" : "0.0.7",
     "log_level" : "error",
     "log2file" : true,
     "use_winston" : false,

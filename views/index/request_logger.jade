@@ -36,10 +36,6 @@ script(type='text/javascript', src='http://code.jquery.com/jquery-1.7.2.min.js')
 script(type='text/javascript', src='/socket.io/socket.io.js')
 script
   $(document).ready(function () {
-
-    //Crockford compliance! Define all the need variables here
-    var socket;
-
     //- Setup the socket library. The rememberTransport and tryTransportsOnConnectTimeout
     //- are neccessary because the defaults will cause some browsers to degrade to
     //- crappy transports when they are disconnected (think suspended laptop) and will

@@ -1,5 +1,5 @@
 var
-  Tag = require(process.env.APP_PATH + "/models/tag").Tag;
+  Tag = require(process.env.APP_PATH + "/models/tag").Tag,
   log = require(process.env.APP_PATH + "/lib/log"),
   Database = require(process.env.APP_PATH + "/lib/database").Database,
   secure = require("node-secure");

@@ -1,11 +1,15 @@
+if (!process.env.APP_PATH) {
+  process.env.APP_PATH = __dirname + '/..';
+}
+
 var
-  app = require(__dirname + '/../app'),
+  app = require(process.env.APP_PATH + '/server').api,
 //  show_response = false,
   show_response = true,
   postId = 4,
   apikey = '6254b715bcc5d680',
-  sessId = 'e0c2154c9a5bc1bf5fab42108bf0881ff0172028',  //expired by one hour
-  authorizedSessId = 'a9e750f97472856f73a0c8cb44fe603bc060adad';  //expired by one hour;
+  sessId = '1a02aff0f3c15c5e387d9674461f382e47db493b',  //expired by one hour
+  authorizedSessId = 'ba626efb1118b3eb77e9804952822d5a6a5bf57d';  //expired by one hour;
 
 exports.testPostLinkCreateValid = function (beforeExit, assert) {
   var
@@ -59,22 +63,21 @@ exports.testPostLinkMissingParams = function (beforeExit, assert) {
         'Content-Length': post_data.length
         },
     data: post_data
-  }, {
-    status: 200,
-    headers: { 'Content-Type': 'application/json; charset=utf-8' }
-  },
-  function(res) {
-    var json = JSON.parse(res.body);
+    }, {
+      status: 200,
+      headers: { 'Content-Type': 'application/json; charset=utf-8' }
+    },
+    function(res) {
+      var json = JSON.parse(res.body);
 
-    if (show_response) {
-      console.log('testPostLinkMissingParams result: ');
-      console.log(json);
-    }
+      if (show_response) {
+        console.log('testPostLinkMissingParams result: ');
+        console.log(json);
+      }
 
-    assert.equal(json.error, 'ERR_BAD_REQUEST');
-    assert.equal(json.code, 400);
-  }
-  );
+      assert.equal(json.error, 'ERR_BAD_REQUEST');
+      assert.equal(json.code, 400);
+    });
 };
 
 exports.testPostLinkCreateTestConverter = function (beforeExit, assert) {
@@ -163,22 +166,21 @@ exports.testGetPostLinkCreateInvalidSess = function (beforeExit, assert) {
         'Content-Length': post_data.length
         },
     data: post_data
-  }, {
-    status: 200,
-    headers: { 'Content-Type': 'application/json; charset=utf-8' }
-  },
-  function(res) {
-    var json = JSON.parse(res.body);
+    }, {
+      status: 200,
+      headers: { 'Content-Type': 'application/json; charset=utf-8' }
+    },
+    function(res) {
+      var json = JSON.parse(res.body);
 
-    if (show_response) {
-      console.log('testGetPostLinkCreateInvalidSess result: ');
-      console.log(json);
-    }
+      if (show_response) {
+        console.log('testGetPostLinkCreateInvalidSess result: ');
+        console.log(json);
+      }
 
-    assert.equal(json.error, 'ERR_UNAUTHORIZED');
-    assert.equal(json.code, 401);
-  }
-);
+      assert.equal(json.error, 'ERR_UNAUTHORIZED');
+      assert.equal(json.code, 401);
+    });
 };
 
 exports.testGetPostLinkValid = function (beforeExit, assert) {

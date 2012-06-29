@@ -1,9 +1,13 @@
+if (!process.env.APP_PATH) {
+  process.env.APP_PATH = __dirname + '/..';
+}
+
 var
-  app = require(__dirname + '/../app'),
+  app = require(process.env.APP_PATH + '/server').api,
 //  show_response = false,
   show_response = true,
   userId = 1,
-  authorizedSessId = '8644d90aa73709928812a86ba5db6ed3c8f01c89';  //expired by one hour
+  authorizedSessId = 'ba626efb1118b3eb77e9804952822d5a6a5bf57d';  //expired by one hour
 
 exports.testMyProfileValid = function (beforeExit, assert) {
 

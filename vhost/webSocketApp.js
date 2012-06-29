@@ -1,13 +1,17 @@
-var
-  express = require('express');
 
 var WebSocketApp = function() {
   var
+    http = require('http'),
+    express = require('express'),
     app = express(),
+    server = http.createServer(app),
     config = require('config'),
     log = require(process.env.APP_PATH + "/lib/log"),
     controller = require(process.env.APP_PATH + "/lib/controller"),
-    Auth_Authom = require(process.env.APP_PATH + "/lib/auth/authom").Auth_Authom;
+    Auth_Authom = require(process.env.APP_PATH + "/lib/auth/authom").Auth_Authom,
+    auth = new Auth_Authom();
+
+  global.socketio = require('socket.io').listen(server);
 
   app
     .configure(function()
@@ -27,7 +31,7 @@ var WebSocketApp = function() {
 
       // access.log format (default is full)
 
-      if (process.env.NODE_ENV != 'development') {
+      if (process.env.NODE_ENV !== 'development') {
         app.use(express.logger());
       }
 
@@ -44,8 +48,6 @@ var WebSocketApp = function() {
         .use(express.bodyParser())
         .use(express.methodOverride());
 
-      // auth = new Auth_Connect();
-      auth = new Auth_Authom();
       auth.initApp(app);
 
       // position our routes above the error handling middleware,
@@ -74,8 +76,7 @@ var WebSocketApp = function() {
           err = error(500, 'Unexpexted error occured'); // override message
         }
         else {
-          log.error(err.code + ': ' + req.originalUrl + ', error: '
-              + err.message);
+          log.error(err.code + ': ' + req.originalUrl + ', error: ' + err.message);
         }
 
         res.status(500);
@@ -102,15 +103,7 @@ var WebSocketApp = function() {
       });
     });
 
-  return app;
-};
-
-WebSocketApp.onConnect = function (app, port) {
-  var
-    io = require('socket.io');
-
-  socketio = io.listen(app);
-  //TODO express 3: socket.io/socket.io.js 404 (Not Found)
+  return server;
 };
 
 module.exports.WebSocketApp = WebSocketApp;

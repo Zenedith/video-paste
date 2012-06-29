@@ -17,8 +17,10 @@ var Session_Generator = function ()
   };
 
   this.createNewSession = function (key, ip, forwardedFor, userId, callback) {
-    Session = require(process.env.APP_PATH + "/models/session").Session;
-    var sess = new Session();
+    var
+      Session = require(process.env.APP_PATH + "/models/session").Session,
+      sess = new Session();
+
     sess.generateSession(key, ip, forwardedFor, userId);
 
     Database.saveObject(sess, callback);

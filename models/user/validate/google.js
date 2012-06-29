@@ -17,29 +17,29 @@ var User_Validate_Google = function () {
         port: 80,
         path: '/api/people/' + id,
         method: 'GET'
-     },
-     req = http.get(options, function(response) {
-       var data = '';
-       response.on('data', function (chunk) {
-         data += chunk;
-       });
+    },
+    req = http.get(options, function(response) {
+      var data = '';
+      response.on('data', function (chunk) {
+        data += chunk;
+      });
 
-       response.on('end', function () {
-         if (response.statusCode !== 200) {
-           return callback(error(605, 'User not authorized on google'), null);
-         }
+      response.on('end', function () {
+        if (response.statusCode !== 200) {
+          return callback(error(605, 'User not authorized on google'), null);
+        }
 
-         data = JSON.parse(data);
+        data = JSON.parse(data);
 
-         if (!data.entry || !data.entry.name) {
-           return callback(error(605, 'User not authorized on google'), null);
-         }
+        if (!data.entry || !data.entry.name) {
+          return callback(error(605, 'User not authorized on google'), null);
+        }
 
-         if (data.entry.name.formatted !== name || data.entry.name.givenName !== fist_name || data.entry.name.familyName !== last_name) {
-           return callback(error(605, 'User not authorized on google'), null);
-         }
+        if (data.entry.name.formatted !== name || data.entry.name.givenName !== fist_name || data.entry.name.familyName !== last_name) {
+          return callback(error(605, 'User not authorized on google'), null);
+        }
 
-         return callback(null, data);
+        return callback(null, data);
        });
      });
    };

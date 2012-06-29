@@ -1,6 +1,10 @@
+if (!process.env.APP_PATH) {
+  process.env.APP_PATH = __dirname + '/..';
+}
+
 var
-  app = require(__dirname + '/../app'),
-//  show_response = false,
+  app = require(process.env.APP_PATH + '/server').app,
+  //show_response = false,
   show_response = true,
   secure = require("node-secure");
 
@@ -17,7 +21,7 @@ exports.testTaskCleanNewList = function (beforeExit, assert) {
     headers: { 'Content-Type': 'text/html; charset=utf-8' }
   }, {
     status: 200,
-    headers: { 'Content-Type': 'application/json; charset=utf-8' },
+    headers: { 'Content-Type': 'application/json; charset=utf-8' }
   },
   function(res) {
     var json = JSON.parse(res.body);
@@ -40,7 +44,7 @@ exports.testIndexController = function (beforeExit, assert) {
   }, {
     status: 200,
     headers: { 'Content-Type': 'text/html; charset=utf-8' },
-    body: /html/
+    body: /Available api helpers/
   },
   function(res) {
 //    var document = res.body;

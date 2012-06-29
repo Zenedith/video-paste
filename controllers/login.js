@@ -15,8 +15,8 @@ var Login_Controller = {
       service = 'google2';
     }
 
-    auth.updateAccessToken(service, req, res);
-  },
+    authConnect.updateAccessToken(service, req, res);
+  }
 };
 
 

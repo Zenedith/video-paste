@@ -1,9 +1,13 @@
+if (!process.env.APP_PATH) {
+  process.env.APP_PATH = __dirname + '/..';
+}
+
 var
-  app = require(__dirname + '/../app'),
+  app = require(process.env.APP_PATH + '/server').api,
 //  show_response = false,
   show_response = true,
   postId = 17,
-  authorizedSessId = 'a9e750f97472856f73a0c8cb44fe603bc060adad';  //expired by one hour
+  authorizedSessId = '08f13082c06e1010e360bdc07edd9641a1581dfa';  //expired by one hour
 
 exports.testPostViewsValid = function (beforeExit, assert) {
 
@@ -48,8 +52,8 @@ exports.testPostViewsInvalidPostId = function (beforeExit, assert) {
     },
     data: post_data
     }, {
-      status: 200,
-      headers: { 'Content-Type': 'application/json; charset=utf-8' }
+        status: 200,
+        headers: { 'Content-Type': 'application/json; charset=utf-8' }
     },
     function(res) {
       var json = JSON.parse(res.body);
@@ -61,8 +65,7 @@ exports.testPostViewsInvalidPostId = function (beforeExit, assert) {
 
       assert.equal(json.error, 'ERR_BAD_REQUEST');
       assert.equal(json.code, 400);
-    }
-  );
+    });
 };
 
 exports.testPostViewsInvalidPostIdNotExists = function (beforeExit, assert) {
@@ -91,6 +94,5 @@ exports.testPostViewsInvalidPostIdNotExists = function (beforeExit, assert) {
 
     assert.equal(json.error, 'ERR_BAD_REQUEST');
     assert.equal(json.code, 400);
-  }
-  );
+  });
 };

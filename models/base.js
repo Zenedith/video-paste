@@ -1,5 +1,5 @@
 var
-  Database = require(process.env.APP_PATH + "/lib/database").Database;
+  Database = require(process.env.APP_PATH + "/lib/database").Database,
   secure = require("node-secure");
 
 var Base = function ()

@@ -1,19 +1,19 @@
-var
-  express = require('express'),
-  config = require('config'),
-  log = require(process.env.APP_PATH + "/lib/log"),
-  RequestLogger = require(process.env.APP_PATH + "/lib/requestLogger").RequestLogger,
-  controller = require(process.env.APP_PATH + "/lib/controller");
-
 var Api = function()
 {
   var
-    app = express.createServer();
+    http = require('http'),
+    express = require('express'),
+    config = require('config'),
+    log = require(process.env.APP_PATH + "/lib/log"),
+    RequestLogger = require(process.env.APP_PATH + "/lib/requestLogger").RequestLogger,
+    controller = require(process.env.APP_PATH + "/lib/controller"),
+    app = express.createServer(),
+    server = http.createServer(app);
 
   app.configure(function() {
     app.use(express.favicon());
 
-    if (process.env.NODE_ENV != 'development') {
+    if (process.env.NODE_ENV !== 'development') {
       app.use(express.logger());
     }
 
@@ -22,14 +22,16 @@ var Api = function()
       function(req, res, next)
       {
         var
-          ip = req.headers['x-real-ip'] ||
-          req.headers['remote-addr'] ||
-          res.connection.remoteAddress, forwardedFor = req.headers['x-forwarded-for'] ||
-          '';
+          ip = req.headers['x-real-ip'] || req.headers['remote-addr'] || res.connection.remoteAddress,
+          forwardedFor = req.headers['x-forwarded-for'] || '';
 
         if (config.app.enable_google_analytics) {
-          ua = "UA-32533263-1", host = req.headers['host'],
-              ga = new GoogleAnalytics(ua, host);
+          var
+            ua = "UA-32533263-1",
+            host = req.headers.host,
+            GoogleAnalytics = require('ga'),
+            ga = new GoogleAnalytics(ua, host);
+
           ga.trackPage(req.originalUrl);
         }
 
@@ -64,8 +66,7 @@ var Api = function()
         err = error(500, 'Unexpexted error occured'); // override message
       }
       else {
-        log.error(err.code + ': ' + req.originalUrl + ', error: '
-            + err.message);
+        log.error(err.code + ': ' + req.originalUrl + ', error: ' + err.message);
       }
 
       if (/RedisClient/i.test(err.msg)) {
@@ -98,7 +99,7 @@ var Api = function()
     });
   });
 
-  return app;
+  return server;
 };
 
 module.exports.Api = Api;

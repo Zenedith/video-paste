@@ -5,8 +5,8 @@ var postRate = function (postId, rateValue)
 {
 //  log.debug('postRate.construct()');
 
-  this.postId = parseInt(postId);
-  this.rate = parseInt(rateValue);
+  this.postId = ~~(postId);
+  this.rate = ~~(rateValue);
 };
 
 exports.postRate = postRate;

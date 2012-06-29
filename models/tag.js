@@ -40,7 +40,7 @@ var Tag = function (tagName)
 
     var
       setName = '',
-      offset = parseInt((page - 1) * limit);
+      offset = ~~((page - 1) * limit);
 
     if (searchKey) {
       setName = Tag.getTagKeywordSetName(searchKey);    //if given tag name then looking for

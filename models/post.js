@@ -14,7 +14,7 @@ var Post = function ()
   this.__added = 0;
   this.__userId = 0;
   this.__url = '';
-  this.__thumbUrl = null,
+  this.__thumbUrl = null;
 
   this.createNewPost = function (urlObj, categoryId, tags, userId, callback) {
     log.debug('Post.createNewPost()');
@@ -25,9 +25,9 @@ var Post = function ()
 
     this.__url = urlObj.get();
     this.__thumbUrl = urlObj.getThumbUrl();
-    this.__categoryId = parseInt(categoryId) || 0;
+    this.__categoryId = ~~(categoryId) || 0;
     this.__added = Math.round(+new Date()/1000);
-    this.__userId = parseInt(userId);
+    this.__userId = ~~(userId);
 
     Database.saveObject(this, function (err, p_obj) {
 
@@ -91,15 +91,15 @@ var Post = function ()
   };
 
   this.getCategoryId = function () {
-    return parseInt(this.__categoryId) || 0;
+    return ~~(this.__categoryId) || 0;
   };
 
   this.getAddedTimestamp = function () {
-    return parseInt(this.__added) || 0;
+    return ~~(this.__added) || 0;
   };
 
   this.getUserId = function () {
-    return parseInt(this.__userId) || 0;
+    return ~~(this.__userId) || 0;
   };
 
   this.getUrl = function () {
@@ -124,7 +124,7 @@ var Post = function ()
 
 //override: get int id value
 Post.prototype.getId = function () {
-  return parseInt(this.__id);
+  return ~~(this.__id);
 };
 
 
@@ -140,14 +140,18 @@ Post.prototype.getObjectsFromIds = function (ids, callback) {
       data = [];
 
     for (var lp in resList) {
-      var
-        post = new Post();
+      if (resList.hasOwnProperty(lp)) {
+        var
+          post = new Post();
 
-      for (var k in resList[lp]) {
-        post[k] = resList[lp][k];
+        for (var k in resList[lp]) {
+          if (resList[lp].hasOwnProperty(k)) {
+            post[k] = resList[lp][k];
+          }
+        }
+
+        data.push(post);
       }
-
-      data.push(post);
     }
 
     return callback(null, data);

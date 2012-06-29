@@ -27,40 +27,24 @@ global.__t = function(str)
   return str;
 };
 
-
-/* ===================================================================== */
-/* Setup route handlers. */
-/* ===================================================================== */
-
-// Handler for GET /health
-app.get('/health', function(req, res){
-    res.send('1');
-});
-
-// Handler for GET /asciimo
-//app.get('/asciimo', function(req, res){
-//    var link="https://a248.e.akamai.net/assets.github.com/img/d84f00f173afcf3bc81b4fad855e39838b23d8ff/687474703a2f2f696d6775722e636f6d2f6b6d626a422e706e67";
-//    res.send("<html><body><img src='" + link + "'></body></html>");
-//});
-
-if (process.env.NODE_ENV == 'dotcloud') {
+if (process.env.NODE_ENV === 'dotcloud') {
   var fs = require('fs');
   var env = JSON.parse(fs.readFileSync('environment.json', 'utf-8'));
 
-  config.app.port = env['PORT_WWW']; // override port
+  config.app.port = env.PORT_WWW; // override port
   config.db.use = "redis";
-  config.db.redis.host = env['DOTCLOUD_DATA_REDIS_HOST']; // override redis host
-  config.db.redis.port = env['DOTCLOUD_DATA_REDIS_PORT']; // override redis port
-  config.db.redis.auth = env['DOTCLOUD_DATA_REDIS_PASSWORD']; // override redis
+  config.db.redis.host = env.DOTCLOUD_DATA_REDIS_HOST; // override redis host
+  config.db.redis.port = env.DOTCLOUD_DATA_REDIS_PORT; // override redis port
+  config.db.redis.auth = env.DOTCLOUD_DATA_REDIS_PASSWORD; // override redis
   // auth
 }
 
 var
   ipaddr = config.app.host || '0.0.0.0',
-  port = config.app.port || process.env['app_port'] || process.env.PORT;
+  port = config.app.port || process.env.app_port || process.env.PORT;
 
 if (process.env.OPENSHIFT_INTERNAL_IP) {
-  ipaddr = process.env.OPENSHIFT_INTERNAL_IP,
+  ipaddr = process.env.OPENSHIFT_INTERNAL_IP;
   port = process.env.OPENSHIFT_INTERNAL_PORT;
 }
 
@@ -99,6 +83,5 @@ if (!module.parent) {
   vhost.listen(port, ipaddr, function () {
      log.debug('%s: Node server started on %s:%d ...', Date(Date.now() ), ipaddr, port);
      log.debug("Express server listening on port %d in %s mode", port, vhost.settings.env);
-     WebSocketApp.onConnect(app, port);
   });
 }

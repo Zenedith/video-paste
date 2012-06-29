@@ -8,8 +8,8 @@ var Key = function ()
 {
   log.debug('Key.construct()');
 
-  const KEY_LIFETIME = 31104000;
-  const KEY_VERSION = 1;
+  var KEY_LIFETIME = 31104000;
+  var KEY_VERSION = 1;
 
   this.__className = "Key";
   this.__lifetime = 0;

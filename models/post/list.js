@@ -1,6 +1,6 @@
 var
   Post = require(process.env.APP_PATH + "/models/post").Post,
-  postObj = new Post();
+  postObj = new Post(),
   List = require(process.env.APP_PATH + "/models/list").List,
   log = require(process.env.APP_PATH + "/lib/log"),
   Database = require(process.env.APP_PATH + "/lib/database").Database,
@@ -15,7 +15,7 @@ var Post_List = function ()
     log.debug('Post_List._getBySetName(' + setName + ', ' + limit + ', ' + page + ')');
 
     var
-      offset = parseInt((page - 1) * limit);
+      offset = ~~((page - 1) * limit);
 
     //count all new posts
     Database.countValuesInSet(setName, function (errCount, count) {
@@ -58,7 +58,7 @@ var Post_List = function ()
     log.debug('Post_List._getByScoreSet(' + scoreSetName + ', ' + limit + ', ' + page + ')');
 
     var
-      offset = parseInt((page - 1) * limit);
+      offset = ~~((page - 1) * limit);
 
     //get post ids
     Database.getScoreList(scoreSetName, offset, (offset + limit), function (err, resList) {

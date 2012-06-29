@@ -5,7 +5,7 @@ var profile = function (userObj)
 {
 //  log.debug('profile.construct()');
 
-  this.userId = parseInt(userObj.getId());
+  this.userId = ~~(userObj.getId());
   this.name = userObj.getName();
   this.fistName = userObj.getFirstName();
   this.lastName = userObj.getLastName();

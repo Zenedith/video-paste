@@ -1,5 +1,9 @@
+if (!process.env.APP_PATH) {
+  process.env.APP_PATH = __dirname + '/..';
+}
+
 var
-  app = require(__dirname + '/../app'),
+  app = require(process.env.APP_PATH + '/server').api,
   config = require('config'),
 //  show_response = false,
   show_response = true,
@@ -10,6 +14,8 @@ exports.testLoginByFbValid = function (beforeExit, assert) {
   var
     obj = config.tests.login.facebook,
     post_data = 'data=' + JSON.stringify(obj);
+
+  console.log(post_data);
 
   assert.response(app, {
     url: '/api/loginByFb/' + apikey,

@@ -12,7 +12,7 @@ var Post_List_New = function ()
   this.cleanOlderPosts = function (callback) {
     log.debug('Post_List_New.cleanOlderPosts()');
 
-    const MIN_NEW_LIST_SIZE = 100;
+    var MIN_NEW_LIST_SIZE = 100;
 
     //check how many items on list
     Database.countValuesInSet(Post_List_New.setNameNew, function (errCount, count) {

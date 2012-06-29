@@ -1,5 +1,9 @@
+if (!process.env.APP_PATH) {
+  process.env.APP_PATH = __dirname + '/..';
+}
+
 var
-  app = require(__dirname + '/../app'),
+  app = require(process.env.APP_PATH + '/server').api,
 //  show_response = false,
   show_response = true,
   apikey = '6254b715bcc5d680';

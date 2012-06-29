@@ -5,9 +5,9 @@ var getLinksByTag = function (listObj, callback)
 {
 //  log.debug('getLinksByTag.construct()');
 
-  this.count = parseInt(listObj.getCount());
-  this.pages = parseInt(listObj.getPages());
-  this.currentPage = parseInt(listObj.getCurrentPage());
+  this.count = ~~(listObj.getCount());
+  this.pages = ~~(listObj.getPages());
+  this.currentPage = ~~(listObj.getCurrentPage());
   this.isNextPage = (this.currentPage < this.pages);
   this.isPrevPage = this.currentPage > 1;
   this.result = [];

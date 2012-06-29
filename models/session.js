@@ -8,7 +8,7 @@ var Session = function ()
 {
   log.debug('Session.construct()');
 
-  const SESSION_LIFETIME = 3600;
+  var SESSION_LIFETIME = 3600;
 
   this.__className = "Session";
   this.__device = '';
@@ -31,7 +31,7 @@ var Session = function ()
     this.__lifetime = current_timestamp + SESSION_LIFETIME;
     this.__client_ip = ip;
     this.__client_forwarder_for = forwardedFor;
-    this.__userId = parseInt(userId) || 0;
+    this.__userId = ~~(userId) || 0;
   };
 
   this.isValidSession = function (id, callback) {
@@ -73,7 +73,7 @@ var Session = function ()
 
         //if something wrong
         if (err2) {
-          return next(err2);
+          return callback(err2, null);
         }
 
         //async: update last used (renew session)

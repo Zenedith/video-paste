@@ -1,110 +1,123 @@
-if (!process.env.APP_PATH) {
-  process.env.APP_PATH = __dirname + '/..';
-}
-
 var
-  app = require(process.env.APP_PATH + '/server').api,
-  postId = 9,
-  ratePostId = 9,
-//  show_response = false,
-  show_response = true,
-  sessId = '1a02aff0f3c15c5e387d9674461f382e47db493b',  //expired by one hour
-  authorizedSessId = 'ba626efb1118b3eb77e9804952822d5a6a5bf57d';  //expired by one hour
+  supertest = require('supertest'),
+  should = require('should'),
+  config = require('config'),
+  Tester = require(__dirname + '/../models/tester').Tester;
 
-exports.testPostRateValid = function (beforeExit, assert) {
+exports.testPostRateInvalidSess = {
+  'POST /api/postRate/:sessionId/:postId': {
+    'should return error json response (ERR_UNAUTHORIZED)': function (done){
+      supertest(Tester.getApiVhost())
+      .post('/api/postRate/' + Tester.getSession() + '/' + Tester.getRatePostId())
+      .send({data: JSON.stringify({rate: -1})})
+      .expect('Content-Type', 'application/json; charset=utf-8')
+      .expect(200)
+      .end(function (err, res) {
 
-  var
-    obj = {rate: -1},
-    post_data = 'data=' + JSON.stringify(obj);
+        if (err) {
+          done(err);
+        }
 
-  assert.response(app, {
-    url: '/api/postRate/' + authorizedSessId + '/' + ratePostId,
-    method: 'POST',
-    headers: {
-        'Content-Type': 'application/x-www-form-urlencoded',
-        'Content-Length': post_data.length
-        },
-    data: post_data
-
-    }, {
-      status: 200,
-      headers: { 'Content-Type': 'application/json; charset=utf-8' }
-    },
-    function(res) {
-      var json = JSON.parse(res.body);
-
-      if (show_response) {
-        console.log('testPostRateValid result: ');
-        console.log(json);
-      }
-
-      assert.equal(json.postId, ratePostId);
-      assert.isDefined(json.rate);
-    });
+        try {
+          res.body.should.have.property('error');
+          res.body.error.should.equal('ERR_UNAUTHORIZED');
+          res.body.should.have.property('code');
+          res.body.code.should.equal(401);
+          done();
+        }
+        catch (e) {
+          done(e);
+        }
+      });
+    }
+  }
 };
 
-exports.testPostRateInvalidSess = function (beforeExit, assert) {
+exports.testPostRateInvalidRate = {
+  'POST /api/postRate/:sessionId/:postId': {
+    'should return error json response (ERR_BAD_REQUEST)': function (done){
+      supertest(Tester.getApiVhost())
+      .post('/api/postRate/' + Tester.getAuthSession() + '/' + Tester.getRatePostId())
+      .send({data: JSON.stringify({rate: 0})})
+      .expect('Content-Type', 'application/json; charset=utf-8')
+      .expect(200)
+      .end(function (err, res) {
 
-  var
-    obj = {rate: 1},
-    post_data = 'data=' + JSON.stringify(obj);
+        if (err) {
+          done(err);
+        }
 
-  assert.response(app, {
-    url: '/api/postRate/' + sessId + '/' + postId,
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/x-www-form-urlencoded',
-      'Content-Length': post_data.length
-    },
-    data: post_data
-
-  }, {
-    status: 200,
-    headers: { 'Content-Type': 'application/json; charset=utf-8' }
-  },
-  function(res) {
-    var json = JSON.parse(res.body);
-
-    if (show_response) {
-      console.log('testPostRateInvalidSess result: ');
-      console.log(json);
+        try {
+          res.body.should.have.property('error');
+          res.body.error.should.equal('ERR_BAD_REQUEST');
+          res.body.should.have.property('code');
+          res.body.code.should.equal(400);
+          done();
+        }
+        catch (e) {
+          done(e);
+        }
+      });
     }
-
-    assert.equal(json.error, 'ERR_UNAUTHORIZED');
-    assert.equal(json.code, 401);
   }
-  );
 };
 
-exports.testPostRateInvalidRate = function (beforeExit, assert) {
+//exports.testPostRateValidDecrease = {
+//    'POST /api/postRate/:sessionId/:postId': {
+//      'should return valid json response with decresed post rate': function (done){
+//        supertest(Tester.getApiVhost())
+//        .post('/api/postRate/' + Tester.getAuthSession() + '/' + Tester.getRatePostId())
+//        .send({data: JSON.stringify({rate: -1})})
+//        .expect('Content-Type', 'application/json; charset=utf-8')
+//        .expect(200)
+//        .end(function (err, res) {
+//          
+//          if (err) {
+//            done(err);
+//          }
+//          
+//          try {
+//            res.body.should.have.property('postId');
+//            res.body.should.have.property('rate');
+//            res.body.rate.should.equal(Tester.getRatePostValue() - 1);
+//            
+//            Tester.setPostToRate(res.body.postId, res.body.rate, true); //update current value
+//            done();
+//          }
+//          catch (e) {
+//            done(e);
+//          }
+//        });
+//      }
+//    }
+//};
 
-  var
-    obj = {rate: 0},
-    post_data = 'data=' + JSON.stringify(obj);
+exports.testPostRateValidIncrease = {
+  'POST /api/postRate/:sessionId/:postId': {
+    'should return valid json response with incresed post rate': function (done){
+      supertest(Tester.getApiVhost())
+      .post('/api/postRate/' + Tester.getAuthSession() + '/' + Tester.getRatePostId())
+      .send({data: JSON.stringify({rate: 1})})
+      .expect('Content-Type', 'application/json; charset=utf-8')
+      .expect(200)
+      .end(function (err, res) {
 
-  assert.response(app, {
-    url: '/api/postRate/' + authorizedSessId + '/' + postId,
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/x-www-form-urlencoded',
-      'Content-Length': post_data.length
-    },
-    data: post_data
+        if (err) {
+          done(err);
+        }
 
-  }, {
-    status: 200,
-    headers: { 'Content-Type': 'application/json; charset=utf-8' }
-  },
-  function(res) {
-    var json = JSON.parse(res.body);
+        try {
+          res.body.should.have.property('postId');
+          res.body.should.have.property('rate');
+          res.body.rate.should.equal(Tester.getRatePostValue() + 1);
 
-    if (show_response) {
-      console.log('testPostRateInvalidRate result: ');
-      console.log(json);
+          Tester.setPostToRate(res.body.postId, res.body.rate, true); //update current value
+          done();
+        }
+        catch (e) {
+          done(e);
+        }
+      });
     }
-
-    assert.equal(json.error, 'ERR_BAD_REQUEST');
-    assert.equal(json.code, 400);
   }
-);
 };

@@ -45,7 +45,7 @@ var WebSocketApp = function() {
             secret : "string"
             })
           )
-        .use(express.bodyParser())
+//        .use(express.bodyParser()) //no need POST data
         .use(express.methodOverride());
 
       auth.initApp(app);
@@ -64,7 +64,7 @@ var WebSocketApp = function() {
       app.use(function(err, req, res, next)
       {
         // on development show debug stack
-        if (process.env.NODE_ENV === 'development') {
+        if (process.env.NODE_ENV === 'development' && !process.env.TESTER) {
           return next(err); // goto express.errorHandler
         }
 

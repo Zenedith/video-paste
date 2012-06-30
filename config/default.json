@@ -157,7 +157,7 @@
       "action": "postViews",
       "url": "api/postViews/:sessionId/:postId",
       "method":"post",
-      "description":"post view increase",
+      "description":"post views increase",
       "isRegExp" : false
     },
     "post_rate" : {

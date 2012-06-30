@@ -1,61 +1,66 @@
-if (!process.env.APP_PATH) {
-  process.env.APP_PATH = __dirname + '/..';
-}
-
 var
-  app = require(process.env.APP_PATH + '/server').api,
-//  show_response = false,
-  show_response = true,
-  sessId = '1a02aff0f3c15c5e387d9674461f382e47db493b';  //expired by one hour
+  supertest = require('supertest'),
+  should = require('should'),
+  Tester = require(__dirname + '/../models/tester').Tester,
+  page = 1,
+  limit = 10,
+  invalidLimit = 110,
+  searchKey = 'fun';
 
-exports.testGetNewLinksValid = function (beforeExit, assert) {
+exports.testGetNewLinksValid = {
+  'GET /api/getNewLinks/:sessionId/:categoryId/:limit/:page': {
+    'should return valid json response with new posts listing': function (done){
+      supertest(Tester.getApiVhost())
+      .get('/api/getNewLinks/' + Tester.getSession() + '/0/' + limit + '/' + page)
+      .expect('Content-Type', 'application/json; charset=utf-8')
+      .expect(200)
+      .end(function (err, res) {
 
-  assert.response(app, {
-    url: '/api/getNewLinks/' + sessId + '/0/10/1',
-    method: 'GET',
-    headers: { 'Content-Type': 'text/html; charset=utf-8' }
-  }, {
-    status: 200,
-    headers: { 'Content-Type': 'application/json; charset=utf-8' }
-  },
-  function(res) {
-    var json = JSON.parse(res.body);
+        if (err) {
+          done(err);
+        }
 
-    if (show_response) {
-      console.log('testGetNewLinksValid result: ');
-      console.log(json);
+        try {
+          res.body.should.have.property('count');
+          res.body.should.have.property('pages');
+          res.body.should.have.property('currentPage');
+          res.body.should.have.property('isNextPage');
+          res.body.should.have.property('isPrevPage');
+          res.body.should.have.property('result');
+          done();
+        }
+        catch (e) {
+          done(e);
+        }
+      });
     }
-
-    assert.isDefined(json.count);
-    assert.isDefined(json.pages);
-    assert.isDefined(json.currentPage);
-    assert.isDefined(json.isNextPage);
-    assert.isDefined(json.isPrevPage);
-    assert.isDefined(json.result);
   }
-  );
 };
 
-exports.testGetNewLinksInvalidLimit = function (beforeExit, assert) {
+exports.testGetNewLinksInvalidLimit = {
+  'GET /api/getNewLinks/:sessionId/:categoryId/:limit/:page': {
+    'should return error json response (ERR_BAD_REQUEST)': function (done){
+      supertest(Tester.getApiVhost())
+      .get('/api/getNewLinks/' + Tester.getSession() + '/0/' + invalidLimit + '/' + page)
+      .expect('Content-Type', 'application/json; charset=utf-8')
+      .expect(200)
+      .end(function (err, res) {
 
-  assert.response(app, {
-    url: '/api/getNewLinks/' + sessId + '/0/211/1',
-    method: 'GET',
-    headers: { 'Content-Type': 'text/html; charset=utf-8' }
-  }, {
-    status: 200,
-    headers: { 'Content-Type': 'application/json; charset=utf-8' }
-  },
-  function(res) {
-    var json = JSON.parse(res.body);
+        if (err) {
+          done(err);
+        }
 
-    if (show_response) {
-      console.log('testGetNewLinksInvalidLimit result: ');
-      console.log(json);
+        try {
+          res.body.should.have.property('error');
+          res.body.error.should.equal('ERR_BAD_REQUEST');
+          res.body.should.have.property('code');
+          res.body.code.should.equal(400);
+          done();
+        }
+        catch (e) {
+          done(e);
+        }
+      });
     }
-
-    assert.equal(json.error, 'ERR_BAD_REQUEST');
-    assert.equal(json.code, 400);
   }
-  );
 };

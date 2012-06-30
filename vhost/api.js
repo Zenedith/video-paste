@@ -17,6 +17,10 @@ var Api = function()
       app.use(express.logger());
     }
 
+    app.use(express.bodyParser()); //need to POST data
+    app.use(express.methodOverride());
+
+
     app.use(
       '/api',
       function(req, res, next)
@@ -54,7 +58,7 @@ var Api = function()
     {
 
       // on development show debug stack
-      if (process.env.NODE_ENV === 'development') {
+      if (process.env.NODE_ENV === 'development' && !process.env.TESTER) {
         return next(err); // goto express.errorHandler
       }
 

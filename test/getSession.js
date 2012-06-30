@@ -1,82 +1,90 @@
-if (!process.env.APP_PATH) {
-  process.env.APP_PATH = __dirname + '/..';
-}
-
 var
-  app = require(process.env.APP_PATH + '/server').api,
-//  show_response = false,
-  show_response = true,
-  apikey = '6254b715bcc5d680';
+  supertest = require('supertest'),
+  should = require('should'),
+  Tester = require(__dirname + '/../models/tester').Tester;
 
+exports.testGetSessionValid = {
+  'GET /api/getSession/:apikey': {
+    'should return valid json response with sess and userId property': function (done){
+      supertest(Tester.getApiVhost())
+      .get('/api/getSession/' + Tester.getApiKey())
+      .expect('Content-Type', 'application/json; charset=utf-8')
+      .expect(200)
+      .end(function (err, res) {
 
-exports.testGetSessionValid = function (beforeExit, assert) {
+        if (err) {
+          done(err);
+        }
 
-  assert.response(app, {
-    url: '/api/getSession/' + apikey,
-    method: 'GET',
-    headers: { 'Content-Type': 'text/html; charset=utf-8' }
-  }, {
-    status: 200,
-    headers: { 'Content-Type': 'application/json; charset=utf-8' }
-  },
-  function(res) {
-    var json = JSON.parse(res.body);
+        try {
+          res.body.should.have.property('sess');
+          res.body.should.have.property('userId');
+          res.body.userId.should.equal(0);
 
-    if (show_response) {
-      console.log('testGetSessionValid result: ');
-      console.log(json);
+          Tester.setSession(res.body.sess);
+          done();
+        }
+        catch (e) {
+          done(e);
+        }
+      });
     }
-
-    assert.isDefined(json.sess);
-    assert.equal(json.userId, 0);
   }
-  );
 };
 
-exports.testGetSessionNoKey = function (beforeExit, assert) {
+exports.testGetSessionNoKey = {
+  'GET /api/getSession/nokey': {
+    'should return error json response (ERR_INVALID_KEY)': function (done){
+      supertest(Tester.getApiVhost())
+      .get('/api/getSession/nokey')
+      .expect('Content-Type', 'application/json; charset=utf-8')
+      .expect(200)
+      .end(function (err, res) {
 
-  assert.response(app, {
-    url: '/api/getSession/nokey',
-    method: 'GET',
-    headers: { 'Content-Type': 'text/html; charset=utf-8' }
-  }, {
-    status: 200,
-    headers: { 'Content-Type': 'application/json; charset=utf-8' }
-  },
-  function(res) {
-    var json = JSON.parse(res.body);
+        if (err) {
+          done(err);
+        }
 
-    if (show_response) {
-      console.log('testGetSessionNoKey result: ');
-      console.log(json);
+        try {
+          res.body.should.have.property('error');
+          res.body.error.should.equal('ERR_INVALID_KEY');
+          res.body.should.have.property('code');
+          res.body.code.should.equal(602);
+          done();
+        }
+        catch (e) {
+          done(e);
+        }
+      });
     }
-
-    assert.equal(json.error, 'ERR_INVALID_KEY');
-    assert.equal(json.code, 602);
   }
-  );
 };
 
-exports.testGetSessionInvalidKey = function (beforeExit, assert) {
 
-  assert.response(app, {
-    url: '/api/getSession/a3ca844f14fbb400',
-    method: 'GET',
-    headers: { 'Content-Type': 'text/html; charset=utf-8' }
-  }, {
-    status: 200,
-    headers: { 'Content-Type': 'application/json; charset=utf-8' }
-  },
-  function(res) {
-    var json = JSON.parse(res.body);
+exports.testGetSessionInvalidKey = {
+  'GET /api/getSession/invalidKey': {
+    'should return error json response (ERR_INVALID_KEY)': function (done){
+        supertest(Tester.getApiVhost())
+        .get('/api/getSession/a3ca844f14fbb400')
+        .expect('Content-Type', 'application/json; charset=utf-8')
+        .expect(200)
+        .end(function (err, res) {
 
-    if (show_response) {
-      console.log('testGetSessionNoKey result: ');
-      console.log(json);
-    }
+          if (err) {
+            done(err);
+          }
 
-    assert.equal(json.error, 'ERR_INVALID_KEY');
-    assert.equal(json.code, 602);
+          try {
+            res.body.should.have.property('error');
+            res.body.error.should.equal('ERR_INVALID_KEY');
+            res.body.should.have.property('code');
+            res.body.code.should.equal(602);
+            done();
+          }
+          catch (e) {
+            done(e);
+          }
+        });
+      }
   }
-  );
 };

@@ -1,217 +1,234 @@
-if (!process.env.APP_PATH) {
-  process.env.APP_PATH = __dirname + '/..';
-}
-
 var
-  app = require(process.env.APP_PATH + '/server').api,
-//  show_response = false,
-  show_response = true,
-  postId = 4,
-  apikey = '6254b715bcc5d680',
-  sessId = '1a02aff0f3c15c5e387d9674461f382e47db493b',  //expired by one hour
-  authorizedSessId = 'ba626efb1118b3eb77e9804952822d5a6a5bf57d';  //expired by one hour;
+  supertest = require('supertest'),
+  should = require('should'),
+  Tester = require(__dirname + '/../models/tester').Tester,
+  invalidPostId = -1;
+  invalidPostIdNotExists = 1000000000001,
+  url = 'http://www.youtube.com/watch?v=BrBQvJ-anB8',
+  createPost = {url: url, tags: ['fun', 'kot']},
+  createPostConvert = {url: 'http://m.youtube.com/watch?v=BrBQvJ-anB8', tags: ['alfa']},
+  createPostInvalidUrl = {url: 'http://m.sss.pl/?v=BrBQvJ-anB8', tags: ['alfa']},
+  createPostMissingUrlParam = {tags: ['fun', 'kot']};
 
-exports.testPostLinkCreateValid = function (beforeExit, assert) {
-  var
-    obj = {url: 'https://www.youtube.com/watch?v=hFmPRt_B3Tk', tags: ['fun', 'kot']},
-    post_data = 'data=' + JSON.stringify(obj);
+exports.testPostLinkCreateValid = {
+  'POST /api/postLink/:sessionId': {
+    'should return new post object info': function (done){
+      supertest(Tester.getApiVhost())
+      .post('/api/postLink/' + Tester.getAuthSession())
+      .send({data: JSON.stringify(createPost)})
+      .expect('Content-Type', 'application/json; charset=utf-8')
+      .expect(201)
+      .end(function (err, res) {
 
-  assert.response(app, {
-    url: '/api/postLink/' + authorizedSessId,
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/x-www-form-urlencoded',
-      'Content-Length': post_data.length
-    },
-    data: post_data
-  }, {
-    status: 201,
-    headers: { 'Content-Type': 'application/json; charset=utf-8' }
-  },
-  function(res) {
-    var json = JSON.parse(res.body);
+        if (err) {
+          done(err);
+        }
 
-    if (show_response) {
-      console.log('testPostLinkCreateValid result: ');
-      console.log(json);
+        try {
+          res.body.should.have.property('postId');
+          res.body.postId.should.above(0);
+          res.body.should.have.property('categoryId');
+          res.body.should.have.property('added');
+          res.body.added.should.above(0);
+          res.body.should.have.property('userId');
+          res.body.userId.should.above(0);
+          res.body.should.have.property('userName');
+          res.body.userName.should.match(/^.+$/);  //not empty
+          res.body.should.have.property('url');
+          res.body.url.should.equal(url);
+          res.body.should.have.property('thumbUrl');
+          res.body.thumbUrl.should.match(/^.+$/);  //not empty
+          res.body.should.have.property('rate');
+          res.body.rate.should.equal(1);
+          res.body.should.have.property('views');
+          res.body.views.should.equal(0);
+          res.body.should.have.property('tags');
+//          res.body.tags.should.have.length(2);  //TODO
+
+          Tester.setCreatedPostId(res.body.postId);
+          done();
+        }
+        catch (e) {
+          done(e);
+        }
+      });
     }
-
-    assert.isDefined(json.postId);
-    assert.ok(json.postId > 0, 'Empty postId');
-    assert.isDefined(json.added);
-    assert.ok(json.added > 0, 'Empty added time');
-    assert.isDefined(json.userId);
-    assert.ok(json.userId > 0, 'Empty userId');
-    assert.isDefined(json.userName);
-    assert.isDefined(json.url);
-    assert.isDefined(json.rate);
-    assert.isDefined(json.views);
-    assert.isDefined(json.tags);
   }
-  );
 };
 
-exports.testPostLinkMissingParams = function (beforeExit, assert) {
+exports.testPostLinkCreateTestConverter = {
+  'POST /api/postLink/:sessionId': {
+    'should return new post object info with converted url': function (done){
+      supertest(Tester.getApiVhost())
+      .post('/api/postLink/' + Tester.getAuthSession())
+      .send({data: JSON.stringify(createPostConvert)})
+      .expect('Content-Type', 'application/json; charset=utf-8')
+      .expect(201)
+      .end(function (err, res) {
 
-  var post_data = '';
+        if (err) {
+          done(err);
+        }
 
-  assert.response(app, {
-    url: '/api/postLink/' + authorizedSessId + '',
-    method: 'POST',
-    headers: {
-        'Content-Type': 'application/x-www-form-urlencoded',
-        'Content-Length': post_data.length
-        },
-    data: post_data
-    }, {
-      status: 200,
-      headers: { 'Content-Type': 'application/json; charset=utf-8' }
-    },
-    function(res) {
-      var json = JSON.parse(res.body);
+        try {
+          res.body.should.have.property('postId');
+          res.body.postId.should.above(0);
+          res.body.should.have.property('categoryId');
+          res.body.should.have.property('added');
+          res.body.added.should.above(0);
+          res.body.should.have.property('userId');
+          res.body.userId.should.above(0);
+          res.body.should.have.property('userName');
+          res.body.userName.should.match(/^.+$/);  //not empty
+          res.body.should.have.property('url');
+          res.body.url.should.equal(url);
+          res.body.should.have.property('thumbUrl');
+          res.body.thumbUrl.should.match(/^.+$/);  //not empty
+          res.body.should.have.property('rate');
+          res.body.rate.should.equal(1);
+          res.body.should.have.property('views');
+          res.body.views.should.equal(0);
+          res.body.should.have.property('tags');
+//          res.body.tags.should.have.length(1);  //TODO
 
-      if (show_response) {
-        console.log('testPostLinkMissingParams result: ');
-        console.log(json);
+          Tester.setCreatedPostId(res.body.postId);
+          done();
+        }
+        catch (e) {
+          done(e);
+        }
+      });
+    }
+  }
+};
+
+exports.testPostLinkCreateInvalidUrl = {
+    'POST /api/postLink/:sessionId': {
+      'should return error json response (ERR_BAD_REQUEST)': function (done){
+        supertest(Tester.getApiVhost())
+        .post('/api/postLink/' + Tester.getAuthSession())
+        .send({data: JSON.stringify(createPostInvalidUrl)})
+        .expect('Content-Type', 'application/json; charset=utf-8')
+        .expect(200)
+        .end(function (err, res) {
+
+          if (err) {
+            done(err);
+          }
+
+          try {
+            res.body.should.have.property('error');
+            res.body.error.should.equal('ERR_BAD_REQUEST');
+            res.body.should.have.property('code');
+            res.body.code.should.equal(400);
+            done();
+          }
+          catch (e) {
+            done(e);
+          }
+        });
       }
-
-      assert.equal(json.error, 'ERR_BAD_REQUEST');
-      assert.equal(json.code, 400);
-    });
-};
-
-exports.testPostLinkCreateTestConverter = function (beforeExit, assert) {
-  var
-    obj = {url: 'http://m.youtube.com/watch?v=BrBQvJ-anB8'},
-    post_data = 'data=' + JSON.stringify(obj);
-
-  assert.response(app, {
-    url: '/api/postLink/' + authorizedSessId + '',
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/x-www-form-urlencoded',
-      'Content-Length': post_data.length
-    },
-    data: post_data
-  }, {
-    status: 201,
-    headers: { 'Content-Type': 'application/json; charset=utf-8' }
-  },
-  function(res) {
-    var json = JSON.parse(res.body);
-
-    if (show_response) {
-      console.log('testPostLinkCreateTestConverter result: ');
-      console.log(json);
     }
-
-    assert.isDefined(json.postId);
-    assert.ok(json.postId > 0, 'Empty postId');
-    assert.isDefined(json.added);
-    assert.ok(json.added > 0, 'Empty added time');
-    assert.isDefined(json.userId);
-    assert.ok(json.userId > 0, 'Empty userId');
-    assert.isDefined(json.userName);
-    assert.isDefined(json.url);
-    assert.isDefined(json.rate);
-    assert.isDefined(json.views);
-    assert.isDefined(json.tags);
-  }
-  );
 };
-exports.testPostLinkCreateInvalidUrl = function (beforeExit, assert) {
 
-  var
-    obj = {url: 'http://sss.wp.pl'},
-    post_data = 'data=' + JSON.stringify(obj);
+exports.testGetPostLinkCreateInvalidSess = {
+  'POST /api/postLink/:sessionId': {
+    'should return error json response (ERR_BAD_REQUEST)': function (done){
+      supertest(Tester.getApiVhost())
+      .post('/api/postLink/' + Tester.getSession())
+      .send({data: JSON.stringify(createPost)})
+      .expect('Content-Type', 'application/json; charset=utf-8')
+      .expect(200)
+      .end(function (err, res) {
 
-  assert.response(app, {
-    url: '/api/postLink/' + authorizedSessId,
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/x-www-form-urlencoded',
-      'Content-Length': post_data.length
-    },
-    data: post_data
-  }, {
-    status: 200,
-    headers: { 'Content-Type': 'application/json; charset=utf-8' }
-  },
-  function(res) {
-    var json = JSON.parse(res.body);
+        if (err) {
+          done(err);
+        }
 
-    if (show_response) {
-      console.log('testPostLinkCreateInvalidUrl result: ');
-      console.log(json);
+        try {
+          res.body.should.have.property('error');
+          res.body.error.should.equal('ERR_UNAUTHORIZED');
+          res.body.should.have.property('code');
+          res.body.code.should.equal(401);
+          done();
+        }
+        catch (e) {
+          done(e);
+        }
+      });
     }
-
-    assert.equal(json.error, 'ERR_BAD_REQUEST');
-    assert.equal(json.code, 400);
   }
-  );
 };
 
+exports.testPostLinkMissingParams = {
+  'POST /api/postLink/:sessionId': {
+    'should return error json response (ERR_BAD_REQUEST)': function (done){
+      supertest(Tester.getApiVhost())
+      .post('/api/postLink/' + Tester.getAuthSession())
+      .send({data: JSON.stringify(createPostMissingUrlParam)})
+      .expect('Content-Type', 'application/json; charset=utf-8')
+      .expect(200)
+      .end(function (err, res) {
 
-exports.testGetPostLinkCreateInvalidSess = function (beforeExit, assert) {
+        if (err) {
+          done(err);
+        }
 
-  var
-    obj = {url: 'https://www.youtube.com/watch?v=hFmPRt_B3Tk'},
-    post_data = 'data=' + JSON.stringify(obj);
-
-  assert.response(app, {
-    url: '/api/postLink/' + sessId + '',
-    method: 'POST',
-    headers: {
-        'Content-Type': 'application/x-www-form-urlencoded',
-        'Content-Length': post_data.length
-        },
-    data: post_data
-    }, {
-      status: 200,
-      headers: { 'Content-Type': 'application/json; charset=utf-8' }
-    },
-    function(res) {
-      var json = JSON.parse(res.body);
-
-      if (show_response) {
-        console.log('testGetPostLinkCreateInvalidSess result: ');
-        console.log(json);
-      }
-
-      assert.equal(json.error, 'ERR_UNAUTHORIZED');
-      assert.equal(json.code, 401);
-    });
-};
-
-exports.testGetPostLinkValid = function (beforeExit, assert) {
-
-  assert.response(app, {
-    url: '/api/postLink/' + sessId + '/' + postId,
-    method: 'GET',
-    headers: { 'Content-Type': 'text/html; charset=utf-8' }
-  }, {
-    status: 200,
-    headers: { 'Content-Type': 'application/json; charset=utf-8' }
-  },
-  function(res) {
-    var json = JSON.parse(res.body);
-
-    if (show_response) {
-      console.log('testGetPostLinkValid result: ');
-      console.log(json);
+        try {
+          res.body.should.have.property('error');
+          res.body.error.should.equal('ERR_BAD_REQUEST');
+          res.body.should.have.property('code');
+          res.body.code.should.equal(400);
+          done();
+        }
+        catch (e) {
+          done(e);
+        }
+      });
     }
-
-    assert.isDefined(json.postId);
-    assert.ok(json.postId > 0, 'Empty postId');
-    assert.isDefined(json.added);
-    assert.ok(json.added > 0, 'Empty added time');
-    assert.isDefined(json.userId);
-    assert.ok(json.userId > 0, 'Empty userId');
-    assert.isDefined(json.userName);
-    assert.isDefined(json.url);
-    assert.isDefined(json.rate);
-    assert.isDefined(json.views);
-    assert.isDefined(json.tags);
   }
-);
+};
+
+exports.testGetPostLinkValid = {
+  'GET /api/postLink/:sessionId/:postId': {
+    'should return valid json response with post info': function (done){
+      supertest(Tester.getApiVhost())
+      .get('/api/postLink/' + Tester.getSession() + '/' + Tester.getCreatedPostId())
+      .expect('Content-Type', 'application/json; charset=utf-8')
+      .expect(200)
+      .end(function (err, res) {
+
+        if (err) {
+          done(err);
+        }
+
+        try {
+          res.body.should.have.property('postId');
+          res.body.postId.should.above(0);
+          res.body.should.have.property('categoryId');
+          res.body.should.have.property('added');
+          res.body.added.should.above(0);
+          res.body.should.have.property('userId');
+          res.body.userId.should.above(0);
+          res.body.should.have.property('userName');
+          res.body.userName.should.match(/^.+$/);  //not empty
+          res.body.should.have.property('url');
+          res.body.url.should.equal(url);
+          res.body.should.have.property('thumbUrl');
+          res.body.thumbUrl.should.match(/^.+$/);  //not empty
+          res.body.should.have.property('rate');
+          res.body.rate.should.equal(1);
+          res.body.should.have.property('views');
+          res.body.views.should.equal(0);
+          res.body.should.have.property('tags');
+
+          Tester.setPostToIncreaseViews(res.body.postId, res.body.views);
+          done();
+        }
+        catch (e) {
+          done(e);
+        }
+      });
+    }
+  }
 };

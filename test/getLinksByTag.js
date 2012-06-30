@@ -1,62 +1,66 @@
-if (!process.env.APP_PATH) {
-  process.env.APP_PATH = __dirname + '/..';
-}
-
 var
-  app = require(process.env.APP_PATH + '/server').api,
-  searchByTag = 'alfa',
-//  show_response = false,
-  show_response = true,
-  sessId = '1a02aff0f3c15c5e387d9674461f382e47db493b';  //expired by one hour
+  supertest = require('supertest'),
+  should = require('should'),
+  Tester = require(__dirname + '/../models/tester').Tester,
+  page = 1,
+  limit = 10,
+  searchKey = 'alfa',
+  invalidSearchKey = 'hhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhsssssssss';
 
-exports.testGetLinksByTagValid = function (beforeExit, assert) {
+exports.testGetLinksByTagValid = {
+  'GET /api/getLinksByTag/:sessionId/:tagName/:limit/:page': {
+    'should return valid json response with posts matched to tag': function (done){
+      supertest(Tester.getApiVhost())
+      .get('/api/getLinksByTag/' + Tester.getSession() + '/' + searchKey + '/' + limit + '/' + page)
+      .expect('Content-Type', 'application/json; charset=utf-8')
+      .expect(200)
+      .end(function (err, res) {
 
-  assert.response(app, {
-    url: '/api/getLinksByTag/' + sessId + '/' + searchByTag +'/10/1',
-    method: 'GET',
-    headers: { 'Content-Type': 'text/html; charset=utf-8' }
-  }, {
-    status: 200,
-    headers: { 'Content-Type': 'application/json; charset=utf-8' }
-  },
-  function(res) {
-    var json = JSON.parse(res.body);
+        if (err) {
+          done(err);
+        }
 
-    if (show_response) {
-      console.log('testGetLinksByTagValid result: ');
-      console.log(json);
+        try {
+          res.body.should.have.property('count');
+          res.body.should.have.property('pages');
+          res.body.should.have.property('currentPage');
+          res.body.should.have.property('isNextPage');
+          res.body.should.have.property('isPrevPage');
+          res.body.should.have.property('result');
+          done();
+        }
+        catch (e) {
+          done(e);
+        }
+      });
     }
-
-    assert.isDefined(json.count);
-    assert.isDefined(json.pages);
-    assert.isDefined(json.currentPage);
-    assert.isDefined(json.isNextPage);
-    assert.isDefined(json.isPrevPage);
-    assert.isDefined(json.result);
   }
-  );
 };
 
-exports.testGetLinksByTagInvalidNoResults = function (beforeExit, assert) {
+exports.testGetLinksByTagInvalidNoResults = {
+  'GET /api/getLinksByTag/:sessionId/:tagName/:limit/:page': {
+    'should return error json response (ERR_EMPTY_RESULTS)': function (done){
+      supertest(Tester.getApiVhost())
+      .get('/api/getLinksByTag/' + Tester.getSession() + '/' + invalidSearchKey + '/' + limit + '/' + page)
+      .expect('Content-Type', 'application/json; charset=utf-8')
+      .expect(200)
+      .end(function (err, res) {
 
-  assert.response(app, {
-    url: '/api/getLinksByTag/' + sessId + '/hhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhsssssssss/10/1',
-    method: 'GET',
-    headers: { 'Content-Type': 'text/html; charset=utf-8' }
-  }, {
-    status: 200,
-    headers: { 'Content-Type': 'application/json; charset=utf-8' }
-  },
-  function(res) {
-    var json = JSON.parse(res.body);
+        if (err) {
+          done(err);
+        }
 
-    if (show_response) {
-      console.log('testGetLinksByTagValid result: ');
-      console.log(json);
+        try {
+          res.body.should.have.property('error');
+          res.body.error.should.equal('ERR_EMPTY_RESULTS');
+          res.body.should.have.property('code');
+          res.body.code.should.equal(601);
+          done();
+        }
+        catch (e) {
+          done(e);
+        }
+      });
     }
-
-    assert.equal(json.error, 'ERR_EMPTY_RESULTS');
-    assert.equal(json.code, 601);
   }
-  );
 };

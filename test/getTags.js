@@ -1,89 +1,96 @@
-if (!process.env.APP_PATH) {
-  process.env.APP_PATH = __dirname + '/..';
-}
-
 var
-  app = require(process.env.APP_PATH + '/server').api,
-//  show_response = false,
-  show_response = true,
-  apikey = '6254b715bcc5d680';
+  supertest = require('supertest'),
+  should = require('should'),
+  Tester = require(__dirname + '/../models/tester').Tester,
+  page = 1,
+  limit = 10,
+  searchKey = 'fun';
 
-exports.testGetTagsValid = function (beforeExit, assert) {
+exports.testGetTagsValidSearchKey = {
+  'GET /api/getTags/:apiKey/:limit/:page/:searchKey': {
+    'should return valid json response with listing tags matched to search key': function (done){
+      supertest(Tester.getApiVhost())
+      .get('/api/getTags/' + Tester.getApiKey() + '/' + limit + '/' + page + '/' + searchKey)
+      .expect('Content-Type', 'application/json; charset=utf-8')
+      .expect(200)
+      .end(function (err, res) {
 
-  assert.response(app, {
-    url: '/api/getTags/' + apikey + '/3/1/fun',
-    method: 'GET',
-    headers: { 'Content-Type': 'text/html; charset=utf-8' }
-  }, {
-    status: 200,
-    headers: { 'Content-Type': 'application/json; charset=utf-8' }
-  },
-  function(res) {
-    var json = JSON.parse(res.body);
+        if (err) {
+          done(err);
+        }
 
-    if (show_response) {
-      console.log('testGetTagsValid result: ');
-      console.log(json);
+        try {
+          res.body.should.have.property('count');
+          res.body.should.have.property('pages');
+          res.body.should.have.property('currentPage');
+          res.body.should.have.property('isNextPage');
+          res.body.should.have.property('isPrevPage');
+          res.body.should.have.property('result');
+          done();
+        }
+        catch (e) {
+          done(e);
+        }
+      });
     }
-
-    assert.isDefined(json.count);
-    assert.isDefined(json.pages);
-    assert.isDefined(json.currentPage);
-    assert.isDefined(json.isNextPage);
-    assert.isDefined(json.isPrevPage);
-    assert.isDefined(json.result);
   }
-  );
 };
 
-exports.testGetTagsValidNoSearchKey = function (beforeExit, assert) {
+exports.testGetTagsValidNoSearchKey = {
+  'GET /api/getTags/:apiKey/:limit/:page': {
+    'should return valid json response with listing all tags': function (done){
+      supertest(Tester.getApiVhost())
+      .get('/api/getTags/' + Tester.getApiKey() + '/' + limit + '/' + page)
+      .expect('Content-Type', 'application/json; charset=utf-8')
+      .expect(200)
+      .end(function (err, res) {
 
-  assert.response(app, {
-    url: '/api/getTags/' + apikey + '/3/1',
-    method: 'GET',
-    headers: { 'Content-Type': 'text/html; charset=utf-8' }
-  }, {
-    status: 200,
-    headers: { 'Content-Type': 'application/json; charset=utf-8' }
-  },
-  function(res) {
-    var json = JSON.parse(res.body);
+        if (err) {
+          done(err);
+        }
 
-    if (show_response) {
-      console.log('testGetTagsValidNoSearchKey result: ');
-      console.log(json);
+        try {
+          res.body.should.have.property('count');
+          res.body.should.have.property('pages');
+          res.body.should.have.property('currentPage');
+          res.body.should.have.property('isNextPage');
+          res.body.should.have.property('isPrevPage');
+          res.body.should.have.property('result');
+          done();
+        }
+        catch (e) {
+          done(e);
+        }
+      });
     }
-
-    assert.isDefined(json.count);
-    assert.isDefined(json.pages);
-    assert.isDefined(json.currentPage);
-    assert.isDefined(json.isNextPage);
-    assert.isDefined(json.isPrevPage);
-    assert.isDefined(json.result);
   }
-  );
 };
 
-exports.testGetTagsInvalidKey = function (beforeExit, assert) {
 
-  assert.response(app, {
-    url: '/api/getTags/nokey/1/1',
-    method: 'GET',
-    headers: { 'Content-Type': 'text/html; charset=utf-8' }
-  }, {
-    status: 200,
-    headers: { 'Content-Type': 'application/json; charset=utf-8' }
-  },
-  function(res) {
-    var json = JSON.parse(res.body);
+exports.testGetTagsInvalidKey = {
+  'GET /api/getTags/nokey': {
+    'should return error json response (ERR_INVALID_KEY)': function (done){
+      supertest(Tester.getApiVhost())
+      .get('/api/getTags/nokey')
+      .expect('Content-Type', 'application/json; charset=utf-8')
+      .expect(200)
+      .end(function (err, res) {
 
-    if (show_response) {
-      console.log('testGetTagsValid result: ');
-      console.log(json);
+        if (err) {
+          done(err);
+        }
+
+        try {
+          res.body.should.have.property('error');
+          res.body.error.should.equal('ERR_INVALID_KEY');
+          res.body.should.have.property('code');
+          res.body.code.should.equal(602);
+          done();
+        }
+        catch (e) {
+          done(e);
+        }
+      });
     }
-
-    assert.equal(json.error, 'ERR_INVALID_KEY');
-    assert.equal(json.code, 602);
   }
-  );
 };

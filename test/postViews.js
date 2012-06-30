@@ -1,98 +1,92 @@
-if (!process.env.APP_PATH) {
-  process.env.APP_PATH = __dirname + '/..';
-}
-
 var
-  app = require(process.env.APP_PATH + '/server').api,
-//  show_response = false,
-  show_response = true,
-  postId = 17,
-  authorizedSessId = '08f13082c06e1010e360bdc07edd9641a1581dfa';  //expired by one hour
+  supertest = require('supertest'),
+  should = require('should'),
+  Tester = require(__dirname + '/../models/tester').Tester,
+  invalidPostId = -1;
+  invalidPostIdNotExists = 1000000000001;
 
-exports.testPostViewsValid = function (beforeExit, assert) {
+exports.testPostViewsValid = {
+  'POST /api/postViews/:sessionId/:postId': {
+    'should return incresed post views value': function (done){
+      supertest(Tester.getApiVhost())
+      .post('/api/postViews/' + Tester.getSession() + '/' + Tester.getPostViewsId())
+      .expect('Content-Type', 'application/json; charset=utf-8')
+      .expect(200)
+      .end(function (err, res) {
 
-  var post_data = '';
+        if (err) {
+          done(err);
+        }
 
-  assert.response(app, {
-    url: '/api/postViews/' + authorizedSessId + '/' + postId,
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/x-www-form-urlencoded',
-      'Content-Length': post_data.length
-    },
-    data: post_data
-  }, {
-    status: 200,
-    headers: { 'Content-Type': 'application/json; charset=utf-8' }
-  },
-  function(res) {
-    var json = JSON.parse(res.body);
+        try {
+          res.body.should.have.property('postId');
+          res.body.should.have.property('views');
+          res.body.views.should.above(Tester.getPostViewsCount());
 
-    if (show_response) {
-      console.log('testPostViewsValid result: ');
-      console.log(json);
+          done();
+        }
+        catch (e) {
+          done(e);
+        }
+      });
     }
-
-    assert.equal(json.postId, postId);
-    assert.ok(json.views > 0);
   }
-  );
 };
 
-exports.testPostViewsInvalidPostId = function (beforeExit, assert) {
+exports.testPostViewsInvalidPostId = {
+  'POST /api/postViews/:sessionId/:postId': {
+    'should return error json response (ERR_BAD_REQUEST)': function (done){
+      supertest(Tester.getApiVhost())
+      .post('/api/postViews/' + Tester.getSession() + '/' + invalidPostId)
+      .expect('Content-Type', 'application/json; charset=utf-8')
+      .expect(200)
+      .end(function (err, res) {
 
-  var post_data = '';
+        if (err) {
+          done(err);
+        }
 
-  assert.response(app, {
-    url: '/api/postViews/' + authorizedSessId + '/-1',
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/x-www-form-urlencoded',
-      'Content-Length': post_data.length
-    },
-    data: post_data
-    }, {
-        status: 200,
-        headers: { 'Content-Type': 'application/json; charset=utf-8' }
-    },
-    function(res) {
-      var json = JSON.parse(res.body);
+        try {
+          res.body.should.have.property('error');
+          res.body.error.should.equal('ERR_BAD_REQUEST');
+          res.body.should.have.property('code');
+          res.body.code.should.equal(400);
 
-      if (show_response) {
-        console.log('testPostViewsInvalidPostId result: ');
-        console.log(json);
-      }
-
-      assert.equal(json.error, 'ERR_BAD_REQUEST');
-      assert.equal(json.code, 400);
-    });
-};
-
-exports.testPostViewsInvalidPostIdNotExists = function (beforeExit, assert) {
-
-  var post_data = '';
-
-  assert.response(app, {
-    url: '/api/postViews/' + authorizedSessId + '/1000000000001',
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/x-www-form-urlencoded',
-      'Content-Length': post_data.length
-    },
-    data: post_data
-  }, {
-    status: 200,
-    headers: { 'Content-Type': 'application/json; charset=utf-8' }
-  },
-  function(res) {
-    var json = JSON.parse(res.body);
-
-    if (show_response) {
-      console.log('testPostViewsInvalidPostIdNotExists result: ');
-      console.log(json);
+          done();
+        }
+        catch (e) {
+          done(e);
+        }
+      });
     }
+  }
+};
 
-    assert.equal(json.error, 'ERR_BAD_REQUEST');
-    assert.equal(json.code, 400);
-  });
+exports.testPostViewsInvalidPostIdNotExists = {
+  'POST /api/postViews/:sessionId/:postId': {
+    'should return error json response (ERR_BAD_REQUEST)': function (done){
+      supertest(Tester.getApiVhost())
+      .post('/api/postViews/' + Tester.getSession() + '/' + invalidPostIdNotExists)
+      .expect('Content-Type', 'application/json; charset=utf-8')
+      .expect(200)
+      .end(function (err, res) {
+
+        if (err) {
+          done(err);
+        }
+
+        try {
+          res.body.should.have.property('error');
+          res.body.error.should.equal('ERR_BAD_REQUEST');
+          res.body.should.have.property('code');
+          res.body.code.should.equal(400);
+
+          done();
+        }
+        catch (e) {
+          done(e);
+        }
+      });
+    }
+  }
 };

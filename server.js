@@ -71,6 +71,7 @@ process.on('exit', function() { terminator(); });
 
 module.exports.app = app;
 module.exports.api = api;
+module.exports.port = port;
 
 if (!module.parent) {
   var

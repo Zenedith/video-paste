@@ -13,6 +13,10 @@ var Task_Controller = {
 
     postListNew.cleanOlderPosts(function (err, removedCount){
 
+      if (err) {
+        return next(err);
+      }
+
       var data = {
         removedCount: removedCount
       };

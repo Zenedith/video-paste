@@ -1,55 +1,65 @@
-if (!process.env.APP_PATH) {
-  process.env.APP_PATH = __dirname + '/..';
-}
-
 var
-  app = require(process.env.APP_PATH + '/server').app,
-  //show_response = false,
-  show_response = true,
+  supertest = require('supertest'),
+  should = require('should'),
+  Tester = require(__dirname + '/../models/tester').Tester,
   secure = require("node-secure");
 
+exports.testTaskCleanNewList = {
+  'GET /task/checkNewList': {
+      'should return json response with removedCount property': function (done){
+        supertest(Tester.getAppVhost())
+        .get('/task/checkNewList')
+        .expect('Content-Type', 'application/json; charset=utf-8')
+        .expect(200)
+        .end(function (err, res) {
 
-exports.testSecureGlobals = function (beforeExit, assert) {
-  console.log('testSecureGlobals');
-  assert.ok(secure.isSecure());
+          if (err) {
+            done(err);
+          }
+
+          try {
+            res.body.should.have.property('removedCount');
+            done();
+          }
+          catch (e) {
+            done(e);
+          }
+        });
+      }
+  }
 };
 
-exports.testTaskCleanNewList = function (beforeExit, assert) {
-  assert.response(app, {
-    url: '/task/checkNewList',
-    method: 'GET',
-    headers: { 'Content-Type': 'text/html; charset=utf-8' }
-  }, {
-    status: 200,
-    headers: { 'Content-Type': 'application/json; charset=utf-8' }
-  },
-  function(res) {
-    var json = JSON.parse(res.body);
-
-    if (show_response) {
-      console.log('testTaskCleanNewList result: ');
-      console.log(json);
+exports.testIndexController = {
+  'GET /': {
+    'should return html documentation page': function (done){
+      supertest(Tester.getAppVhost())
+      .get('/')
+      .expect('Content-Type', 'text/html; charset=utf-8')
+      .expect(/Available api helpers/)
+      .expect(200, done);
     }
-
-    assert.isDefined(json.removedCount);
   }
-  );
 };
 
-exports.testIndexController = function (beforeExit, assert) {
-  assert.response(app, {
-    url: '/',
-    method: 'GET',
-    headers: { 'Content-Type': 'text/html; charset=utf-8' }
-  }, {
-    status: 200,
-    headers: { 'Content-Type': 'text/html; charset=utf-8' },
-    body: /Available api helpers/
-  },
-  function(res) {
-//    var document = res.body;
-    //TODO check documentation
-//    assert.includes(document, '<title>Home</title>');
+exports.testIndexController = {
+  'GET /debug/requests': {
+    'should return html page': function (done){
+      supertest(Tester.getAppVhost())
+      .get('/debug/requests')
+      .expect('Content-Type', 'text/html; charset=utf-8')
+      .expect(/Data/)
+      .expect(/url/)
+      .expect(/Response/)
+      .expect(200, done);
+    }
   }
-  );
+};
+
+exports.testSecureGlobals = {
+  'GET /': {
+    'should return html documentation page': function (done) {
+      secure.isSecure().should.be.ok;
+      done();
+    }
+  }
 };

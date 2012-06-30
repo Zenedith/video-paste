@@ -40,6 +40,10 @@ var Api_Controller = {
         return next(err);
       }
 
+      if (!req.body) {
+        return next(error(400, 'Bad request (no POST data)'));
+      }
+
       var
         postData = (req.body) ? req.body.data : '{}',
         input = JSON.parse(postData);
@@ -114,6 +118,10 @@ var Api_Controller = {
       //if something wrong
       if (err) {
         return next(err);
+      }
+
+      if (!req.body) {
+        return next(error(400, 'Bad request (no POST data)'));
       }
 
       var
@@ -192,6 +200,10 @@ var Api_Controller = {
         return next(err);
       }
 
+      if (!req.body) {
+        return next(error(400, 'Bad request (no POST data)'));
+      }
+
       var
         postData = (req.body) ? req.body.data : '{}',
         input = JSON.parse(postData);
@@ -265,6 +277,10 @@ var Api_Controller = {
       //if something wrong
       if (err) {
         return next(err);
+      }
+
+      if (!req.body) {
+        return next(error(400, 'Bad request (no POST data)'));
       }
 
       var
@@ -475,6 +491,10 @@ var Api_Controller = {
         return next(err);
       }
 
+      if (!req.body) {
+        return next(error(400, 'Bad request (no POST data)'));
+      }
+
       var
         postId = ~~(req.params.postId) || 0,
         postData = (req.body) ? req.body.data : '{}',
@@ -522,7 +542,6 @@ var Api_Controller = {
   },
 
   // create postLink
-  // url and categoryId from POST body
   post_create: function(req, res, next) {
     var
       Session = require(process.env.APP_PATH + "/models/session").Session,
@@ -542,6 +561,10 @@ var Api_Controller = {
 
       if (userId < 1) {
         return next(error(401, 'Session not authorized (userId)'));
+      }
+
+      if (!req.body) {
+        return next(error(400, 'Bad request (no POST data)'));
       }
 
       var
@@ -580,7 +603,7 @@ var Api_Controller = {
             var
               data = decoratedPosts[0];
 
-            res.json(data, 201);
+            res.json(201, data);
             RequestLogger.log(req, data);
           });
         });

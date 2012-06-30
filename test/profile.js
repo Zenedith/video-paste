@@ -1,91 +1,92 @@
-if (!process.env.APP_PATH) {
-  process.env.APP_PATH = __dirname + '/..';
-}
-
 var
-  app = require(process.env.APP_PATH + '/server').api,
-//  show_response = false,
-  show_response = true,
-  userId = 1,
-  authorizedSessId = 'ba626efb1118b3eb77e9804952822d5a6a5bf57d';  //expired by one hour
+  supertest = require('supertest'),
+  should = require('should'),
+  Tester = require(__dirname + '/../models/tester').Tester,
+  invalidUserId = -1,
+  userId = 3;
 
-exports.testMyProfileValid = function (beforeExit, assert) {
+exports.testMyProfileValid = {
+  'GET /api/profile/:sessionId': {
+    'should return valid json response with my profile info': function (done){
+      supertest(Tester.getApiVhost())
+      .get('/api/profile/' + Tester.getAuthSession())
+      .expect('Content-Type', 'application/json; charset=utf-8')
+      .expect(200)
+      .end(function (err, res) {
 
-  assert.response(app, {
-    url: '/api/profile/' + authorizedSessId,
-    method: 'GET',
-    headers: { 'Content-Type': 'text/html; charset=utf-8' }
-  },
-  {
-    status: 200,
-    headers: { 'Content-Type': 'application/json; charset=utf-8' }
-  },
-  function(res) {
-    var json = JSON.parse(res.body);
+        if (err) {
+          done(err);
+        }
 
-    if (show_response) {
-      console.log('testMyProfileValid result: ');
-      console.log(json);
+        try {
+          res.body.should.have.property('userId');
+          res.body.should.have.property('fistName');
+          res.body.should.have.property('lastName');
+          res.body.should.have.property('accountType');
+          res.body.should.have.property('topPosts');
+          done();
+        }
+        catch (e) {
+          done(e);
+        }
+      });
     }
-
-    assert.isDefined(json.userId);
-    assert.isDefined(json.fistName);
-    assert.isDefined(json.lastName);
-    assert.isDefined(json.accountType);
-    assert.isDefined(json.posts);
   }
-  );
 };
 
-exports.testGivenProfileValid = function (beforeExit, assert) {
+exports.testGivenProfileValid = {
+    'GET /api/profile/:sessionId/:userId': {
+      'should return valid json response with given userId profile info': function (done){
+        supertest(Tester.getApiVhost())
+        .get('/api/profile/' + Tester.getAuthSession() + '/' + userId)
+        .expect('Content-Type', 'application/json; charset=utf-8')
+        .expect(200)
+        .end(function (err, res) {
 
-  assert.response(app, {
-    url: '/api/profile/' + authorizedSessId + '/' + userId,
-    method: 'GET',
-    headers: { 'Content-Type': 'text/html; charset=utf-8' }
-  },
-  {
-    status: 200,
-    headers: { 'Content-Type': 'application/json; charset=utf-8' }
-  },
-  function(res) {
-    var json = JSON.parse(res.body);
+          if (err) {
+            done(err);
+          }
 
-    if (show_response) {
-      console.log('testGivenProfileValid result: ');
-      console.log(json);
+          try {
+            res.body.should.have.property('userId');
+            res.body.should.have.property('fistName');
+            res.body.should.have.property('lastName');
+            res.body.should.have.property('accountType');
+            res.body.should.have.property('topPosts');
+            done();
+          }
+          catch (e) {
+            done(e);
+          }
+        });
+      }
     }
-
-    assert.equal(json.userId, userId);
-    assert.isDefined(json.fistName);
-    assert.isDefined(json.lastName);
-    assert.isDefined(json.accountType);
-    assert.isDefined(json.posts);
-  }
-  );
 };
 
-exports.testGivenProfileInvalidUserId = function (beforeExit, assert) {
+exports.testGivenProfileInvalidUserId = {
+  'GET /api/profile/:sessionId/:userId': {
+    'should return error json response (ERR_INVALID_USER_ID)': function (done){
+      supertest(Tester.getApiVhost())
+      .get('/api/profile/' + Tester.getAuthSession() + '/' + invalidUserId)
+      .expect('Content-Type', 'application/json; charset=utf-8')
+      .expect(200)
+      .end(function (err, res) {
 
-  assert.response(app, {
-    url: '/api/profile/' + authorizedSessId + '/-1',
-    method: 'GET',
-    headers: { 'Content-Type': 'text/html; charset=utf-8' }
-  },
-  {
-    status: 200,
-    headers: { 'Content-Type': 'application/json; charset=utf-8' }
-  },
-  function(res) {
-    var json = JSON.parse(res.body);
+        if (err) {
+          done(err);
+        }
 
-    if (show_response) {
-      console.log('testGivenProfileValid result: ');
-      console.log(json);
+        try {
+          res.body.should.have.property('error');
+          res.body.error.should.equal('ERR_INVALID_USER_ID');
+          res.body.should.have.property('code');
+          res.body.code.should.equal(607);
+          done();
+        }
+        catch (e) {
+          done(e);
+        }
+      });
     }
-
-    assert.equal(json.error, 'ERR_INVALID_USER_ID');
-    assert.equal(json.code, 607);
   }
-  );
 };

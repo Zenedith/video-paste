@@ -3,7 +3,7 @@ www:
   buildscript: _nodejs/builder.sh
   ports:
     www: http
-  process: node app.js
+  process: node server.js
   node_version: v0.6.19
   environment:
     DOTCLOUD: 1

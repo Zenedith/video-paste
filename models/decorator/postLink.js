@@ -13,7 +13,8 @@ var decorator_PostLink = function (resList, callback)
     postsIds = {};
 
   //get all users ids
-    for (var lp in resList) {
+  for (var lp in resList) {
+    if (resList.hasOwnProperty(lp)) {
       var
         post = resList[lp],
         userId = post.getUserId();
@@ -21,35 +22,38 @@ var decorator_PostLink = function (resList, callback)
       usersIds[userId] = '';
       postsIds[post.getId()] = '';
     }
+  }
 
-    var
-      userNamesObj = new Post_Decorator_Names(usersIds),
-      postRateObj = new Post_Decorator_Rate(postsIds),
-      postViewsObj = new Post_Decorator_Views(postsIds),
-      postTagsObj = new Post_Decorator_Tags(postsIds);
+  var
+    userNamesObj = new Post_Decorator_Names(usersIds),
+    postRateObj = new Post_Decorator_Rate(postsIds),
+    postViewsObj = new Post_Decorator_Views(postsIds),
+    postTagsObj = new Post_Decorator_Tags(postsIds);
 
-    //prepare on big database query batch
-    databaseQuery.push(userNamesObj.prepareKeys());
-    databaseQuery.push(postRateObj.prepareKeys());
-    databaseQuery.push(postViewsObj.prepareKeys());
-    databaseQuery.push(postTagsObj.prepareKeys());
+  //prepare on big database query batch
+  databaseQuery.push(userNamesObj.prepareKeys());
+  databaseQuery.push(postRateObj.prepareKeys());
+  databaseQuery.push(postViewsObj.prepareKeys());
+  databaseQuery.push(postTagsObj.prepareKeys());
 
-    Database.batch(databaseQuery, function (err, resBatch) {
+  Database.batch(databaseQuery, function (err, resBatch) {
 
-      userNamesObj.load(resBatch[0]);
-      postRateObj.load(resBatch[1]);
-      postViewsObj.load(resBatch[2]);
-      postTagsObj.load(resBatch[3]);
+    userNamesObj.load(resBatch[0]);
+    postRateObj.load(resBatch[1]);
+    postViewsObj.load(resBatch[2]);
+    postTagsObj.load(resBatch[3]);
 
-      for (var lp in resList) {
+    for (var lp in resList) {
+      if (resList.hasOwnProperty(lp)) {
         var
           post = resList[lp];
 
         data.push(new postLink(post, userNamesObj, postTagsObj, postRateObj, postViewsObj));
       }
+    }
 
-      return callback(null, data);
-    });
+    return callback(null, data);
+  });
 };
 
 exports.decorator_PostLink = decorator_PostLink;

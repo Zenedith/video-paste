@@ -1,6 +1,6 @@
 var
   User = require(process.env.APP_PATH + "/models/user").User,
-  user = new User();
+  user = new User(),
   secure = require("node-secure");
 
 var Post_Decorator_Names = function(idsObj) {

@@ -1,57 +1,66 @@
 var
-  app = require(__dirname + '/../app'),
-//  show_response = false,
-  show_response = true,
-  sessId = 'e0c2154c9a5bc1bf5fab42108bf0881ff0172028';  //expired by one hour
+  supertest = require('supertest'),
+  should = require('should'),
+  Tester = require(__dirname + '/../models/tester').Tester,
+  page = 1,
+  limit = 20,
+  invalidLimit = 111;
 
-exports.testGetTopLinksValid = function (beforeExit, assert) {
+exports.testGetTopLinksValid = {
+  'GET /api/getTopLinks/:sessionId/:categoryId/:limit/:page': {
+    'should return valid json response with listing data': function (done){
+      supertest(Tester.getApiVhost())
+      .get('/api/getTopLinks/' + Tester.getSession() + '/0/'+ limit + '/' + page)
+      .expect('Content-Type', 'application/json; charset=utf-8')
+      .expect(200)
+      .end(function (err, res) {
 
-  assert.response(app, {
-    url: '/api/getTopLinks/' + sessId + '/0/20/1',
-    method: 'GET',
-    headers: { 'Content-Type': 'text/html; charset=utf-8' }
-  }, {
-    status: 200,
-    headers: { 'Content-Type': 'application/json; charset=utf-8' }
-  },
-  function(res) {
-    var json = JSON.parse(res.body);
+        if (err) {
+          done(err);
+        }
 
-    if (show_response) {
-      console.log('testGetTopLinksValid result: ');
-      console.log(json);
+        try {
+          res.body.should.have.property('count');
+          res.body.should.have.property('pages');
+          res.body.should.have.property('currentPage');
+          res.body.should.have.property('isNextPage');
+          res.body.should.have.property('isPrevPage');
+          res.body.should.have.property('result');
+
+          done();
+        }
+        catch (e) {
+          done(e);
+        }
+      });
     }
-
-    assert.isDefined(json.count);
-    assert.isDefined(json.pages);
-    assert.isDefined(json.currentPage);
-    assert.isDefined(json.isNextPage);
-    assert.isDefined(json.isPrevPage);
-    assert.isDefined(json.result);
   }
-  );
 };
 
-exports.testGetTopLinksInvalidLimit = function (beforeExit, assert) {
+exports.testGetTopLinksInvalidLimit = {
+  'GET /api/getTopLinks/:sessionId/:categoryId/:limit/:page': {
+    'should return error json response (ERR_BAD_REQUEST)': function (done){
+      supertest(Tester.getApiVhost())
+      .get('/api/getTopLinks/' + Tester.getSession() + '/0/'+ invalidLimit + '/' + page)
+      .expect('Content-Type', 'application/json; charset=utf-8')
+      .expect(200)
+      .end(function (err, res) {
 
-  assert.response(app, {
-    url: '/api/getTopLinks/' + sessId + '/0/211/1',
-    method: 'GET',
-    headers: { 'Content-Type': 'text/html; charset=utf-8' }
-  }, {
-    status: 200,
-    headers: { 'Content-Type': 'application/json; charset=utf-8' }
-  },
-  function(res) {
-    var json = JSON.parse(res.body);
+        if (err) {
+          done(err);
+        }
 
-    if (show_response) {
-      console.log('testGetTopLinksInvalidLimit result: ');
-      console.log(json);
+        try {
+          res.body.should.have.property('error');
+          res.body.error.should.equal('ERR_BAD_REQUEST');
+          res.body.should.have.property('code');
+          res.body.code.should.equal(400);
+          done();
+        }
+        catch (e) {
+          done(e);
+        }
+      });
     }
-
-    assert.equal(json.error, 'ERR_BAD_REQUEST');
-    assert.equal(json.code, 400);
   }
-  );
 };

@@ -19,8 +19,10 @@ var Key_Generator = function ()
   };
 
   this.createNewKey = function (callback) {
-    Key = require(process.env.APP_PATH + "/models/key").Key;
-    var key = new Key();
+    var
+      Key = require(process.env.APP_PATH + "/models/key").Key,
+      key = new Key();
+
     key.generateKey();
 
     Database.saveObject(key, callback);

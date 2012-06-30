@@ -5,8 +5,8 @@ var postViews = function (postId, viewsValue)
 {
 //  log.debug('postViews.construct()');
 
-  this.postId = parseInt(postId);
-  this.views = parseInt(viewsValue);
+  this.postId = ~~(postId);
+  this.views = ~~(viewsValue);
 };
 
 exports.postViews = postViews;

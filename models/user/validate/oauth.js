@@ -16,7 +16,8 @@ var User_Validate_Oauth = function (clientId, clientSecret, baseSite, authorizeP
 
 User_Validate_Oauth.prototype.renewAccessToken = function (callback) {
   //TODO call cron to update /auth/:service/login
-  access_token = null;
+  var
+    access_token = null;
   return callback(null, access_token);
 };
 

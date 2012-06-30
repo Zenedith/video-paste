@@ -6,7 +6,7 @@
   "main": "app.js",
   "author": "Mateusz Stępniak (zenedith@wp.pl)",
   "analyze": false,
-  "version": "0.0.7",
+  "version": "0.0.8",
   "engines": {
     "node": "0.6.x"
   },

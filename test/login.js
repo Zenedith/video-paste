@@ -1,143 +1,125 @@
 var
-  app = require(__dirname + '/../app'),
+  supertest = require('supertest'),
+  should = require('should'),
   config = require('config'),
-//  show_response = false,
-  show_response = true,
-  apikey = '6254b715bcc5d680';
+  Tester = require(__dirname + '/../models/tester').Tester;
 
-exports.testLoginByFbValid = function (beforeExit, assert) {
+exports.testLoginByFbValid = {
+  'POST /api/loginByFb/:apikey': {
+    'should return valid auth json response with sess and userId property': function (done){
+      supertest(Tester.getApiVhost())
+      .post('/api/loginByFb/' + Tester.getApiKey())
+      .send({data: JSON.stringify(config.tests.login.facebook)})
+      .expect('Content-Type', 'application/json; charset=utf-8')
+      .expect(200)
+      .end(function (err, res) {
 
-  var
-    obj = config.tests.login.facebook,
-    post_data = 'data=' + JSON.stringify(obj);
+        if (err) {
+          done(err);
+        }
 
-  assert.response(app, {
-    url: '/api/loginByFb/' + apikey,
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/x-www-form-urlencoded',
-      'Content-Length': post_data.length
-    },
-    data: post_data
-  },
-  function(res) {
-    var json = JSON.parse(res.body);
+        try {
+          res.body.should.have.property('sess');
+          res.body.should.have.property('userId');
+          res.body.userId.should.above(0);
 
-    if (show_response) {
-      console.log('testLoginByFbValid result: ');
-      console.log(json);
+          Tester.setAuthUser(res.body.sess, res.body.userId);
+          done();
+        }
+        catch (e) {
+          done(e);
+        }
+      });
     }
-
-    assert.isDefined(json.sess);
-    assert.isDefined(json.userId);
   }
-  );
 };
 
-exports.testLoginByGoogleValid = function (beforeExit, assert) {
-  var
-    obj = config.tests.login.google,
-    post_data = 'data=' + JSON.stringify(obj);
+exports.testLoginByGoogleValid = {
+  'POST /api/loginByGoogle/:apikey': {
+    'should return valid auth json response with sess and userId property': function (done){
+      supertest(Tester.getApiVhost())
+      .post('/api/loginByGoogle/' + Tester.getApiKey())
+      .send({data: JSON.stringify(config.tests.login.google)})
+      .expect('Content-Type', 'application/json; charset=utf-8')
+      .expect(200)
+      .end(function (err, res) {
 
-  assert.response(app, {
-    url: '/api/loginByGoogle/' + apikey,
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/x-www-form-urlencoded',
-      'Content-Length': post_data.length
-    },
-    data: post_data
-  },
-  function(res) {
-    var json = JSON.parse(res.body);
+        if (err) {
+          done(err);
+        }
 
-    if (show_response) {
-      console.log('testLoginByGoogleValid result: ');
-      console.log(json);
+        try {
+          res.body.should.have.property('sess');
+          res.body.should.have.property('userId');
+          res.body.userId.should.above(0);
+
+          Tester.setAuthUser(res.body.sess, res.body.userId);
+          done();
+        }
+        catch (e) {
+          done(e);
+        }
+      });
     }
-
-    assert.isDefined(json.sess);
-    assert.isDefined(json.userId);
   }
-  );
-};
-exports.testLoginByTwitterValid = function (beforeExit, assert) {
-  var
-    obj = config.tests.login.twitter,
-    post_data = 'data=' + JSON.stringify(obj);
-
-  assert.response(app, {
-    url: '/api/loginByTwitter/' + apikey,
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/x-www-form-urlencoded',
-      'Content-Length': post_data.length
-    },
-    data: post_data
-  },
-  function(res) {
-    var json = JSON.parse(res.body);
-
-    if (show_response) {
-      console.log('testLoginByTwitterValid result: ');
-      console.log(json);
-    }
-
-    assert.isDefined(json.sess);
-    assert.isDefined(json.userId);
-  }
-  );
-};
-exports.testLoginByWindowsLiveValid = function (beforeExit, assert) {
-  var
-    obj = config.tests.login.live,
-    post_data = 'data=' + JSON.stringify(obj);
-
-  console.log(post_data);
-
-  assert.response(app, {
-    url: '/api/loginByWindowsLive/' + apikey,
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/x-www-form-urlencoded',
-      'Content-Length': post_data.length
-    },
-    data: post_data
-  },
-  function(res) {
-    var json = JSON.parse(res.body);
-
-    if (show_response) {
-      console.log('testLoginByWindowsLiveValid result: ');
-      console.log(json);
-    }
-
-    assert.isDefined(json.sess);
-    assert.isDefined(json.userId);
-  }
-  );
 };
 
-exports.testLoginByFbInvalidKey = function (beforeExit, assert) {
+exports.testLoginByTwitterValid = {
+  'POST /api/loginByTwitter/:apikey': {
+    'should return valid auth json response with sess and userId property': function (done){
+      supertest(Tester.getApiVhost())
+      .post('/api/loginByTwitter/' + Tester.getApiKey())
+      .send({data: JSON.stringify(config.tests.login.twitter)})
+      .expect('Content-Type', 'application/json; charset=utf-8')
+      .expect(200)
+      .end(function (err, res) {
 
-  assert.response(app, {
-    url: '/api/loginByFb/nokey',
-    method: 'POST',
-    headers: { 'Content-Type': 'text/html; charset=utf-8' }
-  }, {
-    status: 200,
-    headers: { 'Content-Type': 'application/json; charset=utf-8' }
-  },
-  function(res) {
-    var json = JSON.parse(res.body);
+        if (err) {
+          done(err);
+        }
 
-    if (show_response) {
-      console.log('testLoginByFbInvalidKey result: ');
-      console.log(json);
+        try {
+          res.body.should.have.property('sess');
+          res.body.should.have.property('userId');
+          res.body.userId.should.above(0);
+
+          Tester.setAuthUser(res.body.sess, res.body.userId);
+          done();
+        }
+        catch (e) {
+          done(e);
+        }
+      });
     }
-
-    assert.equal(json.error, 'ERR_INVALID_KEY');
-    assert.equal(json.code, 602);
   }
-  );
+};
+
+exports.testLoginByWindowsLiveValid = {
+  'POST /api/loginByWindowsLive/:apikey': {
+    'should return valid auth json response with sess and userId property': function (done){
+      supertest(Tester.getApiVhost())
+      .post('/api/loginByWindowsLive/' + Tester.getApiKey())
+      .send({data: JSON.stringify(config.tests.login.live)})
+      .expect('Content-Type', 'application/json; charset=utf-8')
+      .expect(200)
+      .end(function (err, res) {
+
+        if (err) {
+          done(err);
+        }
+
+        try {
+          res.body.should.have.property('sess');
+          res.body.should.have.property('userId');
+          res.body.userId.should.above(0);
+
+          Tester.setAuthUser(res.body.sess, res.body.userId);
+          done();
+        }
+        catch (e) {
+          done(e);
+        }
+      });
+    }
+  }
 };

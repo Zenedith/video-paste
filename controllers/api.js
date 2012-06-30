@@ -40,14 +40,21 @@ var Api_Controller = {
         return next(err);
       }
 
+      if (!req.body) {
+        return next(error(400, 'Bad request (no POST data)'));
+      }
+
       var
-        input = JSON.parse(req.body.data || '{}');
+        postData = (req.body) ? req.body.data : '{}',
+        input = JSON.parse(postData);
 
       for (var k in input) {
-        input[k] = sanitize(input[k]).xss();
+        if (input.hasOwnProperty(k)) {
+          input[k] = sanitize(input[k]).xss();
 
-        if (!input[k]) {
-          return next(error(400, 'Bad request (bad ' + k + ' value)'));
+          if (!input[k]) {
+            return next(error(400, 'Bad request (bad ' + k + ' value)'));
+          }
         }
       }
 
@@ -113,14 +120,22 @@ var Api_Controller = {
         return next(err);
       }
 
+      if (!req.body) {
+        return next(error(400, 'Bad request (no POST data)'));
+      }
+
       var
-        input = JSON.parse(req.body.data || '{}');
+        postData = (req.body) ? req.body.data : '{}',
+        input = JSON.parse(postData);
 
       for (var k in input) {
-        input[k] = sanitize(input[k]).xss();
+        if (input.hasOwnProperty(k)) {
+          input[k] = sanitize(input[k]).xss();
 
-        if (!input[k]) {
-          return next(error(400, 'Bad request (bad ' + k + ' value)'));
+//live has strict policy so dont validate empty values
+//        if (!input[k]) {
+//          return next(error(400, 'Bad request (bad ' + k + ' value)'));
+//        }
         }
       }
 
@@ -185,14 +200,21 @@ var Api_Controller = {
         return next(err);
       }
 
+      if (!req.body) {
+        return next(error(400, 'Bad request (no POST data)'));
+      }
+
       var
-        input = JSON.parse(req.body.data || '{}');
+        postData = (req.body) ? req.body.data : '{}',
+        input = JSON.parse(postData);
 
       for (var k in input) {
-        input[k] = sanitize(input[k]).xss();
+        if (input.hasOwnProperty(k)) {
+          input[k] = sanitize(input[k]).xss();
 
-        if (!input[k]) {
-          return next(error(400, 'Bad request (bad ' + k + ' value)'));
+          if (!input[k]) {
+            return next(error(400, 'Bad request (bad ' + k + ' value)'));
+          }
         }
       }
 
@@ -257,14 +279,21 @@ var Api_Controller = {
         return next(err);
       }
 
+      if (!req.body) {
+        return next(error(400, 'Bad request (no POST data)'));
+      }
+
       var
-        input = JSON.parse(req.body.data || '{}');
+        postData = (req.body) ? req.body.data : '{}',
+        input = JSON.parse(postData);
 
       for (var k in input) {
-        input[k] = sanitize(input[k]).xss();
+        if (input.hasOwnProperty(k)) {
+          input[k] = sanitize(input[k]).xss();
 
-        if (!input[k]) {
-          return next(error(400, 'Bad request (bad ' + k + ' value)'));
+          if (!input[k]) {
+            return next(error(400, 'Bad request (bad ' + k + ' value)'));
+          }
         }
       }
 
@@ -366,7 +395,7 @@ var Api_Controller = {
       }
 
       var
-        postId = parseInt(req.params.postId) || 0;
+        postId = ~~(req.params.postId) || 0;
 
       if (postId < 1) {
         return next(error(400, 'Bad request (bad postId value)'));
@@ -416,7 +445,7 @@ var Api_Controller = {
       }
 
       var
-        postId = parseInt(req.params.postId) || 0;
+        postId = ~~(req.params.postId) || 0;
 //        userId = obj.getUserId();
 //
 //      if (userId < 1) {
@@ -462,10 +491,15 @@ var Api_Controller = {
         return next(err);
       }
 
+      if (!req.body) {
+        return next(error(400, 'Bad request (no POST data)'));
+      }
+
       var
-        postId = parseInt(req.params.postId) || 0,
-        input = JSON.parse(req.body.data || '{}'),
-        rate = parseInt(input.rate) || 0,
+        postId = ~~(req.params.postId) || 0,
+        postData = (req.body) ? req.body.data : '{}',
+        input = JSON.parse(postData),
+        rate = ~~(input.rate) || 0,
         userId = obj.getUserId();
 
       if (userId < 1) {
@@ -508,7 +542,6 @@ var Api_Controller = {
   },
 
   // create postLink
-  // url and categoryId from POST body
   post_create: function(req, res, next) {
     var
       Session = require(process.env.APP_PATH + "/models/session").Session,
@@ -530,8 +563,13 @@ var Api_Controller = {
         return next(error(401, 'Session not authorized (userId)'));
       }
 
+      if (!req.body) {
+        return next(error(400, 'Bad request (no POST data)'));
+      }
+
       var
-        input = JSON.parse(req.body.data || '{}'),
+        postData = (req.body) ? req.body.data : '{}',
+        input = JSON.parse(postData),
         url = input.url || '',
         Url = require(process.env.APP_PATH + "/models/url").Url,
         urlObj = new Url(url);
@@ -541,8 +579,8 @@ var Api_Controller = {
       }
 
       var
-        categoryId = parseInt(input.categoryId) || 0;
-        tags = input.tags || [];
+        categoryId = ~~(input.categoryId) || 0,
+        tags = input.tags || [],
         Post = require(process.env.APP_PATH + "/models/post").Post,
         post = new Post();
 
@@ -559,13 +597,13 @@ var Api_Controller = {
           decorator_PostLink([p_obj], function (err, decoratedPosts) {
 
             if (err) {
-              return callback(err, null);
+              return next(err);
             }
 
             var
               data = decoratedPosts[0];
 
-            res.json(data, 201);
+            res.json(201, data);
             RequestLogger.log(req, data);
           });
         });
@@ -591,9 +629,9 @@ var Api_Controller = {
       }
 
       var
-//        categoryId = parseInt(req.params.categoryId) || 0,
-        limit = parseInt(req.params.limit) || 1,
-        page = parseInt(req.params.page) || 1,
+//        categoryId = ~~(req.params.categoryId) || 0,
+        limit = ~~(req.params.limit) || 1,
+        page = ~~(req.params.page) || 1,
         getTopLinks = require(process.env.APP_PATH + "/models/response/getTopLinks").getTopLinks,
         Post_List = require(process.env.APP_PATH + "/models/post/list").Post_List,
         postRateList = new Post_List();
@@ -637,9 +675,9 @@ var Api_Controller = {
       }
 
       var
-//        categoryId = parseInt(req.params.categoryId) || 0,
-        limit = parseInt(req.params.limit) || 1,
-        page = parseInt(req.params.page) || 1,
+//        categoryId = ~~(req.params.categoryId) || 0,
+        limit = ~~(req.params.limit) || 1,
+        page = ~~(req.params.page) || 1,
         getNewLinks = require(process.env.APP_PATH + "/models/response/getNewLinks").getNewLinks,
         Post_List = require(process.env.APP_PATH + "/models/post/list").Post_List,
         postListNew = new Post_List();
@@ -685,8 +723,8 @@ var Api_Controller = {
 
       var
         searchKey = req.params.searchKey || '',
-        limit = parseInt(req.params.limit) || 1,
-        page = parseInt(req.params.page) || 1,
+        limit = ~~(req.params.limit) || 1,
+        page = ~~(req.params.page) || 1,
         getTags = require(process.env.APP_PATH + "/models/response/getTags").getTags,
         Tag = require(process.env.APP_PATH + "/models/tag").Tag,
         tag = new Tag(searchKey);
@@ -733,8 +771,8 @@ var Api_Controller = {
 
       var
         tagName = req.params.tagName || '',
-        limit = parseInt(req.params.limit) || 1,
-        page = parseInt(req.params.page) || 1,
+        limit = ~~(req.params.limit) || 1,
+        page = ~~(req.params.page) || 1,
         getLinksByTag = require(process.env.APP_PATH + "/models/response/getLinksByTag").getLinksByTag,
         Post_List = require(process.env.APP_PATH + "/models/post/list").Post_List,
         postList = new Post_List();

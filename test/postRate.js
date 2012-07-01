@@ -15,7 +15,7 @@ exports.testPostRateInvalidSess = {
       .end(function (err, res) {
 
         if (err) {
-          done(err);
+          return done(err);
         }
 
         try {
@@ -44,7 +44,7 @@ exports.testPostRateInvalidRate = {
       .end(function (err, res) {
 
         if (err) {
-          done(err);
+          return done(err);
         }
 
         try {
@@ -73,7 +73,7 @@ exports.testPostRateInvalidRate = {
 //        .end(function (err, res) {
 //          
 //          if (err) {
-//            done(err);
+//            return done(err);
 //          }
 //          
 //          try {
@@ -103,7 +103,7 @@ exports.testPostRateValidIncrease = {
       .end(function (err, res) {
 
         if (err) {
-          done(err);
+          return done(err);
         }
 
         try {

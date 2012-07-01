@@ -15,7 +15,7 @@ exports.testPostViewsValid = {
       .end(function (err, res) {
 
         if (err) {
-          done(err);
+          return done(err);
         }
 
         try {
@@ -43,7 +43,7 @@ exports.testPostViewsInvalidPostId = {
       .end(function (err, res) {
 
         if (err) {
-          done(err);
+          return done(err);
         }
 
         try {
@@ -72,7 +72,7 @@ exports.testPostViewsInvalidPostIdNotExists = {
       .end(function (err, res) {
 
         if (err) {
-          done(err);
+          return done(err);
         }
 
         try {

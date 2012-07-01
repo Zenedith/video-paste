@@ -1,27 +1,24 @@
 var Api = function()
 {
   var
-    http = require('http'),
     express = require('express'),
     config = require('config'),
     log = require(process.env.APP_PATH + "/lib/log"),
     RequestLogger = require(process.env.APP_PATH + "/lib/requestLogger").RequestLogger,
     controller = require(process.env.APP_PATH + "/lib/controller"),
-    app = express.createServer(),
-    server = http.createServer(app);
+    api = express.createServer();
 
-  app.configure(function() {
-    app.use(express.favicon());
+  api.configure(function() {
 
     if (process.env.NODE_ENV !== 'development') {
-      app.use(express.logger());
+      api.use(express.logger());
     }
 
-    app.use(express.bodyParser()); //need to POST data
-    app.use(express.methodOverride());
+    api.use(express.bodyParser()); //need to POST data
+    api.use(express.methodOverride());
 
 
-    app.use(
+    api.use(
       '/api',
       function(req, res, next)
       {
@@ -46,15 +43,15 @@ var Api = function()
     // position our routes above the error handling middleware,
     // and below our API middleware, since we want the API validation
     // to take place BEFORE our routes
-    app.use(app.router);
-    controller.bootControllers(app, '');
+    api.use(api.router);
+    controller.bootControllers(api, 'api');
 
     // middleware with an arity of 4 are considered
     // error handling middleware. When you next(err)
     // it will be passed through the defined middleware
     // in order, but ONLY those with an arity of 4, ignoring
     // regular middleware.
-    app.use(function(err, req, res, next)
+    api.use(function(err, req, res, next)
     {
 
       // on development show debug stack
@@ -83,7 +80,7 @@ var Api = function()
       RequestLogger.log(req, err);
     });
 
-    app.use(express.errorHandler({
+    api.use(express.errorHandler({
       showStack : true,
       dumpExceptions : true
     }));
@@ -91,7 +88,7 @@ var Api = function()
     // our custom JSON 404 middleware. Since it's placed last
     // it will be the last middleware called, if all others
     // invoke next() and do not respond.
-    app.use(function(req, res, next)
+    api.use(function(req, res, next)
     {
       log.error('404[api]: ' + req.originalUrl);
 
@@ -103,7 +100,7 @@ var Api = function()
     });
   });
 
-  return server;
+  return api;
 };
 
 module.exports.Api = Api;

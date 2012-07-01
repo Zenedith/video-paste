@@ -15,7 +15,7 @@ exports.testLoginByFbValid = {
       .end(function (err, res) {
 
         if (err) {
-          done(err);
+          return done(err);
         }
 
         try {
@@ -45,7 +45,7 @@ exports.testLoginByGoogleValid = {
       .end(function (err, res) {
 
         if (err) {
-          done(err);
+          return done(err);
         }
 
         try {
@@ -75,7 +75,7 @@ exports.testLoginByTwitterValid = {
       .end(function (err, res) {
 
         if (err) {
-          done(err);
+          return done(err);
         }
 
         try {
@@ -105,7 +105,7 @@ exports.testLoginByWindowsLiveValid = {
       .end(function (err, res) {
 
         if (err) {
-          done(err);
+          return done(err);
         }
 
         try {

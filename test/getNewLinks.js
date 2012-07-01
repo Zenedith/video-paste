@@ -17,7 +17,7 @@ exports.testGetNewLinksValid = {
       .end(function (err, res) {
 
         if (err) {
-          done(err);
+          return done(err);
         }
 
         try {
@@ -47,7 +47,7 @@ exports.testGetNewLinksInvalidLimit = {
       .end(function (err, res) {
 
         if (err) {
-          done(err);
+          return done(err);
         }
 
         try {

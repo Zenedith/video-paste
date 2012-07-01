@@ -15,7 +15,7 @@ exports.testMyProfileValid = {
       .end(function (err, res) {
 
         if (err) {
-          done(err);
+          return done(err);
         }
 
         try {
@@ -44,7 +44,7 @@ exports.testGivenProfileValid = {
         .end(function (err, res) {
 
           if (err) {
-            done(err);
+            return done(err);
           }
 
           try {
@@ -73,7 +73,7 @@ exports.testGivenProfileInvalidUserId = {
       .end(function (err, res) {
 
         if (err) {
-          done(err);
+          return done(err);
         }
 
         try {

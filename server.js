@@ -52,19 +52,25 @@ if (process.env.OPENSHIFT_INTERNAL_IP) {
 function terminator(sig, err) {
   err = err || '';
 
-   if (typeof sig === "string") {
+    if (typeof sig === "string") {      
       log.debug('%s: Received %s (%s)- terminating Node server ...', Date(Date.now()), sig, err);
       process.exit(1);
-   }
+    }
 
    log.debug('%s: Node server stopped.', Date(Date.now()) );
 }
 
-// Process on exit and signals.
+//handle uncaughtException (dont exit!)
+process.on('uncaughtException', function(err) { 
+  throw err;
+  log.debug('%s: Received uncaughtException: %s', Date(Date.now()), err); 
+});
+
+//Process on exit and signals.
 process.on('exit', function() { terminator(); });
 
 ['SIGHUP', 'SIGINT', 'SIGQUIT', 'SIGILL', 'SIGTRAP', 'SIGABRT', 'SIGBUS',
- 'SIGFPE', 'SIGUSR1', 'SIGSEGV', 'SIGUSR2', 'SIGPIPE', 'SIGTERM', 'uncaughtException'
+ 'SIGFPE', 'SIGUSR1', 'SIGSEGV', 'SIGUSR2', 'SIGPIPE', 'SIGTERM'
 ].forEach(function(element, index, array) {
     process.on(element, function(err) { terminator(element, err); });
 });
@@ -78,6 +84,8 @@ if (!module.parent) {
     express = require('express'),
     vhost = express.createServer();
 
+  vhost.use(express.favicon()); //serve favicon globally
+  
   vhost.use(express.vhost(config.app.host, app)); //app
   vhost.use(express.vhost('api.' + config.app.host, api));  //api
 

@@ -603,7 +603,7 @@ var Api_Controller = {
             var
               data = decoratedPosts[0];
 
-            res.json(201, data);
+            res.json(data, 201);
             RequestLogger.log(req, data);
           });
         });

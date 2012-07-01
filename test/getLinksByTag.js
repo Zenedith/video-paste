@@ -17,7 +17,7 @@ exports.testGetLinksByTagValid = {
       .end(function (err, res) {
 
         if (err) {
-          done(err);
+          return done(err);
         }
 
         try {
@@ -47,7 +47,7 @@ exports.testGetLinksByTagInvalidNoResults = {
       .end(function (err, res) {
 
         if (err) {
-          done(err);
+          return done(err);
         }
 
         try {

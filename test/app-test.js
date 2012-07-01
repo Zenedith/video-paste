@@ -14,7 +14,7 @@ exports.testTaskCleanNewList = {
         .end(function (err, res) {
 
           if (err) {
-            done(err);
+            return done(err);
           }
 
           try {

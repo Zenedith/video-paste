@@ -21,7 +21,7 @@ exports.testPostLinkCreateValid = {
       .end(function (err, res) {
 
         if (err) {
-          done(err);
+          return done(err);
         }
 
         try {
@@ -67,7 +67,7 @@ exports.testPostLinkCreateTestConverter = {
       .end(function (err, res) {
 
         if (err) {
-          done(err);
+          return done(err);
         }
 
         try {
@@ -113,7 +113,7 @@ exports.testPostLinkCreateInvalidUrl = {
         .end(function (err, res) {
 
           if (err) {
-            done(err);
+            return done(err);
           }
 
           try {
@@ -142,7 +142,7 @@ exports.testGetPostLinkCreateInvalidSess = {
       .end(function (err, res) {
 
         if (err) {
-          done(err);
+          return done(err);
         }
 
         try {
@@ -171,7 +171,7 @@ exports.testPostLinkMissingParams = {
       .end(function (err, res) {
 
         if (err) {
-          done(err);
+          return done(err);
         }
 
         try {
@@ -199,7 +199,7 @@ exports.testGetPostLinkValid = {
       .end(function (err, res) {
 
         if (err) {
-          done(err);
+          return done(err);
         }
 
         try {

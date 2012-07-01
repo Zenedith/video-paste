@@ -16,7 +16,7 @@ exports.testGetTagsValidSearchKey = {
       .end(function (err, res) {
 
         if (err) {
-          done(err);
+          return done(err);
         }
 
         try {
@@ -46,7 +46,7 @@ exports.testGetTagsValidNoSearchKey = {
       .end(function (err, res) {
 
         if (err) {
-          done(err);
+          return done(err);
         }
 
         try {
@@ -77,7 +77,7 @@ exports.testGetTagsInvalidKey = {
       .end(function (err, res) {
 
         if (err) {
-          done(err);
+          return done(err);
         }
 
         try {

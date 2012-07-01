@@ -13,6 +13,7 @@
   "dependencies": {
     "validator": "",
     "express": "",
+    "lru-cache": "",
     "restify": "",
     "redis": "",
     "jade": "",

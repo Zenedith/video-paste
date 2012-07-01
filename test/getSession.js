@@ -13,7 +13,7 @@ exports.testGetSessionValid = {
       .end(function (err, res) {
 
         if (err) {
-          done(err);
+          return done(err);
         }
 
         try {
@@ -42,7 +42,7 @@ exports.testGetSessionNoKey = {
       .end(function (err, res) {
 
         if (err) {
-          done(err);
+          return done(err);
         }
 
         try {
@@ -71,7 +71,7 @@ exports.testGetSessionInvalidKey = {
         .end(function (err, res) {
 
           if (err) {
-            done(err);
+            return done(err);
           }
 
           try {

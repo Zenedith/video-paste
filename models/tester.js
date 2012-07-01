@@ -5,8 +5,6 @@ if (!process.env.APP_PATH) {
 process.env.TESTER = 'mocha';
 
 var
-  Database = require(process.env.APP_PATH + "/lib/database").Database,
-  http = require('http'),
   server = require(process.env.APP_PATH + '/server');
 
 var Tester = (function () {

@@ -88,6 +88,16 @@
       "description":"request logger",
       "isRegExp" : false
     },
+    "task_check_new_list" : {
+      "controller": "task",
+      "action": "check_new_list",
+      "url": "task/checkNewList",
+      "method":"get",
+      "description":"task for clean new list from older items",
+      "isRegExp" : false
+    }
+  },
+  "routers-api": {
     "get_session" : {
       "controller": "api",
       "action": "get_session",
@@ -262,14 +272,6 @@
       "url": "api/getTags/:apiKey",
       "method":"get",
       "description":"get tags",
-      "isRegExp" : false
-    },
-    "task_check_new_list" : {
-      "controller": "task",
-      "action": "check_new_list",
-      "url": "task/checkNewList",
-      "method":"get",
-      "description":"task for clean new list from older items",
       "isRegExp" : false
     },
     "get_post_by_tag" : {

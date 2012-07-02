@@ -17,4 +17,9 @@ start()
 start express
 start restify
 
+echo -e "create compare files"
+cd benchmark
+./compare.sh
+cd ..
+
 exit 0

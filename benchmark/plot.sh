@@ -9,7 +9,7 @@ lineTitle=$4
 
 draw_plot()
 {
-  echo "draw_plot"
+  echo "start drawing: inputFileName=$inputFileName, outputFileName=$outputFileName, graphTitle=$graphTitle, lineTitle=$lineTitle"
  
 gnuplot << EOF
   # output as png image
@@ -37,6 +37,8 @@ gnuplot << EOF
   # and title of "$lineTitle" for the given data
   plot "$inputFileName" using 9 smooth sbezier with lines title "$lineTitle"
 EOF
+  echo "end drawing.."
 }
 
 draw_plot
+exit 0

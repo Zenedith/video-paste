@@ -1,15 +1,19 @@
 #!/bin/bash
 
-url="http://api.localhost:3001/api"
-n=1000
-c=100
-
-#getSession
+frontedType=$1
+url="api.localhost:3001/api"
+n=10
+c=1
 
 test()
 {
-  ab -n $n -c $c -g $testName".dat" $url"/"$testUrl
-  ./plot.sh $testName".dat" $testName".png" $testName" benchmark" "expresso"
+  params="-n $n -c $c -g data/$frontedType_$testName.dat $url/$testUrl"
+  echo -e "benchmark: ab $params"
+  ab -n $n -c $c -g "data/$frontedType"_"$testName.dat" "$url/$testUrl"
+  
+  plotParams="\"data/"$frontedType"_"$testName".dat\" \"images/"$frontedType"_"$testName".png\" \""$frontedType"\" \""$testName" benchmark "$frontedType\"
+  echo -e "plot: ./plot.sh $plotParams"
+  ./plot.sh "data/"$frontedType"_"$testName".dat" "images/"$frontedType"_"$testName".png" $frontedType "$testName benchmark $frontedType"
 }
 
 

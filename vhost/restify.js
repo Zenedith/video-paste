@@ -4,7 +4,7 @@ var Api = function()
     restify = require('restify'),
     config = require('config'),
     log = require(process.env.APP_PATH + "/lib/log"),
-    Restify_TokensTable = require(process.env.APP_PATH + "/lib/restify/tokensTable").Restify_TokensTable,
+//    Restify_TokensTable = require(process.env.APP_PATH + "/lib/restify/tokensTable").Restify_TokensTable,
     RequestLogger = require(process.env.APP_PATH + "/lib/requestLogger").RequestLogger,
     controller = require(process.env.APP_PATH + "/lib/controller"),
     api = restify.createServer();
@@ -15,21 +15,23 @@ var Api = function()
 //  api.use(restify.urlEncodedBodyParser());
 //  api.use(restify.conditionalRequest());// express vhost handled
   
-  //set Token_bucket strategy (disabe when ab tests!)
   //https://en.wikipedia.org/wiki/Token_bucket
-  api.use(restify.throttle({
-    burst: 10,
-    rate: 5,
-//    tokensTable: new Restify_TokensTable(), //default is LRU
-    ip: true,
-//    xff: true,
-    overrides: {
-      '127.0.0.1': {
-        burst: 20,
-        rate: 10
+  
+  if (!process.env.TESTER) {
+    api.use(restify.throttle({
+      burst: 10,
+      rate: 5,
+//      tokensTable: new Restify_TokensTable(), //default is LRU
+      ip: true,
+//      xff: true,
+      overrides: {
+        '127.0.0.1': {
+          burst: 20,
+          rate: 10
+        }
       }
-    }
-  }));
+    }));
+  }
   
   //TODO 50x error handling
   
@@ -39,7 +41,7 @@ var Api = function()
       ip = req.headers['x-real-ip'] || req.headers['remote-addr'] || res.connection.remoteAddress,
       forwardedFor = req.headers['x-forwarded-for'] || '';
 
-    if (config.api.enable_google_analytics) {
+    if (config.app.enable_google_analytics) {
       var
         ua = "UA-32533263-1",
         host = req.headers.host,
@@ -71,7 +73,7 @@ var Api = function()
     RequestLogger.log(req, err);
   });
 
-  return api.server;
+  return api;
 };
 
 module.exports.Api = Api;

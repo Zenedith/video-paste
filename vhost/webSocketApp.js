@@ -9,7 +9,9 @@ var WebSocketApp = function() {
     Auth_Authom = require(process.env.APP_PATH + "/lib/auth/authom").Auth_Authom,
     auth = new Auth_Authom();
 
-  global.socketio = require('socket.io').listen(app);
+  if (!process.env.TESTER) {
+    global.socketio = require('socket.io').listen(app);    
+  }
 
   app.configure(function()
   {

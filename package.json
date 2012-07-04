@@ -3,7 +3,7 @@
   "description": "video paste api project",
   "subdomain": "webapi-video-paste",
   "homepage": "https://github.com/Zenedith/video-paste",
-  "main": "app.js",
+  "main": "server.js",
   "author": "Mateusz Stępniak (zenedith@wp.pl)",
   "analyze": false,
   "version": "0.1.0",

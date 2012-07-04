@@ -1,12 +1,15 @@
 #!/bin/env node
-// OpenShift Node application
-
-if (!process.env.NODE_ENV) {
-  process.env.NODE_ENV = 'production';
-}
 
 if (!process.env.APP_PATH) {
   process.env.APP_PATH = __dirname;
+}
+
+if (/bftestrun/.test(process.env.APP_PATH)) {
+  process.env.NODE_ENV = 'strider';
+}
+
+if (!process.env.NODE_ENV) {
+  process.env.NODE_ENV = 'production';
 }
 
 var
@@ -31,7 +34,7 @@ if (process.env.NODE_ENV === 'dotcloud') {
   config.db.use = "redis";
   config.db.redis.host = env.DOTCLOUD_DATA_REDIS_HOST; // override redis host
   config.db.redis.port = env.DOTCLOUD_DATA_REDIS_PORT; // override redis port
-  config.db.redis.auth = env.DOTCLOUD_DATA_REDIS_PASSWORD; // override redis
+  config.db.redis.auth = env.DOTCLOUD_DATA_REDIS_PASSWORD; // override redis auth
   // auth
 }
 
@@ -39,7 +42,7 @@ if (process.env.NODE_ENV === 'dotcloud') {
 if (process.env.REDIS_PORT) {
   config.db.redis.host = process.env.REDIS_HOST; // override redis host
   config.db.redis.port = process.env.REDIS_PORT; // override redis port
-  config.db.redis.auth = process.env.REDIS_PASSWORD; // override redis  
+  config.db.redis.auth = process.env.REDIS_PASSWORD; // override redis auth
 }
 
 var

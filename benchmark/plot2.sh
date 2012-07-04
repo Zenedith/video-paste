@@ -1,10 +1,12 @@
 #!/bin/bash
 #http://tjholowaychuk.com/post/543349452/apachebench-gnuplot-graphing-benchmarks
 
-inputFileName=$1
-outputFileName=$2
-graphTitle=$3
-lineTitle=$4
+inputFileName1=$1
+inputFileName2=$2
+outputFileName=$3
+graphTitle=$4
+lineTitle1=$5
+lineTitle2=$6
 
 
 draw_plot()
@@ -33,9 +35,10 @@ gnuplot << EOF
   # y-axis label
   set ylabel "response time (ms)"
   
-  # plot data from "$inputFileName" using column 9 with smooth sbezier lines
+  # plot data from "$inputFileName1 and $inputFileName2" using column 9 with smooth sbezier lines
   # and title of "$lineTitle" for the given data
-  plot "$inputFileName" using 9 smooth sbezier with lines title "$lineTitle"
+  plot "$inputFileName1" using 9 smooth sbezier with lines title "$lineTitle1", \
+       "$inputFileName2" using 9 smooth sbezier with lines title "$lineTitle2"
 EOF
   echo "end drawing.."
 }

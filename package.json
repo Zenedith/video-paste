@@ -8,7 +8,7 @@
   "analyze": false,
   "version": "0.1.0",
   "engines": {
-     "node":"== 0.8.1"
+     "node":"0.6"
   },
   "scripts": {
     "test": "mocha -R list -u exports test/app-test.js test/generateKey.js test/getSession.js test/login.js test/postLink.js test/getLinksByTag.js test/getTopLinks.js test/getTags.js test/getNewLinks.js test/profile.js test/postViews.js"

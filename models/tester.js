@@ -123,6 +123,11 @@ var Tester = (function () {
         sessId = newSessId;
       }
     },
+    setApiKey: function (newApiKey, force) {
+      if (!sessId || force) {
+        apikey = newApiKey;
+      }
+    },
     setAuthUser: function (newSessId, newUserId) {
       if (!authSessId) {
         authSessId = newSessId;

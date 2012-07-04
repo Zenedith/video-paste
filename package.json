@@ -17,13 +17,19 @@
     "mocha": "",
     "should": "",
     "methods": "",
+    "superagent": ""
     "supertest": ""
   },
   "dependencies": {
+    "request": "",
     "validator": "",
+    "formidable": "",
+    "qs": "",
+    "connect": "",
     "express": "",
     "lru-cache": "",
     "restify": "",
+    "hiredis": "",
     "redis": "",
     "jade": "",
     "log": "",

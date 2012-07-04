@@ -35,6 +35,13 @@ if (process.env.NODE_ENV === 'dotcloud') {
   // auth
 }
 
+//check strider deploy config
+if (process.env.REDIS_PORT) {
+  config.db.redis.host = process.env.REDIS_HOST; // override redis host
+  config.db.redis.port = process.env.REDIS_PORT; // override redis port
+  config.db.redis.auth = process.env.REDIS_PASSWORD; // override redis  
+}
+
 var
   ipaddr = config.app.host || '0.0.0.0',
   port = config.app.port || process.env.app_port || process.env.PORT;

@@ -28,6 +28,7 @@
     "loggly": "",
     "oauth": "",
     "authom": "",
+    "methods": "",
     "supertest": "",
     "async": ""
   }

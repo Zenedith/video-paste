@@ -6,7 +6,7 @@
   "main": "server.js",
   "author": "Mateusz Stępniak (zenedith@wp.pl)",
   "analyze": false,
-  "version": "0.1.0",
+  "version": "0.1.1",
   "engines": {
      "node":"0.6"
   },
@@ -40,6 +40,7 @@
     "loggly": "",
     "oauth": "",
     "authom": "",
-    "async": ""
+    "async": "",
+    "n-vimeo": ""
   }
 }

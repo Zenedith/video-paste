@@ -571,10 +571,10 @@ var Api_Controller = {
         postData = (req.body) ? req.body.data : '{}',
         input = JSON.parse(postData),
         url = input.url || '',
-        Url = require(process.env.APP_PATH + "/models/url").Url,
-        urlObj = new Url(url);
+        Video = require(process.env.APP_PATH + "/models/video").Video,
+        videoObj = Video.factory(url);
 
-      if (!urlObj.isValid()) {
+      if (!videoObj || !videoObj.getUrl()) {
         return next(error(400, 'Bad request (url param)'));
       }
 
@@ -585,7 +585,7 @@ var Api_Controller = {
         post = new Post();
 
       try {
-        post.createNewPost(urlObj, categoryId, tags, userId, function (err2, p_obj) {
+        post.createNewPost(videoObj, categoryId, tags, userId, function (err2, p_obj) {
 
           if (err2) {
             return next(err2);

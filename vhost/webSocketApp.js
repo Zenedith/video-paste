@@ -1,13 +1,16 @@
 
-var WebSocketApp = function() {
+var WebSocketApp = function(app) {
   var
     express = require('express'),
-    app = express.createServer(),
     config = require('config'),
     log = require(process.env.APP_PATH + "/lib/log"),
     controller = require(process.env.APP_PATH + "/lib/controller"),
     Auth_Authom = require(process.env.APP_PATH + "/lib/auth/authom").Auth_Authom,
     auth = new Auth_Authom();
+  
+  if (!app) {
+    app = express.createServer();
+  }
 
   if (!process.env.TESTER) {
     global.socketio = require('socket.io').listen(app);    

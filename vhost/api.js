@@ -1,12 +1,15 @@
-var Api = function()
+var Api = function(api)
 {
   var
     express = require('express'),
     config = require('config'),
     log = require(process.env.APP_PATH + "/lib/log"),
     RequestLogger = require(process.env.APP_PATH + "/lib/requestLogger").RequestLogger,
-    controller = require(process.env.APP_PATH + "/lib/controller"),
+    controller = require(process.env.APP_PATH + "/lib/controller");
+  
+  if (!api) {
     api = express.createServer();
+  }
 
   api.configure(function() {
 

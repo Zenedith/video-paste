@@ -62,7 +62,7 @@ var Key = function ()
       //async: update last used
       _this.setObjectValueToDB(id, '__last_used', current_timestamp, function(err2, obj) {
         if (err2) {
-          log.crit(err2);
+          log.critical(err2);
         }
       });
 

@@ -39,7 +39,7 @@ var Post = function ()
         log.error(minorErr);
       }
       
-      //set url
+      //set url (TODO dont send this value, always get current value!)
       _this.__thumbUrl = url;
       
       Database.saveObject(_this, function (err, p_obj) {
@@ -60,7 +60,7 @@ var Post = function ()
         //async: add user to already rated this post (has posted it)
         postRate.rate(1, p_obj.getUserId(), function (err2, res2) {
           if (err2) {
-            log.crit(err2);
+            log.critical(err2);
           }
         });
   
@@ -72,7 +72,7 @@ var Post = function ()
   
           postTag.addToPost(postId, function (err3, res3) {
             if (err3) {
-              log.crit(err3);
+              log.critical(err3);
             }
           });
         }
@@ -80,14 +80,14 @@ var Post = function ()
         //async: create views counter
         postViews.createCounter(function (err4, res4) {
           if (err4) {
-            log.crit(err4);
+            log.critical(err4);
           }
         });
   
         //async: add post to new set
         p_obj.addPostToNew(function (err5, res5) {
           if (err5) {
-            log.crit(err5);
+            log.critical(err5);
           }
         });
   

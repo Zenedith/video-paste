@@ -1,6 +1,7 @@
 var
   log = require(process.env.APP_PATH + "/lib/log"),
   util = require('util'),
+  Video_Youtube_Api = require(process.env.APP_PATH + "/models/video/youtube/api").Video_Youtube_Api,
   Video = require(process.env.APP_PATH + "/models/video").Video,
   secure = require("node-secure");
 
@@ -13,8 +14,6 @@ var Video_Youtube = function (url)
   var
     matches = [];
 
-  console.log(url);
-  
   //make "classic site" link
   if (matches = url.match(/(https?)\:\/\/m\.youtube\.com\/.*v=(.+)&?/i)) {
     url = util.format('http://www.youtube.com/watch?v=%s', matches[2]);
@@ -28,13 +27,17 @@ var Video_Youtube = function (url)
       this.__videoId = matches[1];
     }
   }
-  else {
-    console.log('invalid: ' + url);
-  }
 
   this.getThumbUrl = function (callback) {
-    if (this.__videoId) {
-      return callback(null, util.format('http://img.youtube.com/vi/%s/hqdefault.jpg', this.__videoId));
+    
+    if (this.__videoId) {      
+      Video_Youtube_Api.video(this.__videoId, function(err, videoInfo) {
+        if (err || !videoInfo) {
+          return callback(err, null);  
+        }
+
+        return callback(null, videoInfo.getThumbUrl());
+      });
     }
     else {
       return callback(null, '');  

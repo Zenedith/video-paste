@@ -31,12 +31,12 @@ var Video_Dailymotion = function (url)
   this.getThumbUrl = function (callback) {
 
     if (this.__videoId) {
-      Video_Dailymotion_Api.video(this.__videoId, function (err, data) {
-        if (err) {
+      Video_Dailymotion_Api.video(this.__videoId, function (err, videoInfo) {
+        if (err || !videoInfo) {
           return callback(err, null);  
         }
         
-        return callback(null, data.thumb);  
+        return callback(null, videoInfo.getThumbUrl());  
       });
     }
     else {

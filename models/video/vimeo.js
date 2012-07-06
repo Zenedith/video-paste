@@ -1,7 +1,7 @@
 var
   log = require(process.env.APP_PATH + "/lib/log"),
   util = require('util'),
-  vimeoApi = require('n-vimeo').video,
+  Video_Vimeo_Api = require(process.env.APP_PATH + "/models/video/vimeo/api").Video_Vimeo_Api,
   Video = require(process.env.APP_PATH + "/models/video").Video,
   secure = require("node-secure");
 
@@ -14,8 +14,6 @@ var Video_Vimeo = function (url)
   var
     matches = [];
 
-
- 
   //make "classic site" link
   if (matches = url.match(/http\:\/\/vimeo\.com\/m\/(.+)\/?/i)) {
     url = util.format('http://vimeo.com/%s', matches[1]); 
@@ -30,13 +28,12 @@ var Video_Vimeo = function (url)
   this.getThumbUrl = function (callback) {
     
     if (this.__videoId) {      
-      vimeoApi(this.__videoId, function(err, data) {
-
-        if (err) {
-          return callback(err, null);
+      Video_Vimeo_Api.video(this.__videoId, function(err, videoInfo) {
+        if (err || !videoInfo) {
+          return callback(err, null);  
         }
-
-        return callback(null, data.thumb.m);  //medium
+     
+        return callback(null, videoInfo.getThumbUrl());
       });
     }
     else {

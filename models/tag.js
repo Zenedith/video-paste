@@ -16,7 +16,7 @@ var Tag = function (tagName)
     Database.addValueToSet(Tag.getTagsSetName(), this.tagName, function (err, res) {
 
       if (err) {
-        log.crit(err);
+        log.critical(err);
       }
     });
 

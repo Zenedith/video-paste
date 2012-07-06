@@ -1,4 +1,10 @@
-var log = require(process.env.APP_PATH + "/lib/log"), util = require('util'), request = require('request'), apiEndpoint = "https://api.dailymotion.com", secure = require("node-secure");
+var 
+  log = require(process.env.APP_PATH + "/lib/log"), 
+  util = require('util'), 
+  request = require('request'), 
+  apiEndpoint = "https://api.dailymotion.com",
+  Video_Info = require(process.env.APP_PATH + "/models/video/info").Video_Info,
+  secure = require("node-secure");
 
 var Video_Dailymotion_Api = function()
 {
@@ -9,7 +15,9 @@ Video_Dailymotion_Api.video = function(id, cb)
 {
   log.debug('Video_Dailymotion_Api.video(' + id + ')');
 
-  var url = apiEndpoint + '/video/' + id + '?fields=title,thumbnail_medium_url';  //TODO
+  //https://www.dailymotion.com/doc/api/obj-video.html
+  var 
+    url = util.format('%s/video/%s?fields=id,title,description,url,thumbnail_medium_url,explicit', apiEndpoint, id);
 
   request.get({url : url}, function(err, response, body) {
     if (err) {
@@ -18,15 +26,17 @@ Video_Dailymotion_Api.video = function(id, cb)
 
     if (response.statusCode === 200 && body.length > 0) {
       try {
-        var raw = JSON.parse(body), data = {
-          title : raw.title,
-          thumb : raw.thumbnail_medium_url
-        };
+       
+        var
+          videoInfo = new Video_Info();
+        
+        videoInfo.loadByDailymotion(JSON.parse(body));
 
-        return cb(null, data);
+        return cb(null, videoInfo);
       }
       catch (e) {
-        cb(new Error('parsing error'));
+        log.critical(e);
+        return cb(new Error('Video_Dailymotion_Api.video: internal problem'));
       }
     }
     else if (!err) {

@@ -5,9 +5,9 @@ var
   Video = require(process.env.APP_PATH + "/models/video").Video,
   secure = require("node-secure");
 
-var Video_Dailymotion = function (url)
+var Video_Dailymotion = function (url, callback)
 {
-  log.debug('Video_Dailymotion.construct()');
+  log.debug('Video_Dailymotion.construct(%s)', url);
 
   Video.call(this); //call parent constructor
 
@@ -25,25 +25,38 @@ var Video_Dailymotion = function (url)
     //get video id
     if (matches = this.__url.match(/http\:\/\/www\.dailymotion\.com\/video\/(.+)\/?/i)) {
       this.__videoId = matches[1];
-    }
-  }
 
-  this.getThumbUrl = function (callback) {
-
-    if (this.__videoId) {
-      Video_Dailymotion_Api.video(this.__videoId, function (err, videoInfo) {
-        if (err || !videoInfo) {
+      var
+        _this = this;
+      
+      Video_Dailymotion_Api.video(this.__videoId, function (err, data) {
+        if (err || !data) {
           return callback(err, null);  
         }
         
-        return callback(null, videoInfo.getThumbUrl());  
+        _this.create(data);
+
+        return callback(null, _this);  
       });
     }
     else {
       return callback(null, '');  
     }
-  };
+  }
+  else {
+    return callback(null, '');  
+  }
+};
 
+
+Video_Dailymotion.prototype.create = function (data) {
+  log.debug('Video_Dailymotion.create()');
+  this.__videoId = data.id;
+//  this.__url = data.url;
+  this.__title = data.title;
+  this.__description = data.description;
+  this.__thumbUrl = data.thumbnail_medium_url;
+  this.__explicit = data.explicit;
 };
 
 //extending base class

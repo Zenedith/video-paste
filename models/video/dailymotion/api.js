@@ -3,7 +3,6 @@ var
   util = require('util'), 
   request = require('request'), 
   apiEndpoint = "https://api.dailymotion.com",
-  Video_Info = require(process.env.APP_PATH + "/models/video/info").Video_Info,
   secure = require("node-secure");
 
 var Video_Dailymotion_Api = function()
@@ -25,19 +24,11 @@ Video_Dailymotion_Api.video = function(id, cb)
     }
 
     if (response.statusCode === 200 && body.length > 0) {
-      try {
-       
-        var
-          videoInfo = new Video_Info();
-        
-        videoInfo.loadByDailymotion(JSON.parse(body));
 
-        return cb(null, videoInfo);
-      }
-      catch (e) {
-        log.critical(e);
-        return cb(new Error('Video_Dailymotion_Api.video: internal problem'));
-      }
+      var
+        data = JSON.parse(body);
+    
+      return cb(null, data);
     }
     else if (!err) {
       cb(new Error('Video_Dailymotion_Api.video: no data'));

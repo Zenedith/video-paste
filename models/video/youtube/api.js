@@ -3,7 +3,6 @@ var
   util = require('util'), 
   request = require('request'), 
   apiEndpoint = "https://gdata.youtube.com/",
-  Video_Info = require(process.env.APP_PATH + "/models/video/info").Video_Info,
   secure = require("node-secure");
 
 var Video_Youtube_Api = function()
@@ -28,11 +27,9 @@ Video_Youtube_Api.video = function(id, cb)
       try {
        
         var
-          videoInfo = new Video_Info(),
-          json = JSON.parse(body);
+          data = JSON.parse(body);
         
-        videoInfo.loadByYoutube(json.data);
-        return cb(null, videoInfo);
+        return cb(null, data.data);
       }
       catch (e) {
         log.critical(e);

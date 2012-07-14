@@ -97,7 +97,7 @@
     get posted link data by postId
     ```
     ```
-    { postId: int, categoryId: int, added: int, userId: int, userName: string, url: string, thumbUrl: string, rate: int, views: int, tags: [tagName: string] }
+    { postId: int, categoryId: int, added: int, userId: int, userName: string, videoInfo: {url: string, title: string, description: string, thumbUrl:string, explicit: boolean}, rate: int, views: int, tags: [tagName: string] }
     ```
     * ERR_BAD_REQUEST
     * ERR_API_INTERNAL_ERROR
@@ -111,7 +111,7 @@
     POST JSON: data={url: string, tags: [tagName: string]}
     ```
     ```
-    { postId: int, categoryId: int, added: int, userId: int, userName: string, url: string, thumbUrl: string, rate: int, views: int, tags: [tagName: string] }
+    { postId: int, categoryId: int, added: int, userId: int, userName: string, videoInfo: {url: string, title: string, description: string, thumbUrl:string, explicit: boolean}, rate: int, views: int, tags: [tagName: string] }
     ```
     * ERR_BAD_REQUEST
     * ERR_API_INTERNAL_ERROR
@@ -155,7 +155,7 @@
     get top links (only sessionId is required, max limit value: 100)
     ```
     ```
-    {count: int, pages: int, currentPage: int, isNextPage: bool, isPrevPage: bool, result: [{ postId: int, categoryId: int, added: int, userId: int, userName: string, url: string, thumbUrl: string, rate: int, views: int, tags: [tagName: string]}]}
+    {count: int, pages: int, currentPage: int, isNextPage: bool, isPrevPage: bool, result: [{ postId: int, categoryId: int, added: int, userId: int, userName: string, videoInfo: {url: string, title: string, description: string, thumbUrl:string, explicit: boolean}, rate: int, views: int, tags: [tagName: string]}]}
     ```
     * ERR_BAD_REQUEST
     * ERR_API_INTERNAL_ERROR
@@ -177,7 +177,7 @@
     get new links ordered from newer to older (only sessionId is required, max limit value: 100)
     ```
     ```
-    {count: int, pages: int, currentPage: int, isNextPage: bool, isPrevPage: bool, result: [{ postId: int, categoryId: int, added: int, userId: int, userName: string, url: string, thumbUrl: string, rate: int, views: int, tags: [tagName: string]}]}
+    {count: int, pages: int, currentPage: int, isNextPage: bool, isPrevPage: bool, result: [{ postId: int, categoryId: int, added: int, userId: int, userName: string, videoInfo: {url: string, title: string, description: string, thumbUrl:string, explicit: boolean}, rate: int, views: int, tags: [tagName: string]}]}
     ```
     * ERR_BAD_REQUEST
     * ERR_API_INTERNAL_ERROR
@@ -189,7 +189,7 @@
     get links by given tag name, ordered from newer to older (only sessionId is required, max limit value: 100)
     ```
     ```
-    {count: int, pages: int, currentPage: int, isNextPage: bool, isPrevPage: bool, result: [{ postId: int, categoryId: int, added: int, userId: int, userName: string, url: string, thumbUrl: string, rate: int, views: int, tags: [tagName: string]}]}
+    {count: int, pages: int, currentPage: int, isNextPage: bool, isPrevPage: bool, result: [{ postId: int, categoryId: int, added: int, userId: int, userName: string, videoInfo: {url: string, title: string, description: string, thumbUrl:string, explicit: boolean}, rate: int, views: int, tags: [tagName: string]}]}
     ```
     * ERR_BAD_REQUEST
     * ERR_API_INTERNAL_ERROR

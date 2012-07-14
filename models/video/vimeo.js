@@ -5,9 +5,9 @@ var
   Video = require(process.env.APP_PATH + "/models/video").Video,
   secure = require("node-secure");
 
-var Video_Vimeo = function (url)
+var Video_Vimeo = function (url, callback)
 {
-  log.debug('Video_Vimeo.construct()');
+  log.debug('Video_Vimeo.construct(%s)', url);
 
   Video.call(this); //call parent constructor
 
@@ -23,24 +23,33 @@ var Video_Vimeo = function (url)
   if (matches = url.match(/http\:\/\/vimeo\.com\/(.+)\/?/i)) {
     this.__url = url;
     this.__videoId = matches[1];
-  }
 
-  this.getThumbUrl = function (callback) {
+    var
+      _this = this;
     
-    if (this.__videoId) {      
-      Video_Vimeo_Api.video(this.__videoId, function(err, videoInfo) {
-        if (err || !videoInfo) {
-          return callback(err, null);  
-        }
-     
-        return callback(null, videoInfo.getThumbUrl());
-      });
-    }
-    else {
-      return callback(null, '');  
-    }
-  };
+    Video_Vimeo_Api.video(this.__videoId, function(err, data) {
+      if (err || !data) {
+        return callback(err, null);  
+      }
+      
+      _this.create(data.raw);
 
+      return callback(null, _this);
+    });
+  }
+  else {
+    return callback(null, '');
+  }
+};
+
+
+Video_Vimeo.prototype.create = function (data) {
+  log.debug('Video_Vimeo.create()');
+//  this.__url = data.url;
+  this.__title = data.title;
+  this.__description = data.description;
+  this.__thumbUrl = data.thumbnail_medium;
+//  this.explicit = false;
 };
 
 //extending base class

@@ -13,8 +13,6 @@ var Post = function ()
   this.__categoryId = 0;
   this.__added = 0;
   this.__userId = 0;
-  this.__url = '';
-  this.__thumbUrl = null;
 
   this.createNewPost = function (videoObj, categoryId, tags, userId, callback) {
     log.debug('Post.createNewPost()');
@@ -23,33 +21,27 @@ var Post = function ()
       return callback(error(401, 'Missing userId'), null);
     }
 
-    this.__url = videoObj.getUrl();
     this.__categoryId = ~~(categoryId) || 0;
     this.__added = Math.round(+new Date()/1000);
     this.__userId = ~~(userId);
     
-    var
-      _this = this;
-    
-    //get thumb and save on callback
-    videoObj.getThumbUrl(function (minorErr, url) {
+    Database.saveObject(this, function (err, p_obj) {
 
-      //dont exit on minorErr
-      if (minorErr) {
-        log.error(minorErr);
+      if (err) {
+        return callback(err, null);
       }
+
+      var
+        postId = p_obj.getId();
       
-      //set url (TODO dont send this value, always get current value!)
-      _this.__thumbUrl = url;
-      
-      Database.saveObject(_this, function (err, p_obj) {
-  
-        if (err) {
-          return callback(err, null);
+      //save video info for given postId
+      videoObj.saveForPost(postId, function(err2, v_obj) {
+
+        if (err2) {
+          return callback(err2, null);
         }
-  
+
         var
-          postId = p_obj.getId(),
           tagsLen = tags.length,
           Post_Tag = require(process.env.APP_PATH + "/models/post/tag").Post_Tag,
           Post_Rate = require(process.env.APP_PATH + "/models/post/rate").Post_Rate,
@@ -93,7 +85,7 @@ var Post = function ()
   
         //return, created object, don't wait for async methods
         return callback(null, p_obj);
-      });
+      });        
     });
   };
 
@@ -115,15 +107,6 @@ var Post = function ()
   this.getUserId = function () {
     return ~~(this.__userId) || 0;
   };
-
-  this.getUrl = function () {
-    return this.__url;
-  };
-
-  this.getThumbUrl = function () {
-    return this.__thumbUrl;
-  };
-
 };
 
 //override: get int id value

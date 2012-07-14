@@ -105,7 +105,9 @@
     generate valid key (temp)
     ```
     ```
-    {key: string}
+    {
+      key: string
+    }
     ```
 - GET /api/postLink/:sessionId/:postId
     ```
@@ -122,7 +124,7 @@
         url: string, 
         title: string, 
         description: string, 
-        thumbUrl:string, 
+        thumbUrl: string, 
         explicit: boolean
       }, 
       rate: int, 
@@ -154,7 +156,7 @@
         url: string, 
         title: string, 
         description: string, 
-        thumbUrl:string, 
+        thumbUrl: string, 
         explicit: boolean
       }, 
       rate: int, 
@@ -228,7 +230,7 @@
           url: string, 
           title: string, 
           description: string, 
-          thumbUrl:string, 
+          thumbUrl: string, 
           explicit: boolean
         }, 
         rate: int, 
@@ -284,7 +286,7 @@
           url: string, 
           title: string, 
           description: string, 
-          thumbUrl:string, 
+          thumbUrl: string, 
           explicit: boolean
         }, 
         rate: int, 
@@ -321,7 +323,7 @@
           url: string, 
           title: string, 
           description: string, 
-          thumbUrl:string, 
+          thumbUrl: string, 
           explicit: boolean
         }, 
         rate: int, 

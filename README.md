@@ -19,7 +19,10 @@
     get session for unauthorized user
     ```
     ```
-    {sess: string, userId: int}
+    {
+      sess: string, 
+      userId: int
+    }
     ```
     * ERR_BAD_REQUEST
     * ERR_API_INTERNAL_ERROR
@@ -33,7 +36,10 @@
     POST JSON: data={id: string, name: string, fist_name: string, last_name: string, locale: string}
     ```
     ```
-    {sess: string, userId: int}
+    {
+      sess: string, 
+      userId: int
+    }
     ```
     * ERR_BAD_REQUEST
     * ERR_API_INTERNAL_ERROR
@@ -48,7 +54,10 @@
     POST JSON: data={id: string, name: string, given_name: string, family_name: string}
     ```
     ```
-    {sess: string, userId: int}
+    {
+      sess: string, 
+      userId: int
+    }
     ```
     * ERR_BAD_REQUEST
     * ERR_API_INTERNAL_ERROR
@@ -63,7 +72,10 @@
     POST JSON: data={id: string, name: string}
     ```
     ```
-    {sess: string, userId: int}
+    {
+      sess: string, 
+      userId: int
+    }
     ```
     * ERR_BAD_REQUEST
     * ERR_API_INTERNAL_ERROR
@@ -78,7 +90,10 @@
     POST JSON: data={id: string, name: string, fist_name: string, last_name: string, locale: string}
     ```
     ```
-    {sess: string, userId: int}
+    {
+      sess: string, 
+      userId: int
+    }
     ```
     * ERR_BAD_REQUEST
     * ERR_API_INTERNAL_ERROR
@@ -97,7 +112,25 @@
     get posted link data by postId
     ```
     ```
-    { postId: int, categoryId: int, added: int, userId: int, userName: string, videoInfo: {url: string, title: string, description: string, thumbUrl:string, explicit: boolean}, rate: int, views: int, tags: [tagName: string] }
+    { 
+      postId: int, 
+      categoryId: int, 
+      added: int, 
+      userId: int, 
+      userName: string, 
+      videoInfo: {
+        url: string, 
+        title: string, 
+        description: string, 
+        thumbUrl:string, 
+        explicit: boolean
+      }, 
+      rate: int, 
+      views: int, 
+      tags: [
+        tagName: string
+      ] 
+    }
     ```
     * ERR_BAD_REQUEST
     * ERR_API_INTERNAL_ERROR
@@ -111,7 +144,25 @@
     POST JSON: data={url: string, tags: [tagName: string]}
     ```
     ```
-    { postId: int, categoryId: int, added: int, userId: int, userName: string, videoInfo: {url: string, title: string, description: string, thumbUrl:string, explicit: boolean}, rate: int, views: int, tags: [tagName: string] }
+    { 
+      postId: int, 
+      categoryId: int, 
+      added: int, 
+      userId: int, 
+      userName: string, 
+      videoInfo: {
+        url: string, 
+        title: string, 
+        description: string, 
+        thumbUrl:string, 
+        explicit: boolean
+      }, 
+      rate: int, 
+      views: int, 
+      tags: [
+        tagName: string
+      ] 
+    }
     ```
     * ERR_BAD_REQUEST
     * ERR_API_INTERNAL_ERROR
@@ -127,7 +178,10 @@
     POST JSON: data={}
     ```
     ```
-    { postId: int, views: int}
+    { 
+      postId: int, 
+      views: int
+    }
     ```
 
     * ERR_BAD_REQUEST
@@ -142,7 +196,10 @@
     POST JSON: data={rate: int}
     ```
     ```
-    { postId: int, rate: int }
+    { 
+      postId: int, 
+      rate: int 
+    }
     ```
     * ERR_BAD_REQUEST
     * ERR_API_INTERNAL_ERROR
@@ -155,7 +212,32 @@
     get top links (only sessionId is required, max limit value: 100)
     ```
     ```
-    {count: int, pages: int, currentPage: int, isNextPage: bool, isPrevPage: bool, result: [{ postId: int, categoryId: int, added: int, userId: int, userName: string, videoInfo: {url: string, title: string, description: string, thumbUrl:string, explicit: boolean}, rate: int, views: int, tags: [tagName: string]}]}
+    {
+      count: int, 
+      pages: int, 
+      currentPage: int, 
+      isNextPage: bool, 
+      isPrevPage: bool, 
+      result: [{ 
+        postId: int, 
+        categoryId: int, 
+        added: int, 
+        userId: int, 
+        userName: string, 
+        videoInfo: {
+          url: string, 
+          title: string, 
+          description: string, 
+          thumbUrl:string, 
+          explicit: boolean
+        }, 
+        rate: int, 
+        views: int, 
+        tags: [
+          tagName: string
+        ]
+      }]
+    }
     ```
     * ERR_BAD_REQUEST
     * ERR_API_INTERNAL_ERROR
@@ -167,7 +249,16 @@
     get tags (searchKey tag is optional, max limit value: 100)
     ```
     ```
-    {count: int, pages: int, currentPage: int, isNextPage: bool, isPrevPage: bool, result: [tagName:string]}
+    {
+      count: int, 
+      pages: int, 
+      currentPage: int, 
+      isNextPage: bool, 
+      isPrevPage: bool, 
+      result: [
+        tagName:string
+      ]
+    }
     ```
     * ERR_BAD_REQUEST
     * ERR_API_INTERNAL_ERROR
@@ -177,7 +268,32 @@
     get new links ordered from newer to older (only sessionId is required, max limit value: 100)
     ```
     ```
-    {count: int, pages: int, currentPage: int, isNextPage: bool, isPrevPage: bool, result: [{ postId: int, categoryId: int, added: int, userId: int, userName: string, videoInfo: {url: string, title: string, description: string, thumbUrl:string, explicit: boolean}, rate: int, views: int, tags: [tagName: string]}]}
+    {
+      count: int, 
+      pages: int, 
+      currentPage: int, 
+      isNextPage: bool, 
+      isPrevPage: bool, 
+      result: [{ 
+        postId: int, 
+        categoryId: int, 
+        added: int, 
+        userId: int, 
+        userName: string, 
+        videoInfo: {
+          url: string, 
+          title: string, 
+          description: string, 
+          thumbUrl:string, 
+          explicit: boolean
+        }, 
+        rate: int, 
+        views: int, 
+        tags: [
+          tagName: string
+        ]
+      }]
+    }
     ```
     * ERR_BAD_REQUEST
     * ERR_API_INTERNAL_ERROR
@@ -189,7 +305,32 @@
     get links by given tag name, ordered from newer to older (only sessionId is required, max limit value: 100)
     ```
     ```
-    {count: int, pages: int, currentPage: int, isNextPage: bool, isPrevPage: bool, result: [{ postId: int, categoryId: int, added: int, userId: int, userName: string, videoInfo: {url: string, title: string, description: string, thumbUrl:string, explicit: boolean}, rate: int, views: int, tags: [tagName: string]}]}
+    {
+      count: int, 
+      pages: int, 
+      currentPage: int, 
+      isNextPage: bool, 
+      isPrevPage: bool, 
+      result: [{ 
+        postId: int, 
+        categoryId: int, 
+        added: int, 
+        userId: int, 
+        userName: string, 
+        videoInfo: {
+          url: string, 
+          title: string, 
+          description: string, 
+          thumbUrl:string, 
+          explicit: boolean
+        }, 
+        rate: int, 
+        views: int, 
+        tags: [
+          tagName: string
+        ]
+      }]
+    }
     ```
     * ERR_BAD_REQUEST
     * ERR_API_INTERNAL_ERROR
@@ -201,7 +342,15 @@
     get given user profile (userId is optional)
     ```
     ```
-    {userId: int, name: string, fistName: sstring, lastName: string, accountType: string, topPosts: [ postId: int ]}
+    {
+      userId: int, 
+      name: string, 
+      fistName: string, 
+      lastName: string, 
+      accountType: string, 
+      topPosts: [ 
+      ]
+    }
     ```
     * ERR_BAD_REQUEST
     * ERR_API_INTERNAL_ERROR

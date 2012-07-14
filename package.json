@@ -6,7 +6,7 @@
   "main": "server.js",
   "author": "Mateusz Stępniak (zenedith@wp.pl)",
   "analyze": false,
-  "version": "0.1.1",
+  "version": "0.1.2",
   "engines": {
      "node":"0.6"
   },

@@ -562,7 +562,7 @@ var Api_Controller = {
       if (userId < 1) {
         return next(error(401, 'Session not authorized (userId)'));
       }
-
+      
       if (!req.body) {
         return next(error(400, 'Bad request (no POST data)'));
       }
@@ -571,46 +571,58 @@ var Api_Controller = {
         postData = (req.body) ? req.body.data : '{}',
         input = JSON.parse(postData),
         url = input.url || '',
-        Url = require(process.env.APP_PATH + "/models/url").Url,
-        urlObj = new Url(url);
+        Video = require(process.env.APP_PATH + "/models/video").Video;
 
-      if (!urlObj.isValid()) {
-        return next(error(400, 'Bad request (url param)'));
+      if (!url) {
+        return next(error(400, 'Bad Request (url)'));
       }
 
-      var
-        categoryId = ~~(input.categoryId) || 0,
-        tags = input.tags || [],
-        Post = require(process.env.APP_PATH + "/models/post").Post,
-        post = new Post();
-
-      try {
-        post.createNewPost(urlObj, categoryId, tags, userId, function (err2, p_obj) {
-
-          if (err2) {
-            return next(err2);
-          }
-
-          var
-            decorator_PostLink = require(process.env.APP_PATH + "/models/decorator/postLink").decorator_PostLink;
-
-          decorator_PostLink([p_obj], function (err, decoratedPosts) {
-
-            if (err) {
-              return next(err);
+      Video.factory(url, function (err2, videoObj) {
+  
+        if (err2) {
+          return next(err2);
+        }
+        
+        if (!videoObj.getUrl()) {
+          return next(error(400, 'Bad request (url param)'));
+        }
+  
+        var
+          categoryId = ~~(input.categoryId) || 0,
+          tags = input.tags || [],
+          Post = require(process.env.APP_PATH + "/models/post").Post,
+          post = new Post();
+  
+        try {
+          post.createNewPost(videoObj, categoryId, tags, userId, function (err3, p_obj) {
+  
+            if (err3) {
+              return next(err3);
             }
-
+  
+            
+            //TODO dont use decorator 
             var
-              data = decoratedPosts[0];
-
-            res.json(data, 201);
-            RequestLogger.log(req, data);
+              decorator_PostLink = require(process.env.APP_PATH + "/models/decorator/postLink").decorator_PostLink;
+  
+            decorator_PostLink([p_obj], function (err4, decoratedPosts) {
+  
+              if (err4) {
+                return next(err4);
+              }
+  
+              var
+                data = decoratedPosts[0];
+  
+              res.json(data, 201);
+              RequestLogger.log(req, data);
+            });
           });
-        });
-      }
-      catch (err3) {
-        return next(err3);
-      }
+        }
+        catch (e) {
+          return next(e);
+        }
+      });
     });
   },
   //get top link:  /api/getTopLinks/:sessionId/:categoryId/:limit/:page

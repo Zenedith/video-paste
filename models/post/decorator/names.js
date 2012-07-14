@@ -13,8 +13,6 @@ var Post_Decorator_Names = function(idsObj) {
 
   this.prepareKeys = function () {
     var
-      ids = Object.keys(idsObj),
-      idsLen = ids.length,
       classname = user.getClassName(),
       field = '__name',
       keyFields = [];

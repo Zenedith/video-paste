@@ -42,7 +42,7 @@ var Post_List_New = function ()
           //TODO optimize: remove all ids at once
           Database.removeValueFromSet(Post_List_New.setNameNew, resList[i], function(err, res) {
             if (err) {
-              log.crit(err);
+              log.critical(err);
             }
           });
         }

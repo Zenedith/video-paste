@@ -33,7 +33,7 @@ var Post_Tag = function (tagName)
       //async: add tag to post
       Database.appendValueToList(Post_Tag.getPostTagsListName(postId), _this.tagName, function (err2, res2) {
         if (err2) {
-          log.crit(err2);
+          log.critical(err2);
         }
       });
 
@@ -45,7 +45,7 @@ var Post_Tag = function (tagName)
       tag.update(function (err3, res3) {
 
         if (err3) {
-          log.crit(err3);
+          log.critical(err3);
         }
       });
 

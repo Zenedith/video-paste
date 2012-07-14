@@ -1,9 +1,9 @@
 var
   serverInit = require(__dirname + '/server-init'),
-  WebSocketApp = require(process.env.APP_PATH + '/vhost/webSocketApp').WebSocketApp,
-  app = WebSocketApp(),
   Api = require(process.env.APP_PATH + '/vhost/api').Api,
   api = Api(),
+  WebSocketApp = require(process.env.APP_PATH + '/vhost/webSocketApp').WebSocketApp,
+  app = WebSocketApp(api),  //TEMP hack to use one app to serve content and api (dotcloud subdomain problem)
   config = require('config'),
   log = require(process.env.APP_PATH + "/lib/log");
 

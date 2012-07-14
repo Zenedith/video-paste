@@ -79,7 +79,7 @@ var Session = function ()
         //async: update last used (renew session)
         _this.setObjectValueToDB(id, '__lifetime', (current_timestamp + SESSION_LIFETIME), function (err3, obj3) {
           if (err3) {
-            log.crit(err3);
+            log.critical(err3);
           }
         });
 

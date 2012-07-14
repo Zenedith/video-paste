@@ -46,7 +46,7 @@ var Post_Rate = function (postId)
       _this.addUserToAlreadyRatedSet(userId, function (err2, res) {
 
         if (err2) {
-          log.crit(err2);
+          log.critical(err2);
         }
       });
 

@@ -46,7 +46,7 @@ if (process.env.REDIS_PORT) {
 }
 
 var
-  ipaddr = config.app.host || '0.0.0.0',
+  ipaddr = '0.0.0.0',
   port = config.app.port || process.env.app_port || process.env.PORT;
 
 if (process.env.OPENSHIFT_INTERNAL_IP) {

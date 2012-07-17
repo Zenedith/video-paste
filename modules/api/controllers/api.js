@@ -588,13 +588,12 @@ var Api_Controller = {
         }
   
         var
-          categoryId = ~~(input.categoryId) || 0,
           tags = input.tags || [],
           Post = require(process.env.APP_PATH + "/models/post").Post,
           post = new Post();
   
         try {
-          post.createNewPost(videoObj, categoryId, tags, userId, function (err3, p_obj) {
+          post.createNewPost(videoObj, tags, userId, function (err3, p_obj) {
   
             if (err3) {
               return next(err3);
@@ -641,7 +640,6 @@ var Api_Controller = {
       }
 
       var
-//        categoryId = ~~(req.params.categoryId) || 0,
         limit = ~~(req.params.limit) || 1,
         page = ~~(req.params.page) || 1,
         getTopLinks = require(process.env.APP_PATH + "/models/response/getTopLinks").getTopLinks,
@@ -671,7 +669,7 @@ var Api_Controller = {
 
     });
   },
-  //get new links:  /api/getNewLinks/:sessionId/:categoryId/:limit/:page
+  //get new links:  /api/getNewLinks/:sessionId/:limit/:page
   get_new_links: function(req, res, next) {
     var
       Session = require(process.env.APP_PATH + "/models/session").Session,
@@ -687,7 +685,6 @@ var Api_Controller = {
       }
 
       var
-//        categoryId = ~~(req.params.categoryId) || 0,
         limit = ~~(req.params.limit) || 1,
         page = ~~(req.params.page) || 1,
         getNewLinks = require(process.env.APP_PATH + "/models/response/getNewLinks").getNewLinks,

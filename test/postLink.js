@@ -33,7 +33,6 @@ exports.testPostLinkCreateValid = {
         try {
           res.body.should.have.property('postId');
           res.body.postId.should.above(0);
-          res.body.should.have.property('categoryId');
           res.body.should.have.property('added');
           res.body.added.should.above(0);
           res.body.should.have.property('userId');
@@ -79,7 +78,6 @@ exports.testPostLinkCreateTestConverterYoutube = {
         try {
           res.body.should.have.property('postId');
           res.body.postId.should.above(0);
-          res.body.should.have.property('categoryId');
           res.body.should.have.property('added');
           res.body.added.should.above(0);
           res.body.should.have.property('userId');
@@ -125,7 +123,6 @@ exports.testPostLinkCreateTestVimeo = {
         try {
           res.body.should.have.property('postId');
           res.body.postId.should.above(0);
-          res.body.should.have.property('categoryId');
           res.body.should.have.property('added');
           res.body.added.should.above(0);
           res.body.should.have.property('userId');
@@ -171,7 +168,6 @@ exports.testPostLinkCreateTestConverterVimeo = {
         try {
           res.body.should.have.property('postId');
           res.body.postId.should.above(0);
-          res.body.should.have.property('categoryId');
           res.body.should.have.property('added');
           res.body.added.should.above(0);
           res.body.should.have.property('userId');
@@ -217,7 +213,6 @@ exports.testPostLinkCreateTestDailymotion = {
         try {
           res.body.should.have.property('postId');
           res.body.postId.should.above(0);
-          res.body.should.have.property('categoryId');
           res.body.should.have.property('added');
           res.body.added.should.above(0);
           res.body.should.have.property('userId');
@@ -262,7 +257,6 @@ exports.testPostLinkCreateTestConverterDailymotion = {
         try {
           res.body.should.have.property('postId');
           res.body.postId.should.above(0);
-          res.body.should.have.property('categoryId');
           res.body.should.have.property('added');
           res.body.added.should.above(0);
           res.body.should.have.property('userId');
@@ -394,7 +388,6 @@ exports.testGetPostLinkValid = {
         try {
           res.body.should.have.property('postId');
           res.body.postId.should.above(0);
-          res.body.should.have.property('categoryId');
           res.body.should.have.property('added');
           res.body.added.should.above(0);
           res.body.should.have.property('userId');

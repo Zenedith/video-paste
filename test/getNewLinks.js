@@ -8,10 +8,10 @@ var
   searchKey = 'fun';
 
 exports.testGetNewLinksValid = {
-  'GET /api/getNewLinks/:sessionId/:categoryId/:limit/:page': {
+  'GET /api/getNewLinks/:sessionId/:limit/:page': {
     'should return valid json response with new posts listing': function (done){
       supertest(Tester.getApiVhost())
-      .get('/api/getNewLinks/' + Tester.getSession() + '/0/' + limit + '/' + page)
+      .get('/api/getNewLinks/' + Tester.getSession() + '/' + limit + '/' + page)
       .expect('Content-Type', 'application/json; charset=utf-8')
       .expect(200)
       .end(function (err, res) {
@@ -38,10 +38,10 @@ exports.testGetNewLinksValid = {
 };
 
 exports.testGetNewLinksInvalidLimit = {
-  'GET /api/getNewLinks/:sessionId/:categoryId/:limit/:page': {
+  'GET /api/getNewLinks/:sessionId/:limit/:page': {
     'should return error json response (ERR_BAD_REQUEST)': function (done){
       supertest(Tester.getApiVhost())
-      .get('/api/getNewLinks/' + Tester.getSession() + '/0/' + invalidLimit + '/' + page)
+      .get('/api/getNewLinks/' + Tester.getSession() + '/' + invalidLimit + '/' + page)
       .expect('Content-Type', 'application/json; charset=utf-8')
       .expect(200)
       .end(function (err, res) {

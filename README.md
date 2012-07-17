@@ -115,8 +115,7 @@
     ```
     ```
     { 
-      postId: int, 
-      categoryId: int, 
+      postId: int,  
       added: int, 
       userId: int, 
       userName: string, 
@@ -148,7 +147,6 @@
     ```
     { 
       postId: int, 
-      categoryId: int, 
       added: int, 
       userId: int, 
       userName: string, 
@@ -221,8 +219,7 @@
       isNextPage: bool, 
       isPrevPage: bool, 
       result: [{ 
-        postId: int, 
-        categoryId: int, 
+        postId: int,  
         added: int, 
         userId: int, 
         userName: string, 
@@ -265,7 +262,7 @@
     * ERR_BAD_REQUEST
     * ERR_API_INTERNAL_ERROR
     * ERR_INVALID_KEY
-- GET /api/getNewLinks/:sessionId/:categoryId/:limit/:page
+- GET /api/getNewLinks/:sessionId/:limit/:page
     ```
     get new links ordered from newer to older (only sessionId is required, max limit value: 100)
     ```
@@ -278,7 +275,6 @@
       isPrevPage: bool, 
       result: [{ 
         postId: int, 
-        categoryId: int, 
         added: int, 
         userId: int, 
         userName: string, 
@@ -314,8 +310,7 @@
       isNextPage: bool, 
       isPrevPage: bool, 
       result: [{ 
-        postId: int, 
-        categoryId: int, 
+        postId: int,  
         added: int, 
         userId: int, 
         userName: string, 

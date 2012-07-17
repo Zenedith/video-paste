@@ -10,18 +10,16 @@ var Post = function ()
   log.debug('Post.construct()');
 
   this.__className = "Post";
-  this.__categoryId = 0;
   this.__added = 0;
   this.__userId = 0;
 
-  this.createNewPost = function (videoObj, categoryId, tags, userId, callback) {
+  this.createNewPost = function (videoObj, tags, userId, callback) {
     log.debug('Post.createNewPost()');
 
     if (!userId) {
       return callback(error(401, 'Missing userId'), null);
     }
 
-    this.__categoryId = ~~(categoryId) || 0;
     this.__added = Math.round(+new Date()/1000);
     this.__userId = ~~(userId);
     
@@ -94,10 +92,6 @@ var Post = function ()
       Post_List_New = require(process.env.APP_PATH + "/models/post/list/new").Post_List_New;
 
     Database.addValueToSet(Post_List_New.setNameNew, this.getId(), callback);
-  };
-
-  this.getCategoryId = function () {
-    return ~~(this.__categoryId) || 0;
   };
 
   this.getAddedTimestamp = function () {

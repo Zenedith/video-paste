@@ -12,7 +12,6 @@ var postLink = function (postObj, userNamesObj, postTagsObj, postRateObj, postVi
   var
     vObj = videoInfoObj.getVideoInfo(this.postId);
   
-  this.categoryId = ~~(postObj.getCategoryId());
   this.added = postObj.getAddedTimestamp();
   this.userId = ~~(postObj.getUserId());
   this.userName = userNamesObj.getName(this.userId);

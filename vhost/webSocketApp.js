@@ -2,6 +2,7 @@
 var WebSocketApp = function(app) {
   var
     express = require('express'),
+    http = require('http'),
     config = require('config'),
     log = require(process.env.APP_PATH + "/lib/log"),
     controller = require(process.env.APP_PATH + "/lib/controller"),
@@ -9,11 +10,13 @@ var WebSocketApp = function(app) {
     auth = new Auth_Authom();
   
   if (!app) {
-    app = express.createServer();
+    app = express();
   }
 
+  var server = http.createServer(app);
+
   if (!process.env.TESTER) {
-    global.socketio = require('socket.io').listen(app);    
+    global.socketio = require('socket.io').listen(server);
   }
 
   app.configure(function()
@@ -77,9 +80,8 @@ var WebSocketApp = function(app) {
         // message
         err = error(500, 'Unexpexted error occured'); // override message
       }
-      else {
-        log.error(err.code + ': ' + req.originalUrl + ', error: ' + err.message);
-      }
+
+      log.error(err.code + ': ' + req.originalUrl + ', error: ' + err.message);
 
       res.status(500);
       res.render('info', {

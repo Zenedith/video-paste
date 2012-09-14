@@ -5,10 +5,6 @@
   },
   "db": {
     "use" : "redis",
-    "prefix" : "vpa",
-    "redis": {
-      "host": "127.0.0.1",
-      "port": 6379
-    }
+    "prefix" : "vpa"
   }
 }

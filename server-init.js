@@ -8,6 +8,14 @@ if (/bftestrun/.test(process.env.APP_PATH)) {
   process.env.NODE_ENV = 'strider';
 }
 
+if (process.env.VCAP_APP_PORT) {
+  process.env.NODE_ENV = 'cloudfoundry';
+}
+
+if (process.env.OPENSHIFT_INTERNAL_IP) {
+  process.env.NODE_ENV = 'production'; //TODO
+}
+
 if (!process.env.NODE_ENV) {
   process.env.NODE_ENV = 'production';
 }
@@ -26,16 +34,31 @@ global.__t = function(str)
   return str;
 };
 
-if (process.env.NODE_ENV === 'dotcloud') {
-  var fs = require('fs');
-  var env = JSON.parse(fs.readFileSync('environment.json', 'utf-8'));
+var
+    ipaddr = '0.0.0.0',
+    port = config.app.port || process.env.app_port || process.env.PORT;
 
-  config.app.port = env.PORT_WWW; // override port
-  config.db.use = "redis";
-  config.db.redis.host = env.DOTCLOUD_DATA_REDIS_HOST; // override redis host
-  config.db.redis.port = env.DOTCLOUD_DATA_REDIS_PORT; // override redis port
-  config.db.redis.auth = env.DOTCLOUD_DATA_REDIS_PASSWORD; // override redis auth
-  // auth
+switch (process.env.NODE_ENV) {
+    case 'dotcloud':
+      var fs = require('fs');
+      var env = JSON.parse(fs.readFileSync('environment.json', 'utf-8'));
+
+      config.app.port = env.PORT_WWW; // override port
+      config.db.use = "redis";
+      config.db.redis.host = env.DOTCLOUD_DATA_REDIS_HOST; // override redis host
+      config.db.redis.port = env.DOTCLOUD_DATA_REDIS_PORT; // override redis port
+      config.db.redis.auth = env.DOTCLOUD_DATA_REDIS_PASSWORD; // override redis auth
+      break;
+    case 'cloudfoundry':
+      ipaddr = process.env.VCAP_APP_HOST;
+      port = process.env.VCAP_APP_PORT;
+      var matches = [];
+
+      if (matches = process.env.VMC_REDIS.match(/(.+)\:(.+)/)) {
+        config.db.redis.host = matches[1]; // override redis host
+        config.db.redis.port = matches[2]; // override redis port
+      }
+      break;
 }
 
 //check strider deploy config
@@ -44,10 +67,6 @@ if (process.env.REDIS_PORT) {
   config.db.redis.port = process.env.REDIS_PORT; // override redis port
   config.db.redis.auth = process.env.REDIS_PASSWORD; // override redis auth
 }
-
-var
-  ipaddr = '0.0.0.0',
-  port = config.app.port || process.env.app_port || process.env.PORT;
 
 if (process.env.OPENSHIFT_INTERNAL_IP) {
   ipaddr = process.env.OPENSHIFT_INTERNAL_IP;
@@ -58,17 +77,17 @@ if (process.env.OPENSHIFT_INTERNAL_IP) {
 function terminator(sig, err) {
   err = err || '';
 
-    if (typeof sig === "string") {      
-      log.debug('%s: Received %s (%s)- terminating Node server ...', Date(Date.now()), sig, err);
+    if (typeof sig === "string") {
+      log.debug('%s: Received %s (%s)- terminating Node server ...', new Date(Date.now()), sig, err);
       process.exit(1);
     }
 
-   log.debug('%s: Node server stopped.', Date(Date.now()) );
+   log.debug('%s: Node server stopped.', new Date(Date.now()) );
 }
 
 //handle uncaughtException (dont exit!)
-process.on('uncaughtException', function(err) { 
-  log.debug('%s: Received uncaughtException: %s', Date(Date.now()), err); 
+process.on('uncaughtException', function(err) {
+  log.debug('%s: Received uncaughtException: %s', new Date(Date.now()), err);
 });
 
 //Process on exit and signals.
@@ -76,7 +95,7 @@ process.on('exit', function() { terminator(); });
 
 ['SIGHUP', 'SIGINT', 'SIGQUIT', 'SIGILL', 'SIGTRAP', 'SIGABRT', 'SIGBUS',
  'SIGFPE', 'SIGUSR1', 'SIGSEGV', 'SIGUSR2', 'SIGPIPE', 'SIGTERM'
-].forEach(function(element, index, array) {
+].forEach(function(element) {
     process.on(element, function(err) { terminator(element, err); });
 });
 

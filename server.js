@@ -14,7 +14,7 @@ module.exports.port = serverInit.port;
 if (!module.parent) {
   var
     express = require('express'),
-    vhost = express.createServer();
+    vhost = express();
   
   vhost.use(express.favicon()); //serve favicon globally
   
@@ -22,7 +22,7 @@ if (!module.parent) {
   vhost.use(express.vhost('api.' + config.app.host, api));  //api
 
   vhost.listen(serverInit.port, serverInit.ipaddr, function () {
-    log.debug('%s: Node server started on %s:%d ...', Date(Date.now() ), serverInit.ipaddr, serverInit.port);
+    log.debug('%s: Node server started on %s:%d ...', new Date(Date.now() ), serverInit.ipaddr, serverInit.port);
     log.debug("Express server listening on port %d in %s mode", serverInit.port, process.env.NODE_ENV);
   });
 }

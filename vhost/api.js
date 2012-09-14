@@ -8,7 +8,7 @@ var Api = function(api)
     controller = require(process.env.APP_PATH + "/lib/controller");
   
   if (!api) {
-    api = express.createServer();
+    api = express();
   }
 
   api.configure(function() {
@@ -26,8 +26,8 @@ var Api = function(api)
       function(req, res, next)
       {
         var
-          ip = req.headers['x-real-ip'] || req.headers['remote-addr'] || res.connection.remoteAddress,
-          forwardedFor = req.headers['x-forwarded-for'] || '';
+          ip = req.headers['x-real-ip'] || req.headers['remote-addr'] || res.connection.remoteAddress;
+          //,forwardedFor = req.headers['x-forwarded-for'] || '';
 
         if (config.app.enable_google_analytics) {
           var

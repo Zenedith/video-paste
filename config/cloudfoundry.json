@@ -1,7 +1,7 @@
 {
   "app" : {
-    "port" : 8888,
-    "host" : "video-paste-www.cloudapp.net"
+    "port" : 3000,
+    "host" : "api-tap4video.cloudfoundry.com"
   },
   "db": {
     "use" : "redis",

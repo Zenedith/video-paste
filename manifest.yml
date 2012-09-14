@@ -1,0 +1,16 @@
+--- 
+applications: 
+  .: 
+    url: api-tap4video.cloudfoundry.com
+    instances: 1
+    mem: 64M
+    framework: 
+      info: 
+        description: Node.js Application
+        mem: 64M
+        exec: 
+      name: node
+    services: 
+      redis-db: 
+        type: redis
+    name: tap4video

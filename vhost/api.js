@@ -6,7 +6,7 @@ var Api = function(api)
     log = require(process.env.APP_PATH + "/lib/log"),
     RequestLogger = require(process.env.APP_PATH + "/lib/requestLogger").RequestLogger,
     controller = require(process.env.APP_PATH + "/lib/controller");
-  
+
   if (!api) {
     api = express();
   }

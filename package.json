@@ -26,7 +26,7 @@
     "formidable": "",
     "qs": "",
     "connect": "",
-    "express": "",
+    "express": "3.0.0rc4",
     "lru-cache": "",
     "restify": "",
     "hiredis": "",

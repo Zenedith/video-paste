@@ -9,20 +9,20 @@ var
 
 module.exports.app = app;
 module.exports.api = api;
-module.exports.port = serverInit.port;
+module.exports.port = config.app.port;
 
 if (!module.parent) {
   var
     express = require('express'),
     vhost = express();
-  
+
   vhost.use(express.favicon()); //serve favicon globally
   
   vhost.use(express.vhost(config.app.host, app)); //app
   vhost.use(express.vhost('api.' + config.app.host, api));  //api
 
-  vhost.listen(serverInit.port, serverInit.ipaddr, function () {
-    log.debug('%s: Node server started on %s:%d ...', new Date(Date.now() ), serverInit.ipaddr, serverInit.port);
-    log.debug("Express server listening on port %d in %s mode", serverInit.port, process.env.NODE_ENV);
+  vhost.listen(config.app.port, serverInit.ipaddr, function () {
+    log.debug('%s: Node server started on %s:%d ...', new Date(Date.now() ), serverInit.ipaddr, config.app.port);
+    log.debug("Express server listening on port %d in %s mode", config.app.port, process.env.NODE_ENV);
   });
 }

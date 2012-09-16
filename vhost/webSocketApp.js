@@ -97,7 +97,7 @@ var WebSocketApp = function(app) {
     // our custom JSON 404 middleware. Since it's placed last
     // it will be the last middleware called, if all others
     // invoke next() and do not respond.
-    app.use(function(req, res, next)
+    app.use(function(req, res)
     {
       log.error('404[app]: ' + req.originalUrl);
       res.status(404);
@@ -107,7 +107,7 @@ var WebSocketApp = function(app) {
     });
   });
 
-  return app;
+  return server;
 };
 
 module.exports.WebSocketApp = WebSocketApp;

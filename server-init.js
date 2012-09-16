@@ -44,6 +44,7 @@ var ServerInit = function () {
       var fs = require('fs');
       var env = JSON.parse(fs.readFileSync('environment.json', 'utf-8'));
 
+      host = env.DOTCLOUD_WWW_HTTP_HOST; // override host
       port = env.PORT_WWW; // override port
       config.db.use = "redis";
       config.db.redis.host = env.DOTCLOUD_DATA_REDIS_HOST; // override redis host

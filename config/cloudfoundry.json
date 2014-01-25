@@ -1,10 +1,10 @@
 {
-  "app" : {
-    "port" : 3000,
-    "host" : "api-tap4video.cloudfoundry.com"
-  },
-  "db": {
-    "use" : "redis",
-    "prefix" : "vpa"
-  }
+    "app": {
+        "port": 3000,
+        "host": "api-tap4video.cloudfoundry.com"
+    },
+    "db": {
+        "use": "redis",
+        "prefix": "vpa"
+    }
 }

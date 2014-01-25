@@ -1,1 +1,0 @@
-/Users/Shared/PRO/node/cloud9/bin/cloud9.sh -w /Users/Zenedith/git/video-paste

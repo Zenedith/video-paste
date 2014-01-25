@@ -1,38 +1,34 @@
 #!/bin/bash
-# This is a simple build script and will be executed on your CI system if
-# available.  Otherwise it will execute while your application is stopped
-# before the deploy step.  This script gets executed directly, so it
-# could be python, php, ruby, etc.
+ 
+# This script will be executed on your CI system if available. Otherwise it will
+# execute while your application is stopped before the deploy step.
 
-#!/bin/bash
+  echo "build: Checking for redis $REDIS_VERSION ..."
+ if [ ! -d ${OPENSHIFT_DATA_DIR}/redis ] || [ ! -e ${OPENSHIFT_DATA_DIR}redis/bin/redis.conf ]; then
+   cd ${OPENSHIFT_TMP_DIR}
+   if [ ! -d redis-${REDIS_VERSION} ]; then
+     curl -L -o redis-${REDIS_VERSION}.tar.gz http://redis.googlecode.com/files/redis-${REDIS_VERSION}.tar.gz
+     tar -xvzf redis-${REDIS_VERSION}.tar.gz
+   fi
+   cd redis-${REDIS_VERSION}
+   echo "Start compiling Redis ${REDIS_VERSION} on Openshift (i'll take a while)"
+   PREFIX=${OPENSHIFT_DATA_DIR}redis make -e install
 
-REDIS_VERSION=2.4.12
-MAKE_IS_DONE="no"
+   mkdir ${OPENSHIFT_DATA_DIR}/redis/data
+   MAKE_IS_DONE="yes"
+ else
+   echo "build: redis $REDIS_VERSION is installed."
+ fi
 
-if [ ! -d ${OPENSHIFT_DATA_DIR}/redis ]; then
-  cd ${OPENSHIFT_TMP_DIR}
-  if [ ! -d redis-${REDIS_VERSION} ]; then
-    curl -L -o redis-${REDIS_VERSION}.tar.gz http://redis.googlecode.com/files/redis-${REDIS_VERSION}.tar.gz
-    tar -xvzf redis-${REDIS_VERSION}.tar.gz
-  fi
-  cd redis-${REDIS_VERSION}
-  echo "Start compiling Redis ${REDIS_VERSION} on Openshift (i'll take a while)"
-  PREFIX=${OPENSHIFT_DATA_DIR}redis make -e install
-
-  mkdir ${OPENSHIFT_DATA_DIR}/redis/data
-  MAKE_IS_DONE="yes"
-fi
-
-if [ "$MAKE_IS_DONE" == "yes" ]; then
+ if [ "$MAKE_IS_DONE" == "yes" ]; then
   echo "Make is done, now create the patch"
   cat <<EOF >${OPENSHIFT_TMP_DIR}redis.conf.patch
 17c17
 < daemonize no
 ---
 > daemonize yes
-21,22c21
+21c21
 < pidfile /var/run/redis.pid
-<
 ---
 > pidfile ${OPENSHIFT_RUN_DIR}redis.pid
 24c24
@@ -51,8 +47,72 @@ if [ "$MAKE_IS_DONE" == "yes" ]; then
 > dir ${OPENSHIFT_DATA_DIR}redis/data
 
 EOF
+  cat ${OPENSHIFT_TMP_DIR}redis.conf.patch
   patch ${OPENSHIFT_TMP_DIR}redis-${REDIS_VERSION}/redis.conf ${OPENSHIFT_TMP_DIR}redis.conf.patch -o ${OPENSHIFT_DATA_DIR}redis/bin/redis.conf
+ fi
+
+ cd ${OPENSHIFT_DATA_DIR}redis
+ [ -f ${OPENSHIFT_RUN_DIR}redis.pid ] || ${OPENSHIFT_DATA_DIR}redis/bin/redis-server ${OPENSHIFT_DATA_DIR}redis/bin/redis.conf
+
+
+export NODE_VERSION="0.8.15"
+ 
+# This script builds and installs node.js into the $OPENSHIFT_DATA_DIR directory
+# from source code. The node.js source tarball will be downloaded, compiled, and
+# installed automatically only if a node binary does not exist in '../data/bin'
+# or if an existing binary does not match the specified version above.
+ 
+# NOTE: This can take while to compile on an openshift gear (@25min), so be
+# patient. This wait can be mitigated by compiling binaries elsewhere, and
+# copying them to the $OPENSHIFT_DATA_DIR directory. This script will only
+# attempt to compile sources after testing the binary version.
+ 
+export NODE_NAME="node-v$NODE_VERSION"
+
+echo "build: Checking for $NODE_NAME binary ..."
+if [ -x $OPENSHIFT_DATA_DIR/bin/node ] && [ "`$OPENSHIFT_DATA_DIR/bin/node -v`" == "v$NODE_VERSION" ]; then
+  echo "build: $NODE_NAME is installed."
+  exit 0
+fi
+ 
+echo "build: $NODE_NAME binary was not found, or is incorrect version."
+export NODE_TARBALL="$NODE_NAME.tar.gz"
+export NODE_TARBALL_PATH="$OPENSHIFT_TMP_DIR"$NODE_TARBALL
+export NODE_TARBALL_SHA1="curl -s http://nodejs.org/dist/v$NODE_VERSION/SHASUMS.txt" | grep "$NODE_TARBALL" | awk '{ print $1 }'
+ 
+echo "build: Checking for source code $OPENSHIFT_TMP_DIR/$NODE_TARBALL ..."
+if [ ! -f $NODE_TARBALL_PATH ] || \
+   [ "sha1sum $NODE_TARBALL_PATH | grep "$NODE_TARBALL_SHA1" | awk '{ print $1 }'" != "$NODE_TARBALL_SHA1" ]; then
+  echo "build: Downloading source code ..."
+  curl -so $NODE_TARBALL_PATH http://nodejs.org/dist/v$NODE_VERSION/$NODE_TARBALL
+  echo "build: Downloaded source code."
+else
+  echo "build: Found source code $NODE_TARBALL_PATH"
 fi
 
-cd ${OPENSHIFT_DATA_DIR}redis
-[ -f ${OPENSHIFT_RUN_DIR}redis.pid ] || ${OPENSHIFT_DATA_DIR}redis/bin/redis-server ${OPENSHIFT_DATA_DIR}redis/bin/redis.conf
+echo "build: Extracting $NODE_NAME source files ..."
+tar zxCf $OPENSHIFT_TMP_DIR $NODE_TARBALL_PATH
+cd "$OPENSHIFT_TMP_DIR"$NODE_NAME
+echo "build: Extracted $NODE_NAME source files."
+ 
+if [ ! -f ./config.mk ]; then
+  echo "build: Configuring $NODE_NAME ... "
+  ./configure \
+      --prefix=$OPENSHIFT_DATA_DIR \
+      --without-waf \
+      --shared-openssl \
+      --shared-openssl-includes=/usr/local/include/ \
+      --shared-openssl-libpath=/usr/local/lib/ \
+      --shared-zlib \
+      --shared-zlib-includes=/usr/local/include/ \
+      --shared-zlib-libpath=/usr/local/lib/
+  echo "build: Configured $NODE_NAME"
+fi
+ 
+echo "build: Building $NODE_NAME (Be patient) ... "
+make -j
+echo "build: Built $NODE_NAME"
+ 
+echo "build: Installing $NODE_NAME ... "
+make install
+echo "build: $NODE_NAME is installed."

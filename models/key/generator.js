@@ -1,32 +1,31 @@
 var
-  log = require(process.env.APP_PATH + "/lib/log"),
-  crypto = require('crypto'),
-  Database = require(process.env.APP_PATH + "/lib/database").Database,
-  secure = require("node-secure");
+    log = require(process.env.APP_PATH + "/lib/log"),
+    crypto = require('crypto'),
+    Database = require(process.env.APP_PATH + "/lib/database").Database,
+    secure = require("node-secure");
 
-var Key_Generator = function ()
-{
-  log.debug('Key_Generator.construct()');
+var Key_Generator = function () {
+    log.debug('Key_Generator.construct()');
 
-  this.salt = 'video-paste-key';
-  this.key_salt = 'video-pas' + Math.random() + 'te-key';
+    this.salt = 'video-paste-key';
+    this.key_salt = 'video-pas' + Math.random() + 'te-key';
 
-  this.generateKey = function () {
-    log.debug('Key_Generator.generateKey()');
-    var key = crypto.createHmac('sha1', this.salt).update(this.key_salt).digest('hex');
+    this.generateKey = function () {
+        log.debug('Key_Generator.generateKey()');
+        var key = crypto.createHmac('sha1', this.salt).update(this.key_salt).digest('hex');
 
-    return key.substr(4,16);
-  };
+        return key.substr(4, 16);
+    };
 
-  this.createNewKey = function (callback) {
-    var
-      Key = require(process.env.APP_PATH + "/models/key").Key,
-      key = new Key();
+    this.createNewKey = function (callback) {
+        var
+            Key = require(process.env.APP_PATH + "/models/key").Key,
+            key = new Key();
 
-    key.generateKey();
+        key.generateKey();
 
-    Database.saveObject(key, callback);
-  };
+        Database.saveObject(key, callback);
+    };
 
 };
 

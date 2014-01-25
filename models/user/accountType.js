@@ -1,11 +1,11 @@
 var
-  secure = require("node-secure");
+    secure = require("node-secure");
 
 var accountType = {
-  FACEBOOK: 'facebook',
-  GOOGLE: 'google',
-  TWITTER: 'twitter',
-  WINDOWS_LIVE: 'live'
+    FACEBOOK: 'facebook',
+    GOOGLE: 'google',
+    TWITTER: 'twitter',
+    WINDOWS_LIVE: 'live'
 };
 
 exports.accountType = accountType;

@@ -1,318 +1,208 @@
 {
-  "app" : {
-    "port" : 0,
-    "host" : "",
-    "version" : "0.1.2",
-    "log_level" : "error",
-    "log2file" : true,
-    "use_winston" : false,
-    "use_loggly" : true,
-    "use_loggly_frontend" : false,
-    "enable_google_analytics" : true
-  },
-  "tests": {
-    "login": {
-      "facebook": {
-        "id": "",
-        "name": "",
-        "fist_name": "",
-        "last_name": "",
-        "locale": ""
-      },
-      "google": {
-        "id": "",
-        "name": "",
-        "given_name": "",
-        "family_name": ""
-      },
-      "twitter": {
-        "id": "",
-        "name": ""
-      },
-      "live": {
-        "id": "",
-        "name": "",
-        "fist_name": "",
-        "last_name": "",
-        "locale": ""
-      }
+    "app" : {
+        "port" : 0,
+        "host" : "",
+        "version" : "0.1.3",
+        "log_level" : "error",
+        "log2file" : true,
+        "use_winston" : false,
+        "use_loggly" : true,
+        "use_loggly_frontend" : false,
+        "enable_google_analytics" : true
+    },
+    "tests": {
+        "login": {
+            "facebook": {
+                "id": "",
+                "name": "",
+                "fist_name": "",
+                "last_name": "",
+                "locale": ""
+            },
+            "google": {
+                "id": "",
+                "name": "",
+                "given_name": "",
+                "family_name": ""
+            },
+            "twitter": {
+                "id": "",
+                "name": ""
+            },
+            "live": {
+                "id": "",
+                "name": "",
+                "fist_name": "",
+                "last_name": "",
+                "locale": ""
+            }
+        }
+    },
+    "auth": {
+        "facebook": {
+            "appid": "",
+            "appsecret": "",
+            "accesstoken": ""
+        },
+        "google": {
+            "clientid": "",
+            "clientsecret": "",
+            "email": "",
+            "accesstoken": ""
+        },
+        "twitter": {
+            "consumerkey": "",
+            "consumersecret": "",
+            "accesstoken": "",
+            "accesstokensecret": ""
+        },
+        "live": {
+            "clientid": "",
+            "clientsecret": "",
+            "accesstoken": ""
+        }
+    },
+    "db": {
+        "use" : "redis",
+        "prefix" : "vpa",
+        "redis": {
+            "host": "127.0.0.1",
+            "port": 6379,
+            "auth": ""
+        }
+    },
+    "routers": {
+        "index" : {
+            "controller": "index",
+            "action": "index",
+            "url": "",
+            "method":"get",
+            "description":"index page",
+            "isRegExp" : false
+        },
+        "request_logger" : {
+            "controller": "index",
+            "action": "request_logger",
+            "url": "debug/requests",
+            "method":"get",
+            "description":"request logger",
+            "isRegExp" : false
+        },
+        "task_check_new_list" : {
+            "controller": "task",
+            "action": "check_new_list",
+            "url": "task/checkNewList",
+            "method":"get",
+            "description":"task for clean new list from older items",
+            "isRegExp" : false
+        }
+    },
+    "routers-api": {
+        "keys" : {
+            "controller": "keys",
+            "action": "create",
+            "url": "api/keys",
+            "method":"post",
+            "description":"generate key",
+            "isRegExp" : false
+        },
+        "get_session" : {
+            "controller": "auth",
+            "action": "authGuest",
+            "url": "api/auth",
+            "method":"post",
+            "description":"authorize as guest",
+            "isRegExp" : false
+        },
+        "login_fb" : {
+            "controller": "auth",
+            "action": "authFb",
+            "url": "api/auth/fb",
+            "method":"post",
+            "description":"login by fb",
+            "isRegExp" : false
+        },
+        "login_google" : {
+            "controller": "auth",
+            "action": "authGoogle",
+            "url": "api/auth/google",
+            "method":"post",
+            "description":"login by google",
+            "isRegExp" : false
+        },
+        "login_twitter" : {
+            "controller": "auth",
+            "action": "authTwitter",
+            "url": "api/auth/twitter",
+            "method":"post",
+            "description":"login by twitter",
+            "isRegExp" : false
+        },
+        "login_winlive" : {
+            "controller": "auth",
+            "action": "authLive",
+            "url": "api/auth/live",
+            "method":"post",
+            "description":"login by windows live",
+            "isRegExp" : false
+        },
+        "getUserProfile" : {
+            "controller": "users",
+            "action": "profile",
+            "url": "api/users/:userId",
+            "method":"get",
+            "description":"get user profile",
+            "isRegExp" : false
+        }
+    },
+    "routers-tap4video": {
+        "createPost" : {
+            "controller": "posts",
+            "action": "create",
+            "url": "api/tap4video/posts",
+            "method":"post",
+            "description":"create post",
+            "isRegExp" : false
+        },
+        "getPost" : {
+            "controller": "posts",
+            "action": "get",
+            "url": "api/tap4video/posts/:postId",
+            "method":"get",
+            "description":"get post",
+            "isRegExp" : false
+        },
+        "postView" : {
+            "controller": "posts",
+            "action": "postViews",
+            "url": "api/tap4video/posts/:postId/view",
+            "method":"post",
+            "description":"post views increase",
+            "isRegExp" : false
+        },
+        "postRate" : {
+            "controller": "posts",
+            "action": "postRate",
+            "url": "api/tap4video/posts/:postId/rate",
+            "method":"post",
+            "description":"rate post",
+            "isRegExp" : false
+        },
+        "postsSearch" : {
+            "controller": "posts",
+            "action": "search",
+            "url": "api/tap4video/posts",
+            "method":"get",
+            "description":"search posts",
+            "isRegExp" : false
+        },
+        "tagsSearch" : {
+            "controller": "tags",
+            "action": "search",
+            "url": "api/tap4video/tags",
+            "method":"get",
+            "description":"get tags for search key",
+            "isRegExp" : false
+        }
     }
-  },
-  "auth": {
-    "facebook": {
-      "appid": "",
-      "appsecret": "",
-      "accesstoken": ""
-    },
-    "google": {
-      "clientid": "",
-      "clientsecret": "",
-      "email": "",
-      "accesstoken": ""
-    },
-    "twitter": {
-      "accesstoken": "",
-      "accesstokensecret": "",
-      "accesstoken": "",
-      "accesstokensecret": ""
-    },
-    "live": {
-      "clientid": "",
-      "clientsecret": "",
-      "accesstoken": ""
-    }
-  },
-  "db": {
-    "use" : "redis",
-    "prefix" : "vpa",
-    "redis": {
-      "host": "127.0.0.1",
-      "port": 6379,
-      "auth": ""
-    }
-  },
-  "routers": {
-    "index" : {
-      "controller": "index",
-      "action": "index",
-      "url": "",
-      "method":"get",
-      "description":"index page",
-      "isRegExp" : false
-    },
-    "request_logger" : {
-      "controller": "index",
-      "action": "request_logger",
-      "url": "debug/requests",
-      "method":"get",
-      "description":"request logger",
-      "isRegExp" : false
-    },
-    "task_check_new_list" : {
-      "controller": "task",
-      "action": "check_new_list",
-      "url": "task/checkNewList",
-      "method":"get",
-      "description":"task for clean new list from older items",
-      "isRegExp" : false
-    }
-  },
-  "routers-api": {
-    "get_session" : {
-      "controller": "api",
-      "action": "get_session",
-      "url": "api/getSession/:apiKey",
-      "method":"get",
-      "description":"get session",
-      "isRegExp" : false
-    },
-    "login_fb" : {
-      "controller": "api",
-      "action": "login_fb",
-      "url": "api/loginByFb/:apiKey",
-      "method":"post",
-      "description":"login by fb",
-      "isRegExp" : false
-    },
-    "login_google" : {
-      "controller": "api",
-      "action": "login_google",
-      "url": "api/loginByGoogle/:apiKey",
-      "method":"post",
-      "description":"login by google",
-      "isRegExp" : false
-    },
-    "login_twitter" : {
-      "controller": "api",
-      "action": "login_twitter",
-      "url": "api/loginByTwitter/:apiKey",
-      "method":"post",
-      "description":"login by twitter",
-      "isRegExp" : false
-    },
-    "login_winlive" : {
-      "controller": "api",
-      "action": "login_winlive",
-      "url": "api/loginByWindowsLive/:apiKey",
-      "method":"post",
-      "description":"login by windows live",
-      "isRegExp" : false
-    },
-    "generate_key" : {
-      "controller": "api",
-      "action": "generate_key",
-      "url": "api/generateKey",
-      "method":"get",
-      "description":"generate ket",
-      "isRegExp" : false
-    },
-    "post_get" : {
-      "controller": "api",
-      "action": "post_get",
-      "url": "api/postLink/:sessionId/:postId",
-      "method":"get",
-      "description":"get post",
-      "isRegExp" : false
-    },
-    "post_create" : {
-      "controller": "api",
-      "action": "post_create",
-      "url": "api/postLink/:sessionId",
-      "method":"post",
-      "description":"create post",
-      "isRegExp" : false
-    },
-    "post_view" : {
-      "controller": "api",
-      "action": "postViews",
-      "url": "api/postViews/:sessionId/:postId",
-      "method":"post",
-      "description":"post views increase",
-      "isRegExp" : false
-    },
-    "post_rate" : {
-      "controller": "api",
-      "action": "postRate",
-      "url": "api/postRate/:sessionId/:postId",
-      "method":"post",
-      "description":"rate post",
-      "isRegExp" : false
-    },
-    "get_new_links" : {
-      "controller": "api",
-      "action": "get_new_links",
-      "url": "api/getNewLinks/:sessionId/:limit/:page",
-      "method":"get",
-      "description":"get new links",
-      "isRegExp" : false
-    },
-    "get_new_links_default1" : {
-      "controller": "api",
-      "action": "get_new_links",
-      "url": "api/getNewLinks/:sessionId/:limit",
-      "method":"get",
-      "description":"get new links",
-      "isRegExp" : false
-    },
-    "get_new_links_default2" : {
-      "controller": "api",
-      "action": "get_new_links",
-      "url": "api/getNewLinks/:sessionId",
-      "method":"get",
-      "description":"get new links",
-      "isRegExp" : false
-    },
-    "get_top_link" : {
-      "controller": "api",
-      "action": "get_top_link",
-      "url": "api/getTopLinks/:sessionId/:categoryId/:limit/:page",
-      "method":"get",
-      "description":"get top links",
-      "isRegExp" : false
-    },
-    "get_top_link_default1" : {
-      "controller": "api",
-      "action": "get_top_link",
-      "url": "api/getTopLinks/:sessionId/:categoryId/:limit",
-      "method":"get",
-      "description":"get top links",
-      "isRegExp" : false
-    },
-    "get_top_link_default2" : {
-      "controller": "api",
-      "action": "get_top_link",
-      "url": "api/getTopLinks/:sessionId/:categoryId",
-      "method":"get",
-      "description":"get top links",
-      "isRegExp" : false
-    },
-    "get_top_link_default3" : {
-      "controller": "api",
-      "action": "get_top_link",
-      "url": "api/getTopLinks/:sessionId",
-      "method":"get",
-      "description":"get top links",
-      "isRegExp" : false
-    },
-    "get_tags_search_key" : {
-      "controller": "api",
-      "action": "getTags",
-      "url": "api/getTags/:apiKey/:limit/:page/:searchKey",
-      "method":"get",
-      "description":"get tags for search key",
-      "isRegExp" : false
-    },
-    "get_tags" : {
-      "controller": "api",
-      "action": "getTags",
-      "url": "api/getTags/:apiKey/:limit/:page",
-      "method":"get",
-      "description":"get tags",
-      "isRegExp" : false
-    },
-    "get_tags_default1" : {
-      "controller": "api",
-      "action": "getTags",
-      "url": "api/getTags/:apiKey/:limit",
-      "method":"get",
-      "description":"get tags",
-      "isRegExp" : false
-    },
-    "get_tags_default2" : {
-      "controller": "api",
-      "action": "getTags",
-      "url": "api/getTags/:apiKey",
-      "method":"get",
-      "description":"get tags",
-      "isRegExp" : false
-    },
-    "get_post_by_tag" : {
-      "controller": "api",
-      "action": "getLinksByTag",
-      "url": "api/getLinksByTag/:sessionId/:tagName/:limit/:page",
-      "method":"get",
-      "description":"get links for tag",
-      "isRegExp" : false
-    },
-    "get_post_by_tag_default1" : {
-      "controller": "api",
-      "action": "getLinksByTag",
-      "url": "api/getLinksByTag/:sessionId/:tagName/:limit",
-      "method":"get",
-      "description":"get links for tag",
-      "isRegExp" : false
-    },
-    "get_post_by_tag_default2" : {
-      "controller": "api",
-      "action": "getLinksByTag",
-      "url": "api/getLinksByTag/:sessionId/:tagName",
-      "method":"get",
-      "description":"get links for tag",
-      "isRegExp" : false
-    },
-    "get_post_by_tag_default3" : {
-      "controller": "api",
-      "action": "getLinksByTag",
-      "url": "api/getLinksByTag/:sessionId",
-      "method":"get",
-      "description":"get links for tag",
-      "isRegExp" : false
-    },
-    "user_my_profile" : {
-      "controller": "api",
-      "action": "profile",
-      "url": "api/profile/:sessionId",
-      "method":"get",
-      "description":"get my profile",
-      "isRegExp" : false
-    },
-    "user_profile" : {
-      "controller": "api",
-      "action": "profile",
-      "url": "api/profile/:sessionId/:userId",
-      "method":"get",
-      "description":"get user profile",
-      "isRegExp" : false
-    }
-  }
 }

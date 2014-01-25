@@ -94,8 +94,8 @@ div.content
 
   div.method
     div.left
-      div.method_type GET
-      div.method_url /api/getSession/:apiKey
+      div.method_type POST
+      div.method_url /api/auth?apiKey=
       div.method_desc get session for unauthorized user
       div.method_post_data
       div.method_sample_response RESPONSE: {sess: string, userId: int}
@@ -108,7 +108,7 @@ div.content
   div.method
     div.left
       div.method_type POST
-      div.method_url /api/loginByFb/:apiKey
+      div.method_url /api/auth/fb?apiKey=
       div.method_desc get session for authorized user by facebook
       div.method_post_data POST JSON: data={id: string, name: string, fist_name: string, last_name: string, locale: string}
       div.method_sample_response RESPONSE: {sess: string, userId: int}
@@ -122,7 +122,7 @@ div.content
   div.method
     div.left
       div.method_type POST
-      div.method_url /api/loginByGoogle/:apiKey
+      div.method_url /api/auth/google?apiKey=
       div.method_desc get session for authorized user by google
       div.method_post_data POST JSON: data={id: string, name: string, given_name: string, family_name: string}
       div.method_sample_response RESPONSE: {sess: string, userId: int}
@@ -136,7 +136,7 @@ div.content
   div.method
     div.left
       div.method_type POST
-      div.method_url /api/loginByTwitter/:apiKey
+      div.method_url /api/auth/twitter?apiKey=
       div.method_desc get session for authorized user by twitter
       div.method_post_data POST JSON: data={id: string, name: string}
       div.method_sample_response RESPONSE: {sess: string, userId: int}
@@ -150,7 +150,7 @@ div.content
   div.method
     div.left
       div.method_type POST
-      div.method_url /api/loginByWindowsLive/:apiKey
+      div.method_url /api/auth/live?apiKey=
       div.method_desc get session for authorized user by windows live
       div.method_post_data POST JSON: data={id: string, name: string, fist_name: string, last_name: string, locale: string}
       div.method_sample_response RESPONSE: {sess: string, userId: int}
@@ -163,8 +163,8 @@ div.content
 
   div.method
     div.left
-      div.method_type GET
-      div.method_url /api/generateKey
+      div.method_type POST
+      div.method_url /api/keys?generateKey=true
       div.method_desc generate valid key (temp)
       div.method_post_data
       div.method_sample_response RESPONSE: {key: string}
@@ -173,7 +173,7 @@ div.content
   div.method
     div.left
       div.method_type GET
-      div.method_url /api/postLink/:sessionId/:postId
+      div.method_url /api/tap4video/posts/:postId?sessionId=
       div.method_desc get posted link data by postId
       div.method_post_data
       div.method_sample_response RESPONSE: { postId: int, added: int, userId: int, userName: string, videoInfo: {url: string, title: string, description: string, thumbUrl:string, explicit: boolean}, rate: int, views: int, tags: [tagName: string] }
@@ -187,7 +187,7 @@ div.content
   div.method
     div.left
       div.method_type POST
-      div.method_url /api/postLink/:sessionId
+      div.method_url /api/tap4video/posts?sessionId=
       div.method_desc create post link
       div.method_post_data POST JSON: data={url: string, tags: [tagName: string]}
       div.method_sample_response RESPONSE: { postId: int, added: int, userId: int, userName: string, videoInfo: {url: string, title: string, description: string, thumbUrl:string, explicit: boolean}, rate: int, views: int, tags: [tagName: string] }
@@ -203,7 +203,7 @@ div.content
   div.method
     div.left
       div.method_type POST
-      div.method_url /api/postViews/:sessionId/:postId
+      div.method_url /api/tap4video/posts/:postId/view?sessionId=
       div.method_desc increse post link views count
       div.method_post_data POST JSON: data={}
       div.method_sample_response RESPONSE: { postId: int, views: int }
@@ -217,7 +217,7 @@ div.content
   div.method
     div.left
       div.method_type POST
-      div.method_url /api/postRate/:sessionId/:postId
+      div.method_url /api/tap4video/posts/:postId/rate?sessionId=
       div.method_desc rate post link  (rate [-1, 1])
       div.method_post_data POST JSON: data={rate: int}
       div.method_sample_response RESPONSE: { postId: int, rate: int }
@@ -233,7 +233,7 @@ div.content
   div.method
     div.left
       div.method_type GET
-      div.method_url /api/getTopLinks/:sessionId/:categoryId/:limit/:page
+      div.method_url /api/tap4video/posts?sessionId=&limit=&page=
       div.method_desc get top links (only sessionId is required, max limit value: 100)
       div.method_post_data
       div.method_sample_response RESPONSE: {count: int, pages: int, currentPage: int, isNextPage: bool, isPrevPage: bool, result: [{ postId: int, added: int, userId: int, userName: string, videoInfo: {url: string, title: string, description: string, thumbUrl:string, explicit: boolean}, rate: int, views: int, tags: [tagName: string]}]}
@@ -248,8 +248,8 @@ div.content
   div.method
     div.left
       div.method_type GET
-      div.method_url /api/getTags/:apiKey/:limit/:page/:searchKey
-      div.method_desc get tags (searchKey tag is optional, max limit value: 100)
+      div.method_url /api/tap4video/tags?apiKey=&limit=&page=&searchKey=
+      div.method_desc get tags (searchKey param is optional, max limit value: 100)
       div.method_post_data
       div.method_sample_response RESPONSE: {count: int, pages: int, currentPage: int, isNextPage: bool, isPrevPage: bool, result: [tagName:string]}
     div.method_error_codes
@@ -261,7 +261,7 @@ div.content
   div.method
     div.left
       div.method_type GET
-      div.method_url /api/getNewLinks/:sessionId/:limit/:page
+      div.method_url /api/tap4video/posts?sessionId=&limit=&page=&new=true
       div.method_desc get new links ordered from newer to older (only sessionId is required, max limit value: 100)
       div.method_post_data
       div.method_sample_response RESPONSE: {count: int, pages: int, currentPage: int, isNextPage: bool, isPrevPage: bool, result: [{ postId: int, added: int, userId: int, userName: string, videoInfo: {url: string, title: string, description: string, thumbUrl:string, explicit: boolean}, rate: int, views: int, tags: [tagName: string]}]}
@@ -276,7 +276,7 @@ div.content
   div.method
     div.left
       div.method_type GET
-      div.method_url /api/getLinksByTag/:sessionId/:tagName/:limit/:page
+      div.method_url /api/tap4video/posts?sessionId=&limit=&page=&tagName=
       div.method_desc get links by given tag name, ordered from newer to older (only sessionId is required, max limit value: 100)
       div.method_post_data
       div.method_sample_response RESPONSE: {count: int, pages: int, currentPage: int, isNextPage: bool, isPrevPage: bool, result: [{ postId: int, added: int, userId: int, userName: string, videoInfo: {url: string, title: string, description: string, thumbUrl:string, explicit: boolean}, rate: int, views: int, tags: [tagName: string]}]}
@@ -291,8 +291,8 @@ div.content
   div.method
     div.left
       div.method_type GET
-      div.method_url /api/profile/:sessionId/:userId
-      div.method_desc get given user profile (userId is optional)
+      div.method_url /api/users/:userId
+      div.method_desc get given user profile (userId can be replaced by "me")
       div.method_post_data
       div.method_sample_response RESPONSE: {userId: int, name: string, fistName: sstring, lastName: string, accountType: string, topPosts: [ postId: int ]}
     div.method_error_codes

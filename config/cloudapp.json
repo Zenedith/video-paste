@@ -1,14 +1,14 @@
 {
-  "app" : {
-    "port" : 8888,
-    "host" : "video-paste-www.cloudapp.net"
-  },
-  "db": {
-    "use" : "redis",
-    "prefix" : "vpa",
-    "redis": {
-      "host": "127.0.0.1",
-      "port": 6379
+    "app": {
+        "port": 8888,
+        "host": "video-paste-www.cloudapp.net"
+    },
+    "db": {
+        "use": "redis",
+        "prefix": "vpa",
+        "redis": {
+            "host": "127.0.0.1",
+            "port": 6379
+        }
     }
-  }
 }

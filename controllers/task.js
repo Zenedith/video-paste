@@ -1,30 +1,30 @@
 var
-  log = require(process.env.APP_PATH + "/lib/log"),
-  config = require('config'),
-  RequestLogger = require(process.env.APP_PATH + "/lib/requestLogger").RequestLogger,
-  secure = require("node-secure");
+    log = require(process.env.APP_PATH + "/lib/log"),
+    config = require('config'),
+    RequestLogger = require(process.env.APP_PATH + "/lib/requestLogger").RequestLogger,
+    secure = require("node-secure");
 
 var Task_Controller = {
-  check_new_list: function (req, res, next) {
+    check_new_list: function (req, res, next) {
 
-    var
-      Post_List_New = require(process.env.APP_PATH + "/models/post/list/new").Post_List_New,
-      postListNew = new Post_List_New();
+        var
+            Post_List_New = require(process.env.APP_PATH + "/models/post/list/new").Post_List_New,
+            postListNew = new Post_List_New();
 
-    postListNew.cleanOlderPosts(function (err, removedCount){
+        postListNew.cleanOlderPosts(function (err, removedCount) {
 
-      if (err) {
-        return next(err);
-      }
+            if (err) {
+                return next(err);
+            }
 
-      var data = {
-        removedCount: removedCount
-      };
+            var data = {
+                removedCount: removedCount
+            };
 
-      res.json(data);
-      RequestLogger.log(req, data);
-    });
-  }
+            res.json(data);
+            RequestLogger.log(req, data);
+        });
+    }
 
 };
 

@@ -1,52 +1,52 @@
 var
-  Database = require(process.env.APP_PATH + "/lib/database").Database,
-  Post_Tag = require(process.env.APP_PATH + "/models/post/tag").Post_Tag,
-  secure = require("node-secure");
+    Database = require(process.env.APP_PATH + "/lib/database").Database,
+    Post_Tag = require(process.env.APP_PATH + "/models/post/tag").Post_Tag,
+    secure = require("node-secure");
 
-var Post_Decorator_Tags = function(idsObj, callback) {
+var Post_Decorator_Tags = function (idsObj, callback) {
 
-  this.postsTags = {};
+    this.postsTags = {};
 
-  var
-    ids = Object.keys(idsObj),
-    idsLen = ids.length;
-
-  this.prepareKeys = function () {
     var
-      start = 0,
-      stop = -1,
-      keyFields = [];
+        ids = Object.keys(idsObj),
+        idsLen = ids.length;
 
-    if (idsLen) {
-
-      for (var i = 0; i < idsLen; ++i) {
+    this.prepareKeys = function () {
         var
-          listName = Post_Tag.getPostTagsListName(ids[i]),
-          key = [listName, start, stop];
+            start = 0,
+            stop = -1,
+            keyFields = [];
 
-        keyFields.push(key);
-      }
-    }
+        if (idsLen) {
 
-    return {'lrange' : keyFields};
-  };
+            for (var i = 0; i < idsLen; ++i) {
+                var
+                    listName = Post_Tag.getPostTagsListName(ids[i]),
+                    key = [listName, start, stop];
 
-  this.load = function (data) {
+                keyFields.push(key);
+            }
+        }
 
-    if (idsLen) {
-      for (var i = 0; i < idsLen; ++i) {
-        this.postsTags[ids[i]] = data.pop();
-      }
-    }
-  };
+        return {'lrange': keyFields};
+    };
 
-  this.getTags = function (id) {
-    if (this.postsTags.hasOwnProperty(id) && this.postsTags[id]) {
-      return this.postsTags[id];
-    }
+    this.load = function (data) {
 
-    return [];
-  };
+        if (idsLen) {
+            for (var i = 0; i < idsLen; ++i) {
+                this.postsTags[ids[i]] = data.pop();
+            }
+        }
+    };
+
+    this.getTags = function (id) {
+        if (this.postsTags.hasOwnProperty(id) && this.postsTags[id]) {
+            return this.postsTags[id];
+        }
+
+        return [];
+    };
 };
 
 exports.Post_Decorator_Tags = Post_Decorator_Tags;

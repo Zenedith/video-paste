@@ -1,50 +1,50 @@
 var
-  User = require(process.env.APP_PATH + "/models/user").User,
-  user = new User(),
-  secure = require("node-secure");
+    User = require(process.env.APP_PATH + "/models/user").User,
+    user = new User(),
+    secure = require("node-secure");
 
-var Post_Decorator_Names = function(idsObj) {
+var Post_Decorator_Names = function (idsObj) {
 
-  this.userNames = {};
+    this.userNames = {};
 
-  var
-    ids = Object.keys(idsObj),
-    idsLen = ids.length;
-
-  this.prepareKeys = function () {
     var
-      classname = user.getClassName(),
-      field = '__name',
-      keyFields = [];
+        ids = Object.keys(idsObj),
+        idsLen = ids.length;
 
-    if (idsLen) {
-
-      for (var i = 0; i < idsLen; ++i) {
+    this.prepareKeys = function () {
         var
-          key = [classname, ids[i], field];
+            classname = user.getClassName(),
+            field = '__name',
+            keyFields = [];
 
-        keyFields.push(key);
-      }
-    }
+        if (idsLen) {
 
-    return {'get' : keyFields};
-  };
+            for (var i = 0; i < idsLen; ++i) {
+                var
+                    key = [classname, ids[i], field];
 
-  this.load = function (data) {
-    if (idsLen) {
-      for (var i = 0; i < idsLen; ++i) {
-        this.userNames[ids[i]] = data.pop();
-      }
-    }
-  };
+                keyFields.push(key);
+            }
+        }
 
-  this.getName = function (id) {
-    if (this.userNames.hasOwnProperty(id) && this.userNames[id]) {
-      return this.userNames[id];
-    }
+        return {'get': keyFields};
+    };
 
-    return '';
-  };
+    this.load = function (data) {
+        if (idsLen) {
+            for (var i = 0; i < idsLen; ++i) {
+                this.userNames[ids[i]] = data.pop();
+            }
+        }
+    };
+
+    this.getName = function (id) {
+        if (this.userNames.hasOwnProperty(id) && this.userNames[id]) {
+            return this.userNames[id];
+        }
+
+        return '';
+    };
 };
 
 exports.Post_Decorator_Names = Post_Decorator_Names;

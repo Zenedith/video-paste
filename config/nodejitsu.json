@@ -1,15 +1,15 @@
 {
-  "app" : {
-    "port" : 0,
-    "host" : ""
-  },
-  "db": {
-    "use" : "redis",
-    "prefix" : "vpa",
-    "redis": {
-      "host": "koi.redistogo.com",
-      "port": 9319,
-      "auth": "2bcb8f46bc5f0072cba542c71b8ee1cc"
+    "app": {
+        "port": 0,
+        "host": ""
+    },
+    "db": {
+        "use": "redis",
+        "prefix": "vpa",
+        "redis": {
+            "host": "koi.redistogo.com",
+            "port": 9319,
+            "auth": "2bcb8f46bc5f0072cba542c71b8ee1cc"
+        }
     }
-  }
 }

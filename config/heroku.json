@@ -1,6 +1,6 @@
 {
-  "app" : {
-    "port" : 0,
-    "host" : "video-paste-api.herokuapp.com"
-  }
+    "app": {
+        "port": 0,
+        "host": "video-paste-api.herokuapp.com"
+    }
 }

@@ -1,5 +1,22 @@
+# Package Files #
+*.class
 .settings
-lib-cov
+.project
+.classpath
+test-result
+target/
+precompiled
+tmp
+eclipse/classes
+bin
+.DS_Store
+# Intellij project files
+*.iml
+*.ipr
+*.iws
+*.ids
+.idea
+
 *.seed
 *.log
 *.csv
@@ -8,10 +25,12 @@ lib-cov
 *.pid
 *.gz
 
+out
+lib-cov
+
 pids
 logs
 results
 
 node_modules
 npm-debug.log
-.idea

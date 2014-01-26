@@ -1,0 +1,38 @@
+{
+    "app" : {
+        "log_level" : "error",
+        "log2file" : false,
+        "use_winston" : false,
+        "use_loggly" : false,
+        "use_loggly_frontend" : false,
+        "enable_google_analytics" : false
+    },
+    "tests": {
+        "login": {
+            "facebook": {
+                "id": "100000376491230",
+                "name": "xxxx",
+                "fist_name": "xxx",
+                "last_name": "xx",
+                "locale": "pl_PL"
+            },
+            "google": {
+                "id": "112119194620910629287",
+                "name": "xxxx",
+                "given_name": "xxx",
+                "family_name": "xxx"
+            },
+            "twitter": {
+                "id": "114930149",
+                "name": "xxxx"
+            },
+            "live": {
+                "id": "a53a2f848e05416c",
+                "name": "xxxx",
+                "fist_name": "xxx",
+                "last_name": "xxxx",
+                "locale": "pl_PL"
+            }
+        }
+    }
+}

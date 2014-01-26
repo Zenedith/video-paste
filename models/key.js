@@ -26,6 +26,8 @@ var Key = function () {
         this.__lifetime = ~~(current_timestamp + KEY_LIFETIME);
         this.__version = KEY_VERSION;
         this.__lastUsed = ~~current_timestamp;
+
+        log.debug('Key.generatedKey: %s', this.__id);
     };
 
     this.isValidKey = function (id, callback) {

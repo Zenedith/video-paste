@@ -1,20 +1,22 @@
-style
-  body {
-    margin: 0 auto;
-  }
+extends ../layout
+block body
+  style.
+    body {
+        margin: 0 auto;
+    }
 
-  .content {
-    width: 1180px;
-    margin: 0 auto;
-  }
+    .content {
+        width: 1180px;
+        margin: 0 auto;
+    }
 
-  .info {
-    padding: 50px;
-    background-color: whiteSmoke;
-    border: 1px solid #CCC;
-    height: 50px;
-    text-align: center;
-   }
+    .info {
+        padding: 50px;
+        background-color: whiteSmoke;
+        border: 1px solid #CCC;
+        height: 50px;
+        text-align: center;
+     }
 
-div.content
-  div.info= title
+  div.content
+    div.info= title

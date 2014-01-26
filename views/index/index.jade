@@ -1,361 +1,363 @@
-style
-  body {
-    margin: 0 auto;
-  }
+extends ../layout
+block body
+  style.
+    body {
+        margin: 0 auto;
+    }
 
-  .content {
-    width: 1180px;
-    margin: 0 auto;
-  }
+    .content {
+        width: 1180px;
+        margin: 0 auto;
+    }
 
-  .info {
-    padding: 10px;
-    border: 1px solid #CCC;
-    text-align: center;
-   }
-   .item {
-    border: 1px solid #CCC;
-    margin-bottom: 30px;
-  }
-   .method {
-    clear: both;
-    background-color: whiteSmoke;
-    border: 1px solid #CCC;
-    height: 150px;
-    margin-bottom: 30px;
-  }
-  ul {
-    margin: 0;
-    padding: 0;
-    list-style: none;
-  }
-  .method_url, .method_type, .method_status, .method_desc, .err_error, .err_code {
-    float: left;
-    padding: 2px 10px;
-  }
-  .method_error_codes {
-    float: right;
-    padding: 16px 25px;
-  }
-  .method_url {
-    width: 325px;
-  }
-  .method_desc {
-    width: 440px;
-  }
-  .left {
-    float: left;
-    width: 880px;
-  }
-  .method_sample_response {
-    padding: 10px;
-    height: 40px;
-    background-color: white;
-  }
-  .method_post_data {
-    padding: 10px;
-    height: 40px;
-    clear: both;
-    background-color: white;
-    border-bottom: 1px solid #CCC;
-  }
+    .info {
+        padding: 10px;
+        border: 1px solid #CCC;
+        text-align: center;
+     }
+     .item {
+        border: 1px solid #CCC;
+        margin-bottom: 30px;
+    }
+     .method {
+        clear: both;
+        background-color: whiteSmoke;
+        border: 1px solid #CCC;
+        height: 150px;
+        margin-bottom: 30px;
+    }
+    ul {
+        margin: 0;
+        padding: 0;
+        list-style: none;
+    }
+    .method_url, .method_type, .method_status, .method_desc, .err_error, .err_code {
+        float: left;
+        padding: 2px 10px;
+    }
+    .method_error_codes {
+        float: right;
+        padding: 16px 25px;
+    }
+    .method_url {
+        width: 325px;
+    }
+    .method_desc {
+        width: 440px;
+    }
+    .left {
+        float: left;
+        width: 880px;
+    }
+    .method_sample_response {
+        padding: 10px;
+        height: 40px;
+        background-color: white;
+    }
+    .method_post_data {
+        padding: 10px;
+        height: 40px;
+        clear: both;
+        background-color: white;
+        border-bottom: 1px solid #CCC;
+    }
 
-  .error_response {
-    clear: both;
-    background-color: whiteSmoke;
-    border: 1px solid #CCC;
-  }
+    .error_response {
+        clear: both;
+        background-color: whiteSmoke;
+        border: 1px solid #CCC;
+    }
 
-  .err {
-    clear: both;
-    border: 1px solid #CCC;
-  }
+    .err {
+        clear: both;
+        border: 1px solid #CCC;
+    }
 
-  .err_error {
-    width: 410px;
-  }
+    .err_error {
+        width: 410px;
+    }
 
-  err_code {
-    width: 410px;
-  }
+    err_code {
+        width: 410px;
+    }
 
-div.content
-  h1.info Available api helpers
-  div.item
-    div GET /debug/requests
-    div DESC: request and response live debugger
+  div.content
+    h1.info Available api helpers
+    div.item
+        div GET /debug/requests
+        div DESC: request and response live debugger
 
-  h1.info Available tasks
-  div.item
-    div GET /task/checkNewList
-    div DESC: cleaning older posts from new list
+    h1.info Available tasks
+    div.item
+        div GET /task/checkNewList
+        div DESC: cleaning older posts from new list
 
-  h1.info Available api methods
+    h1.info Available api methods
 
-  div.method
-    div.left
-      div.method_type POST
-      div.method_url /api/auth?apiKey=
-      div.method_desc get session for unauthorized user
-      div.method_post_data
-      div.method_sample_response RESPONSE: {sess: string, userId: int}
-    div.method_error_codes
-      ul
-        li ERR_BAD_REQUEST
-        li ERR_API_INTERNAL_ERROR
-        li ERR_INVALID_KEY
+    div.method
+        div.left
+            div.method_type POST
+            div.method_url /api/auth?apiKey=
+            div.method_desc get session for unauthorized user
+            div.method_post_data
+            div.method_sample_response RESPONSE: {sess: string, userId: int}
+        div.method_error_codes
+            ul
+                li ERR_BAD_REQUEST
+                li ERR_API_INTERNAL_ERROR
+                li ERR_INVALID_KEY
 
-  div.method
-    div.left
-      div.method_type POST
-      div.method_url /api/auth/fb?apiKey=
-      div.method_desc get session for authorized user by facebook
-      div.method_post_data POST JSON: data={id: string, name: string, fist_name: string, last_name: string, locale: string}
-      div.method_sample_response RESPONSE: {sess: string, userId: int}
-    div.method_error_codes
-      ul
-        li ERR_BAD_REQUEST
-        li ERR_API_INTERNAL_ERROR
-        li ERR_INVALID_KEY
-        li ERR_LOGIN_FAILED
+    div.method
+        div.left
+            div.method_type POST
+            div.method_url /api/auth/fb?apiKey=
+            div.method_desc get session for authorized user by facebook
+            div.method_post_data POST JSON: data={id: string, name: string, fist_name: string, last_name: string, locale: string}
+            div.method_sample_response RESPONSE: {sess: string, userId: int}
+        div.method_error_codes
+            ul
+                li ERR_BAD_REQUEST
+                li ERR_API_INTERNAL_ERROR
+                li ERR_INVALID_KEY
+                li ERR_LOGIN_FAILED
 
-  div.method
-    div.left
-      div.method_type POST
-      div.method_url /api/auth/google?apiKey=
-      div.method_desc get session for authorized user by google
-      div.method_post_data POST JSON: data={id: string, name: string, given_name: string, family_name: string}
-      div.method_sample_response RESPONSE: {sess: string, userId: int}
-    div.method_error_codes
-      ul
-        li ERR_BAD_REQUEST
-        li ERR_API_INTERNAL_ERROR
-        li ERR_INVALID_KEY
-        li ERR_LOGIN_FAILED
+    div.method
+        div.left
+            div.method_type POST
+            div.method_url /api/auth/google?apiKey=
+            div.method_desc get session for authorized user by google
+            div.method_post_data POST JSON: data={id: string, name: string, given_name: string, family_name: string}
+            div.method_sample_response RESPONSE: {sess: string, userId: int}
+        div.method_error_codes
+            ul
+                li ERR_BAD_REQUEST
+                li ERR_API_INTERNAL_ERROR
+                li ERR_INVALID_KEY
+                li ERR_LOGIN_FAILED
 
-  div.method
-    div.left
-      div.method_type POST
-      div.method_url /api/auth/twitter?apiKey=
-      div.method_desc get session for authorized user by twitter
-      div.method_post_data POST JSON: data={id: string, name: string}
-      div.method_sample_response RESPONSE: {sess: string, userId: int}
-    div.method_error_codes
-      ul
-        li ERR_BAD_REQUEST
-        li ERR_API_INTERNAL_ERROR
-        li ERR_INVALID_KEY
-        li ERR_LOGIN_FAILED
+    div.method
+        div.left
+            div.method_type POST
+            div.method_url /api/auth/twitter?apiKey=
+            div.method_desc get session for authorized user by twitter
+            div.method_post_data POST JSON: data={id: string, name: string}
+            div.method_sample_response RESPONSE: {sess: string, userId: int}
+        div.method_error_codes
+            ul
+                li ERR_BAD_REQUEST
+                li ERR_API_INTERNAL_ERROR
+                li ERR_INVALID_KEY
+                li ERR_LOGIN_FAILED
 
-  div.method
-    div.left
-      div.method_type POST
-      div.method_url /api/auth/live?apiKey=
-      div.method_desc get session for authorized user by windows live
-      div.method_post_data POST JSON: data={id: string, name: string, fist_name: string, last_name: string, locale: string}
-      div.method_sample_response RESPONSE: {sess: string, userId: int}
-    div.method_error_codes
-      ul
-        li ERR_BAD_REQUEST
-        li ERR_API_INTERNAL_ERROR
-        li ERR_INVALID_KEY
-        li ERR_LOGIN_FAILED
+    div.method
+        div.left
+            div.method_type POST
+            div.method_url /api/auth/live?apiKey=
+            div.method_desc get session for authorized user by windows live
+            div.method_post_data POST JSON: data={id: string, name: string, fist_name: string, last_name: string, locale: string}
+            div.method_sample_response RESPONSE: {sess: string, userId: int}
+        div.method_error_codes
+            ul
+                li ERR_BAD_REQUEST
+                li ERR_API_INTERNAL_ERROR
+                li ERR_INVALID_KEY
+                li ERR_LOGIN_FAILED
 
-  div.method
-    div.left
-      div.method_type POST
-      div.method_url /api/keys?generateKey=true
-      div.method_desc generate valid key (temp)
-      div.method_post_data
-      div.method_sample_response RESPONSE: {key: string}
-    div.method_error_codes
+    div.method
+        div.left
+            div.method_type POST
+            div.method_url /api/keys?generateKey=true
+            div.method_desc generate valid key (temp)
+            div.method_post_data
+            div.method_sample_response RESPONSE: {key: string}
+        div.method_error_codes
 
-  div.method
-    div.left
-      div.method_type GET
-      div.method_url /api/tap4video/posts/:postId?sessionId=
-      div.method_desc get posted link data by postId
-      div.method_post_data
-      div.method_sample_response RESPONSE: { postId: int, added: int, userId: int, userName: string, videoInfo: {url: string, title: string, description: string, thumbUrl:string, explicit: boolean}, rate: int, views: int, tags: [tagName: string] }
-    div.method_error_codes
-      ul
-        li ERR_BAD_REQUEST
-        li ERR_API_INTERNAL_ERROR
-        li ERR_INVALID_KEY
-        li ERR_INVALID_SESSION
+    div.method
+        div.left
+            div.method_type GET
+            div.method_url /api/tap4video/posts/:postId?sessionId=
+            div.method_desc get posted link data by postId
+            div.method_post_data
+            div.method_sample_response RESPONSE: { postId: int, added: int, userId: int, userName: string, videoInfo: {url: string, title: string, description: string, thumbUrl:string, explicit: boolean}, rate: int, views: int, tags: [tagName: string] }
+        div.method_error_codes
+            ul
+                li ERR_BAD_REQUEST
+                li ERR_API_INTERNAL_ERROR
+                li ERR_INVALID_KEY
+                li ERR_INVALID_SESSION
 
-  div.method
-    div.left
-      div.method_type POST
-      div.method_url /api/tap4video/posts?sessionId=
-      div.method_desc create post link
-      div.method_post_data POST JSON: data={url: string, tags: [tagName: string]}
-      div.method_sample_response RESPONSE: { postId: int, added: int, userId: int, userName: string, videoInfo: {url: string, title: string, description: string, thumbUrl:string, explicit: boolean}, rate: int, views: int, tags: [tagName: string] }
-    div.method_error_codes
-      ul
-        li ERR_BAD_REQUEST
-        li ERR_API_INTERNAL_ERROR
-        li ERR_INVALID_KEY
-        li ERR_INVALID_SESSION
-        li ERR_INVALID_TAG_NAME
-        li ERR_UNAUTHORIZED
+    div.method
+        div.left
+            div.method_type POST
+            div.method_url /api/tap4video/posts?sessionId=
+            div.method_desc create post link
+            div.method_post_data POST JSON: data={url: string, tags: [tagName: string]}
+            div.method_sample_response RESPONSE: { postId: int, added: int, userId: int, userName: string, videoInfo: {url: string, title: string, description: string, thumbUrl:string, explicit: boolean}, rate: int, views: int, tags: [tagName: string] }
+        div.method_error_codes
+            ul
+                li ERR_BAD_REQUEST
+                li ERR_API_INTERNAL_ERROR
+                li ERR_INVALID_KEY
+                li ERR_INVALID_SESSION
+                li ERR_INVALID_TAG_NAME
+                li ERR_UNAUTHORIZED
 
-  div.method
-    div.left
-      div.method_type POST
-      div.method_url /api/tap4video/posts/:postId/view?sessionId=
-      div.method_desc increse post link views count
-      div.method_post_data POST JSON: data={}
-      div.method_sample_response RESPONSE: { postId: int, views: int }
-    div.method_error_codes
-      ul
-        li ERR_BAD_REQUEST
-        li ERR_API_INTERNAL_ERROR
-        li ERR_INVALID_KEY
-        li ERR_INVALID_SESSION
+    div.method
+        div.left
+            div.method_type POST
+            div.method_url /api/tap4video/posts/:postId/view?sessionId=
+            div.method_desc increse post link views count
+            div.method_post_data POST JSON: data={}
+            div.method_sample_response RESPONSE: { postId: int, views: int }
+        div.method_error_codes
+            ul
+                li ERR_BAD_REQUEST
+                li ERR_API_INTERNAL_ERROR
+                li ERR_INVALID_KEY
+                li ERR_INVALID_SESSION
 
-  div.method
-    div.left
-      div.method_type POST
-      div.method_url /api/tap4video/posts/:postId/rate?sessionId=
-      div.method_desc rate post link  (rate [-1, 1])
-      div.method_post_data POST JSON: data={rate: int}
-      div.method_sample_response RESPONSE: { postId: int, rate: int }
-    div.method_error_codes
-      ul
-        li ERR_BAD_REQUEST
-        li ERR_API_INTERNAL_ERROR
-        li ERR_INVALID_KEY
-        li ERR_INVALID_SESSION
-        li ERR_UNAUTHORIZED
-        li ERR_ALREADY_RATED
+    div.method
+        div.left
+            div.method_type POST
+            div.method_url /api/tap4video/posts/:postId/rate?sessionId=
+            div.method_desc rate post link    (rate [-1, 1])
+            div.method_post_data POST JSON: data={rate: int}
+            div.method_sample_response RESPONSE: { postId: int, rate: int }
+        div.method_error_codes
+            ul
+                li ERR_BAD_REQUEST
+                li ERR_API_INTERNAL_ERROR
+                li ERR_INVALID_KEY
+                li ERR_INVALID_SESSION
+                li ERR_UNAUTHORIZED
+                li ERR_ALREADY_RATED
 
-  div.method
-    div.left
-      div.method_type GET
-      div.method_url /api/tap4video/posts?sessionId=&limit=&page=
-      div.method_desc get top links (only sessionId is required, max limit value: 100)
-      div.method_post_data
-      div.method_sample_response RESPONSE: {count: int, pages: int, currentPage: int, isNextPage: bool, isPrevPage: bool, result: [{ postId: int, added: int, userId: int, userName: string, videoInfo: {url: string, title: string, description: string, thumbUrl:string, explicit: boolean}, rate: int, views: int, tags: [tagName: string]}]}
-    div.method_error_codes
-      ul
-        li ERR_BAD_REQUEST
-        li ERR_API_INTERNAL_ERROR
-        li ERR_INVALID_KEY
-        li ERR_INVALID_SESSION
-        li ERR_EMPTY_RESULTS
+    div.method
+        div.left
+            div.method_type GET
+            div.method_url /api/tap4video/posts?sessionId=&limit=&page=
+            div.method_desc get top links (only sessionId is required, max limit value: 100)
+            div.method_post_data
+            div.method_sample_response RESPONSE: {count: int, pages: int, currentPage: int, isNextPage: bool, isPrevPage: bool, result: [{ postId: int, added: int, userId: int, userName: string, videoInfo: {url: string, title: string, description: string, thumbUrl:string, explicit: boolean}, rate: int, views: int, tags: [tagName: string]}]}
+        div.method_error_codes
+            ul
+                li ERR_BAD_REQUEST
+                li ERR_API_INTERNAL_ERROR
+                li ERR_INVALID_KEY
+                li ERR_INVALID_SESSION
+                li ERR_EMPTY_RESULTS
 
-  div.method
-    div.left
-      div.method_type GET
-      div.method_url /api/tap4video/tags?apiKey=&limit=&page=&searchKey=
-      div.method_desc get tags (searchKey param is optional, max limit value: 100)
-      div.method_post_data
-      div.method_sample_response RESPONSE: {count: int, pages: int, currentPage: int, isNextPage: bool, isPrevPage: bool, result: [tagName:string]}
-    div.method_error_codes
-      ul
-        li ERR_BAD_REQUEST
-        li ERR_API_INTERNAL_ERROR
-        li ERR_INVALID_KEY
+    div.method
+        div.left
+            div.method_type GET
+            div.method_url /api/tap4video/tags?apiKey=&limit=&page=&searchKey=
+            div.method_desc get tags (searchKey param is optional, max limit value: 100)
+            div.method_post_data
+            div.method_sample_response RESPONSE: {count: int, pages: int, currentPage: int, isNextPage: bool, isPrevPage: bool, result: [tagName:string]}
+        div.method_error_codes
+            ul
+                li ERR_BAD_REQUEST
+                li ERR_API_INTERNAL_ERROR
+                li ERR_INVALID_KEY
 
-  div.method
-    div.left
-      div.method_type GET
-      div.method_url /api/tap4video/posts?sessionId=&limit=&page=&new=true
-      div.method_desc get new links ordered from newer to older (only sessionId is required, max limit value: 100)
-      div.method_post_data
-      div.method_sample_response RESPONSE: {count: int, pages: int, currentPage: int, isNextPage: bool, isPrevPage: bool, result: [{ postId: int, added: int, userId: int, userName: string, videoInfo: {url: string, title: string, description: string, thumbUrl:string, explicit: boolean}, rate: int, views: int, tags: [tagName: string]}]}
-    div.method_error_codes
-      ul
-        li ERR_BAD_REQUEST
-        li ERR_API_INTERNAL_ERROR
-        li ERR_INVALID_KEY
-        li ERR_INVALID_SESSION
-        li ERR_EMPTY_RESULTS
+    div.method
+        div.left
+            div.method_type GET
+            div.method_url /api/tap4video/posts?sessionId=&limit=&page=&new=true
+            div.method_desc get new links ordered from newer to older (only sessionId is required, max limit value: 100)
+            div.method_post_data
+            div.method_sample_response RESPONSE: {count: int, pages: int, currentPage: int, isNextPage: bool, isPrevPage: bool, result: [{ postId: int, added: int, userId: int, userName: string, videoInfo: {url: string, title: string, description: string, thumbUrl:string, explicit: boolean}, rate: int, views: int, tags: [tagName: string]}]}
+        div.method_error_codes
+            ul
+                li ERR_BAD_REQUEST
+                li ERR_API_INTERNAL_ERROR
+                li ERR_INVALID_KEY
+                li ERR_INVALID_SESSION
+                li ERR_EMPTY_RESULTS
 
-  div.method
-    div.left
-      div.method_type GET
-      div.method_url /api/tap4video/posts?sessionId=&limit=&page=&tagName=
-      div.method_desc get links by given tag name, ordered from newer to older (only sessionId is required, max limit value: 100)
-      div.method_post_data
-      div.method_sample_response RESPONSE: {count: int, pages: int, currentPage: int, isNextPage: bool, isPrevPage: bool, result: [{ postId: int, added: int, userId: int, userName: string, videoInfo: {url: string, title: string, description: string, thumbUrl:string, explicit: boolean}, rate: int, views: int, tags: [tagName: string]}]}
-    div.method_error_codes
-      ul
-        li ERR_BAD_REQUEST
-        li ERR_API_INTERNAL_ERROR
-        li ERR_INVALID_KEY
-        li ERR_INVALID_SESSION
-        li ERR_EMPTY_RESULTS
+    div.method
+        div.left
+            div.method_type GET
+            div.method_url /api/tap4video/posts?sessionId=&limit=&page=&tagName=
+            div.method_desc get links by given tag name, ordered from newer to older (only sessionId is required, max limit value: 100)
+            div.method_post_data
+            div.method_sample_response RESPONSE: {count: int, pages: int, currentPage: int, isNextPage: bool, isPrevPage: bool, result: [{ postId: int, added: int, userId: int, userName: string, videoInfo: {url: string, title: string, description: string, thumbUrl:string, explicit: boolean}, rate: int, views: int, tags: [tagName: string]}]}
+        div.method_error_codes
+            ul
+                li ERR_BAD_REQUEST
+                li ERR_API_INTERNAL_ERROR
+                li ERR_INVALID_KEY
+                li ERR_INVALID_SESSION
+                li ERR_EMPTY_RESULTS
 
-  div.method
-    div.left
-      div.method_type GET
-      div.method_url /api/users/:userId
-      div.method_desc get given user profile (userId can be replaced by "me")
-      div.method_post_data
-      div.method_sample_response RESPONSE: {userId: int, name: string, fistName: sstring, lastName: string, accountType: string, topPosts: [ postId: int ]}
-    div.method_error_codes
-      ul
-        li ERR_BAD_REQUEST
-        li ERR_API_INTERNAL_ERROR
-        li ERR_INVALID_KEY
-        li ERR_INVALID_SESSION
-        li ERR_UNAUTHORIZED
-        li ERR_INVALID_USER_ID
+    div.method
+        div.left
+            div.method_type GET
+            div.method_url /api/users/:userId
+            div.method_desc get given user profile (userId can be replaced by "me")
+            div.method_post_data
+            div.method_sample_response RESPONSE: {userId: int, name: string, fistName: sstring, lastName: string, accountType: string, topPosts: [ postId: int ]}
+        div.method_error_codes
+            ul
+                li ERR_BAD_REQUEST
+                li ERR_API_INTERNAL_ERROR
+                li ERR_INVALID_KEY
+                li ERR_INVALID_SESSION
+                li ERR_UNAUTHORIZED
+                li ERR_INVALID_USER_ID
 
-  h1.info Error handling
+    h1.info Error handling
 
-  div.error_response
-    div.struct
-      pre
-        |{
-        |  error: string,
-        |  data: string,
-        |  code: int,
-        |  msg: string
-        | }
+    div.error_response
+        div.struct
+            pre
+                |{
+                |    error: string,
+                |    data: string,
+                |    code: int,
+                |    msg: string
+                | }
 
-  div.erors
-    div.err
-      div.err_error error value
-      div.err_code code value
-    div.err
-      div.err_error ERR_BAD_REQUEST
-      div.err_code 400
-    div.err
-      div.err_error ERR_UNAUTHORIZED
-      div.err_code 401
-    div.err
-      div.err_error ERR_NOT_ALLOWED
-      div.err_code 403
-    div.err
-      div.err_error ERR_NOT_FOUND
-      div.err_code 404
-    div.err
-      div.err_error ERR_METHOD_NOT_ALLOWED
-      div.err_code 405
-    div.err
-      div.err_error ERR_API_INTERNAL_ERROR
-      div.err_code 50x
-    div.err
-      div.err_error ERR_EMPTY_RESULTS
-      div.err_code 601
-    div.err
-      div.err_error ERR_INVALID_KEY
-      div.err_code 602
-    div.err
-      div.err_error ERR_INVALID_SESSION
-      div.err_code 603
-    div.err
-      div.err_error ERR_ALREADY_RATED
-      div.err_code 604
-    div.err
-      div.err_error ERR_LOGIN_FAILED
-      div.err_code 605
-    div.err
-      div.err_error ERR_INVALID_TAG_NAME
-      div.err_code 606
-    div.err
-      div.err_error ERR_INVALID_USER_ID
-      div.err_code 607
+    div.erors
+        div.err
+            div.err_error error value
+            div.err_code code value
+        div.err
+            div.err_error ERR_BAD_REQUEST
+            div.err_code 400
+        div.err
+            div.err_error ERR_UNAUTHORIZED
+            div.err_code 401
+        div.err
+            div.err_error ERR_NOT_ALLOWED
+            div.err_code 403
+        div.err
+            div.err_error ERR_NOT_FOUND
+            div.err_code 404
+        div.err
+            div.err_error ERR_METHOD_NOT_ALLOWED
+            div.err_code 405
+        div.err
+            div.err_error ERR_API_INTERNAL_ERROR
+            div.err_code 50x
+        div.err
+            div.err_error ERR_EMPTY_RESULTS
+            div.err_code 601
+        div.err
+            div.err_error ERR_INVALID_KEY
+            div.err_code 602
+        div.err
+            div.err_error ERR_INVALID_SESSION
+            div.err_code 603
+        div.err
+            div.err_error ERR_ALREADY_RATED
+            div.err_code 604
+        div.err
+            div.err_error ERR_LOGIN_FAILED
+            div.err_code 605
+        div.err
+            div.err_error ERR_INVALID_TAG_NAME
+            div.err_code 606
+        div.err
+            div.err_error ERR_INVALID_USER_ID
+            div.err_code 607

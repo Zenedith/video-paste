@@ -1,4 +1,4 @@
-!!!5
+doctype html
 html
   head
     title video-paste api
@@ -6,7 +6,7 @@ html
     meta(name='robots', content='all,index,follow')
     meta(name='viewport', content='width=device-width,initial-scale=1')
     - if (config.app.enable_google_analytics)
-      script(type='text/javascript')
+      script(type='text/javascript').
         var _gaq = _gaq || [];
         _gaq.push(['_setAccount', 'UA-32533263-1']);
         _gaq.push(['_setDomainName', 'dotcloud.com']);
@@ -19,5 +19,4 @@ html
           var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
         })();
   body
-    != body
-
+    block body

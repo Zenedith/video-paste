@@ -1,8 +1,8 @@
 var
     log = require(process.env.APP_PATH + "/lib/log"),
     Database = require(process.env.APP_PATH + "/lib/database").Database,
-    sanitize = require('validator').sanitize,
-    check = require('validator').check,
+    sanitize = require('sanitizer'),
+    validator = require('validator'),
     secure = require("node-secure");
 
 var Post_Tag = function (tagName) {
@@ -14,7 +14,7 @@ var Post_Tag = function (tagName) {
         log.debug('Post_Tag.addToPost(' + postId + ')');
 
         try {
-            check(this.tagName).notEmpty().len(3, 25);
+            validator.len(this.tagName, 3, 25);
         }
         catch (e) {
             return callback(error(606, 'invalid tagName: ' + e.message), null);

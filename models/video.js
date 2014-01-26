@@ -2,8 +2,8 @@ var
     Base = require(process.env.APP_PATH + "/models/base").Base,
     Database = require(process.env.APP_PATH + "/lib/database").Database,
     log = require(process.env.APP_PATH + "/lib/log"),
-    sanitize = require('validator').sanitize,
-    check = require('validator').check,
+    sanitize = require('sanitizer'),
+    validator = require('validator'),
     secure = require("node-secure");
 
 var Video = function () {
@@ -50,10 +50,10 @@ Video.factory = function (url, callback) {
     log.debug('Video.factory()');
 
     url = url || '';
-    url = sanitize(url).xss();
+    url = sanitize.escape(url);
 
     try {
-        check(url).notEmpty().isUrl();
+        validator.isURL(url);
     }
     catch (e) {
         return null;

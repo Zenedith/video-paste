@@ -17,6 +17,9 @@ var Api = function (api) {
         if (process.env.NODE_ENV !== 'development') {
             api.use(express.logger());
         }
+        else {
+            api.use(express.logger('dev'));
+        }
 
         api.use(express.bodyParser()); //need to POST data
         api.use(express.methodOverride());

@@ -17,7 +17,7 @@ exports.testGetSessionValid = {
                     }
 
                     try {
-                        res.body.should.have.property('sess');
+                        res.body.should.have.property('id');
                         res.body.should.have.property('userId');
                         res.body.userId.should.equal(0);
 

@@ -13,7 +13,7 @@ var Key = function () {
     this.__className = "Key";
     this.__lifetime = 0;
     this.__version = 0;
-    this.__last_used = 0;
+    this.__lastUsed = 0;
 
     this.generateKey = function () {
         log.debug('Key.generateKey()');
@@ -25,19 +25,19 @@ var Key = function () {
         this.setId(kgen.generateKey()); //id is a key!
         this.__lifetime = ~~(current_timestamp + KEY_LIFETIME);
         this.__version = KEY_VERSION;
-        this.__last_used = ~~current_timestamp;
+        this.__lastUsed = ~~current_timestamp;
     };
 
     this.isValidKey = function (id, callback) {
         var
-            sanitize = require('validator').sanitize,
-            check = require('validator').check,
+            sanitize = require('sanitizer'),
+            validator = require('validator'),
             _this = this;
 
-        id = sanitize(id).xss();
+        id = sanitize.escape(id);
 
         try {
-            check(id).notEmpty().len(16, 16);
+            validator.isLength(id, 16, 16);
         }
         catch (e) {
             return callback(error(602, 'invalid api key: ' + e.message), null);
@@ -59,7 +59,7 @@ var Key = function () {
             }
 
             //async: update last used
-            _this.setObjectValueToDB(id, '__last_used', current_timestamp, function (err2, obj) {
+            _this.setObjectValueToDB(id, '__lastUsed', current_timestamp, function (err2, obj) {
                 if (err2) {
                     log.critical(err2);
                 }

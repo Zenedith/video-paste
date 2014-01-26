@@ -22,6 +22,10 @@ var WebSocketApp = function (app) {
         if (process.env.NODE_ENV !== 'development') {
             app.use(express.logger());
         }
+        else {
+            app.use(express.logger("dev"));
+            app.locals.pretty = true;
+        }
 
         app.set('views', process.env.APP_PATH + '/views');
         app.set('view engine', 'jade');
@@ -33,10 +37,6 @@ var WebSocketApp = function (app) {
         app.set('config', config);
 
         // access.log format (default is full)
-
-        if (process.env.NODE_ENV !== 'development') {
-            app.use(express.logger());
-        }
 
         // app.use(express.logger({ format: ':method :url' }));
         // app.use(expressValidator); //data validator and sanitizer

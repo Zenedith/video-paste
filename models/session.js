@@ -35,14 +35,14 @@ var Session = function () {
 
     this.isValidSession = function (id, callback) {
         var
-            sanitize = require('validator').sanitize,
-            check = require('validator').check,
+            sanitize = require('sanitizer'),
+            validator = require('validator'),
             _this = this;
 
-        id = sanitize(id).xss();
+        id = sanitize.escape(id);
 
         try {
-            check(id).notEmpty().len(40, 40);
+            validator.len(id, 40, 40);
         }
         catch (e) {
             return callback(error(603, 'invalid api sessionId: ' + e.message), null);

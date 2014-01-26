@@ -3,7 +3,7 @@ var
     config = require('config'),
     RequestLogger = require(process.env.APP_PATH + "/lib/requestLogger").RequestLogger,
     disableServiceAuth = true,  //problem with access key renew in some services
-    sanitize = require('validator').sanitize,
+    sanitize = require('sanitizer'),
     secure = require("node-secure");
 
 var Api_Controller = {
@@ -50,7 +50,7 @@ var Api_Controller = {
 
             for (var k in input) {
                 if (input.hasOwnProperty(k)) {
-                    input[k] = sanitize(input[k]).xss();
+                    input[k] = sanitize.escape(input[k]);
 
                     if (!input[k]) {
                         return next(error(400, 'Bad request (bad ' + k + ' value)'));
@@ -130,7 +130,7 @@ var Api_Controller = {
 
             for (var k in input) {
                 if (input.hasOwnProperty(k)) {
-                    input[k] = sanitize(input[k]).xss();
+                    input[k] = sanitize.escape(input[k]);
 
 //live has strict policy so dont validate empty values
 //        if (!input[k]) {
@@ -210,7 +210,7 @@ var Api_Controller = {
 
             for (var k in input) {
                 if (input.hasOwnProperty(k)) {
-                    input[k] = sanitize(input[k]).xss();
+                    input[k] = sanitize.escape(input[k]);
 
                     if (!input[k]) {
                         return next(error(400, 'Bad request (bad ' + k + ' value)'));
@@ -289,7 +289,7 @@ var Api_Controller = {
 
             for (var k in input) {
                 if (input.hasOwnProperty(k)) {
-                    input[k] = sanitize(input[k]).xss();
+                    input[k] = sanitize.escape(input[k]);
 
                     if (!input[k]) {
                         return next(error(400, 'Bad request (bad ' + k + ' value)'));
@@ -744,7 +744,7 @@ var Api_Controller = {
 
             //searchKey is optional
             if (searchKey) {
-                searchKey = sanitize(searchKey).xss();
+                searchKey = sanitize.escape(searchKey);
 
                 if (!searchKey) {
                     return next(error(400, 'Bad request (bad searchKey value)'));
@@ -790,7 +790,7 @@ var Api_Controller = {
                 return next(error(400, 'Bad request (too big limit value)'));
             }
 
-            tagName = sanitize(tagName).xss();
+            tagName = sanitize.escape(tagName);
 
             if (!tagName) {
                 return next(error(400, 'Bad request (bad tagName value)'));

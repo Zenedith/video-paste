@@ -6,15 +6,15 @@ var
     secure = require("node-secure");
 
 var Post_Tag = function (tagName) {
-    log.debug('Post_Tag.construct(' + tagName + ')');
+    log.debug('Post_Tag.construct(%s)', tagName);
 
-    this.tagName = sanitize(tagName).xss();
+    this.tagName = sanitize.escape(tagName);
 
     this.addToPost = function (postId, callback) {
         log.debug('Post_Tag.addToPost(' + postId + ')');
 
         try {
-            validator.len(this.tagName, 3, 25);
+            validator.isLength(this.tagName, 3, 25);
         }
         catch (e) {
             return callback(error(606, 'invalid tagName: ' + e.message), null);

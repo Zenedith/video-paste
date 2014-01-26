@@ -21,7 +21,7 @@ exports.testGetSessionValid = {
                         res.body.should.have.property('userId');
                         res.body.userId.should.equal(0);
 
-                        Tester.setSession(res.body.sess);
+                        Tester.setSession(res.body.id);
                         done();
                     }
                     catch (e) {

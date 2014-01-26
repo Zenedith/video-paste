@@ -4,21 +4,28 @@ var
     log = require(process.env.APP_PATH + "/lib/log"),
     config = require('config'),
     RequestLogger = require(process.env.APP_PATH + "/lib/requestLogger").RequestLogger,
-    disableServiceAuth = true, //problem with access key renew in some services
     sanitize = require('sanitizer'),
     secure = require("node-secure");
 
 var Posts_Controller = {
     create: function (req, res, next) {
+
+        if (isEmptyJson(req.body)) {
+            return next(error(400, 'Bad request (no POST data)'));
+        }
+
         var
             jsonBody = getJsonBodyData(req),
-            sessionId = getStringParam(req.query, "sessionId") || getStringParam(jsonBody, "sessionId");
+            sessionId = getStringParam(req.query, "sessionId");
+
+        log.debug(jsonBody);
 
         //validate session and key
         sess_obj.isValidSession(sessionId, function (err, sessionObj) {
 
             //if something wrong
             if (err) {
+                log.debug(err);
                 return next(err);
             }
 
@@ -72,7 +79,9 @@ var Posts_Controller = {
                             var
                                 data = decoratedPosts[0];
 
+                            res.location('/posts/' + data.postId);
                             res.json(data, 201);
+
                             RequestLogger.log(req, data);
                         });
                     });
@@ -87,6 +96,9 @@ var Posts_Controller = {
         var
             postId = getIntegerParam(req.params, "postId"),
             sessionId = getStringParam(req.query, "sessionId");
+
+        log.debug(postId);
+        log.debug(sessionId);
 
         //validate session and key
         sess_obj.isValidSession(sessionId, function (err, obj) {
@@ -130,9 +142,8 @@ var Posts_Controller = {
     },
     postViews: function (req, res, next) {
         var
-            jsonBody = getJsonBodyData(req),
-            postId = getIntegerParam(req.params, "postId") || getIntegerParam(jsonBody, "postId"),
-            sessionId = getStringParam(req.query, "sessionId") || getStringParam(jsonBody, "sessionId");
+            postId = getIntegerParam(req.params, "postId"),
+            sessionId = getStringParam(req.query, "sessionId");
 
         if (postId < 1) {
             return next(error(400, 'Bad request (bad postId value)'));
@@ -165,11 +176,15 @@ var Posts_Controller = {
     },
 
     postRate: function (req, res, next) {
+        if (isEmptyJson(req.body)) {
+            return next(error(400, 'Bad request (no POST data)'));
+        }
+
         var
             jsonBody = getJsonBodyData(req),
-            postId = getIntegerParam(req.params, "postId") || getIntegerParam(jsonBody, "postId"),
-            rate = getIntegerParam(req.params, "rate") || getIntegerParam(jsonBody, "rate"),
-            sessionId = getStringParam(req.query, "sessionId") || getStringParam(jsonBody, "sessionId");
+            postId = getIntegerParam(req.params, "postId"),
+            rate = getIntegerParam(jsonBody, "rate"),
+            sessionId = getStringParam(req.query, "sessionId");
 
         if (postId < 1) {
             return next(error(400, 'Bad Request (postId)'));
@@ -322,11 +337,22 @@ var getIntegerParam = function (query, paramName, defaultValue) {
     return ~~(query[paramName]) || defaultValue;
 };
 
-var getJsonBodyData = function (req) {
-    var
-        postData = req.body.data || '{}';
+var isEmptyJson = function (obj) {
+    if (!obj) {
+        return true;
+    }
 
-    return JSON.parse(postData);
+    for (var key in obj) {
+        if (Object.prototype.hasOwnProperty.call(obj, key)) {
+            return false;
+        }
+    }
+
+    return true;
+};
+
+var getJsonBodyData = function (req) {
+    return req.body || {};
 };
 
 module.exports = Posts_Controller;

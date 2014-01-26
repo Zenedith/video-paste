@@ -21,13 +21,12 @@ var Auth_Controller = {
                 return next(err);
             }
 
-            if (!req.body) {
+            if (isEmptyJson(req.body)) {
                 return next(error(400, 'Bad request (no POST data)'));
             }
 
             var
-                postData = (req.body) ? req.body.data : '{}',
-                input = JSON.parse(postData);
+                input = getJsonBodyData(req.body);
 
             for (var k in input) {
                 if (input.hasOwnProperty(k)) {
@@ -90,20 +89,20 @@ var Auth_Controller = {
             apiKey = getStringParam(req.query, 'apiKey');
 
         //validate key
-        key_obj.isValidKey(apiKey, function (err) {
+        key_obj.isValidKey(apiKey, function (err, keyData) {
 
             //if something wrong
             if (err) {
                 return next(err);
             }
 
-            if (!req.body) {
+
+            if (isEmptyJson(req.body)) {
                 return next(error(400, 'Bad request (no POST data)'));
             }
 
             var
-                postData = (req.body) ? req.body.data : '{}',
-                input = JSON.parse(postData);
+                input = getJsonBodyData(req.body);
 
             for (var k in input) {
                 if (input.hasOwnProperty(k)) {
@@ -173,13 +172,12 @@ var Auth_Controller = {
                 return next(err);
             }
 
-            if (!req.body) {
+            if (isEmptyJson(req.body)) {
                 return next(error(400, 'Bad request (no POST data)'));
             }
 
             var
-                postData = (req.body) ? req.body.data : '{}',
-                input = JSON.parse(postData);
+                input = getJsonBodyData(req.body);
 
             for (var k in input) {
                 if (input.hasOwnProperty(k)) {
@@ -251,13 +249,12 @@ var Auth_Controller = {
                 return next(err);
             }
 
-            if (!req.body) {
+            if (isEmptyJson(req.body)) {
                 return next(error(400, 'Bad request (no POST data)'));
             }
 
             var
-                postData = (req.body) ? req.body.data : '{}',
-                input = JSON.parse(postData);
+                input = getJsonBodyData(req.body);
 
             for (var k in input) {
                 if (input.hasOwnProperty(k)) {
@@ -351,6 +348,24 @@ var Auth_Controller = {
 };
 
 //private
+var isEmptyJson = function (obj) {
+    if (!obj) {
+        return true;
+    }
+
+    for (var key in obj) {
+        if (Object.prototype.hasOwnProperty.call(obj, key)) {
+            return false;
+        }
+    }
+
+    return true;
+};
+
+var getJsonBodyData = function (req) {
+    return req.body || {};
+};
+
 var getStringParam = function (params, paramName) {
     var
         param = params[paramName] || "";

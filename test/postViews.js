@@ -6,10 +6,10 @@ var
     invalidPostIdNotExists = 1000000000001;
 
 exports.testPostViewsValid = {
-    'POST /api/tap4video/posts/:postId/view': {
+    'POST /api/tap4video/posts/:postId/views': {
         'should return incresed post views value': function (done) {
             supertest(Tester.getApiVhost())
-                .post('/api/tap4video/posts/' + Tester.getPostViewsId() + '/view?sessionId=' + Tester.getSession())
+                .post('/api/tap4video/posts/' + Tester.getPostViewsId() + '/views?sessionId=' + Tester.getSession())
                 .expect('Content-Type', 'application/json; charset=utf-8')
                 .expect(200)
                 .end(function (err, res) {
@@ -34,10 +34,10 @@ exports.testPostViewsValid = {
 };
 
 exports.testPostViewsInvalidPostId = {
-    'POST /api/tap4video/posts/:postId/view': {
+    'POST /api/tap4video/posts/:postId/views': {
         'should return error json response (ERR_BAD_REQUEST)': function (done) {
             supertest(Tester.getApiVhost())
-                .post('/api/tap4video/posts/' + invalidPostId + '/view?sessionId=' + Tester.getSession())
+                .post('/api/tap4video/posts/' + invalidPostId + '/views?sessionId=' + Tester.getSession())
                 .expect('Content-Type', 'application/json; charset=utf-8')
                 .expect(200)
                 .end(function (err, res) {
@@ -63,10 +63,10 @@ exports.testPostViewsInvalidPostId = {
 };
 
 exports.testPostViewsInvalidPostIdNotExists = {
-    'POST /api/tap4video/posts/:postId/view': {
+    'POST /api/tap4video/posts/:postId/views': {
         'should return error json response (ERR_BAD_REQUEST)': function (done) {
             supertest(Tester.getApiVhost())
-                .post('/api/tap4video/posts/' + invalidPostIdNotExists + '/view?sessionId=' + Tester.getSession())
+                .post('/api/tap4video/posts/' + invalidPostIdNotExists + '/views?sessionId=' + Tester.getSession())
                 .expect('Content-Type', 'application/json; charset=utf-8')
                 .expect(200)
                 .end(function (err, res) {

@@ -42,19 +42,20 @@ var Session = function () {
         id = sanitize.escape(id);
 
         try {
-            validator.len(id, 40, 40);
+            validator.isLength(id, 40, 40);
         }
         catch (e) {
-            return callback(error(603, 'invalid api sessionId: ' + e.message), null);
+            return callback(error(603, 'invalid api sessionId: (' + id + '), ' + e.message), null);
         }
 
         this.load(id, function (err, obj) {
+
             if (err) {
                 return callback(error(603, err), null);
             }
 
             if (obj === null) {
-                return callback(error(603, 'invalid api sessionId'), null);
+                return callback(error(603, 'invalid api sessionId: (' + id + ')'), null);
             }
 
             var

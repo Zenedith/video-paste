@@ -13,6 +13,7 @@ var Tester = (function () {
         searchByTag = 'alfa',
         apikey = '6254b715bcc5d680',
         authUserId = 0,
+        postOwnerSessId = '',
         authSessId = '',
         sessId = '',
         viewsPostId = 0,
@@ -56,6 +57,13 @@ var Tester = (function () {
             }
 
             return authUserId;
+        },
+        getPostOwnerSessId: function () {
+            if (!postOwnerSessId) {
+                throw new Error('Tester: no postOwnerSessId defined');
+            }
+
+            return postOwnerSessId;
         },
         getAppVhost: function () {
             return server.app;
@@ -135,6 +143,11 @@ var Tester = (function () {
 
             if (!authUserId) {
                 authUserId = newUserId;
+            }
+        },
+        setPostOwnerSessId: function (newPostOwnerSessId) {
+            if (!postOwnerSessId) {
+                postOwnerSessId = newPostOwnerSessId;
             }
         }
     }

@@ -172,10 +172,10 @@
             "description":"get post",
             "isRegExp" : false
         },
-        "postView" : {
+        "postViews" : {
             "controller": "posts",
             "action": "postViews",
-            "url": "api/tap4video/posts/:postId/view",
+            "url": "api/tap4video/posts/:postId/views",
             "method":"post",
             "description":"post views increase",
             "isRegExp" : false

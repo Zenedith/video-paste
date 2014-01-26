@@ -429,7 +429,6 @@ var Api_Controller = {
             });
         });
     },
-    //api/postViews/:sessionId/:postId
     postViews: function (req, res, next) {
         var
             Session = require(process.env.APP_PATH + "/models/session").Session,

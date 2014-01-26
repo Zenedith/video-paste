@@ -4,28 +4,27 @@ var
     Tester = require(__dirname + '/../models/tester').Tester,
     invalidPostId = -1,
     invalidPostIdNotExists = 1000000000001,
-    url = 'http://www.youtube.com/watch?v=BrBQvJ-anB8',
+    url = 'https://www.youtube.com/watch?v=ozsU9OAy4XM',
     vimeoUrl = 'http://vimeo.com/6271487',
     dailyUrl = 'http://www.dailymotion.com/video/ximfb0_i-love-lastarya_sexy',
-    createPost = {url: url, tags: ['fun', 'kot'], sessionId: ""},
-    createPostVimeo = {url: vimeoUrl, tags: ['spehere'], sessionId: ""},
-    createPostDailymotion = {url: dailyUrl, tags: ['spehere'], sessionId: ""},
-    createPostConvertYoutube = {url: 'http://m.youtube.com/watch?v=BrBQvJ-anB8', tags: ['alfa'], sessionId: ""},
-    createPostConvertVimeo = {url: 'http://vimeo.com/m/6271487', tags: ['example'], sessionId: ""},
-    createPostConvertDailymotion = {url: 'https://touch.dailymotion.com/video/ximfb0_i-love-lastarya_sexy', tags: ['sexy'], sessionId: ""},
-    createPostInvalidUrl = {url: 'http://m.sss.pl/?v=BrBQvJ-anB8', tags: ['alfa'], sessionId: ""},
-    createPostMissingUrlParam = {tags: ['fun', 'kot'], sessionId: ""};
+    createPost = {url: url, tags: ['fun', 'kot']},
+    createPostVimeo = {url: vimeoUrl, tags: ['spehere']},
+    createPostDailymotion = {url: dailyUrl, tags: ['spehere']},
+    createPostConvertYoutube = {url: 'http://m.youtube.com/watch?v=ozsU9OAy4XM', tags: ['alfa']},
+    createPostConvertVimeo = {url: 'http://vimeo.com/m/6271487', tags: ['example']},
+    createPostConvertDailymotion = {url: 'https://touch.dailymotion.com/video/ximfb0_i-love-lastarya_sexy', tags: ['sexy']},
+    createPostInvalidUrl = {url: 'http://m.sss.pl/?v=BrBQvJ-anB8', tags: ['alfa']},
+    createPostMissingUrlParam = {tags: ['fun', 'kot']};
 
 exports.testPostLinkCreateValid = {
     'POST /api/tap4video/posts': {
         'should return new post object info': function (done) {
 
-            //update sessionId
-            createPost.sessionId = Tester.getAuthSession();
-
             supertest(Tester.getApiVhost())
-                .post('/api/tap4video/posts')
-                .send({data: JSON.stringify(createPost)})
+                .post('/api/tap4video/posts?sessionId=' + Tester.getPostOwnerSessId())
+                .set('Content-Type', 'application/json')
+                .set('Accept', 'application/json')
+                .send(JSON.stringify(createPost))
                 .expect('Content-Type', 'application/json; charset=utf-8')
                 .expect(201)
                 .end(function (err, res) {
@@ -69,12 +68,11 @@ exports.testPostLinkCreateValid = {
 //  'POST /api/tap4video/posts':{
 //    'should return new post object info with converted youtube url':function (done) {
 //
-//      //update sessionId
-//      createPostConvertYoutube.sessionId = Tester.getAuthSession();
-//
 //      supertest(Tester.getApiVhost())
-//        .post('/api/tap4video/posts')
-//        .send({data:JSON.stringify(createPostConvertYoutube)})
+//        .post('/api/tap4video/posts?sessionId=' + Tester.getPostOwnerSessId())
+//        .set('Content-Type', 'application/json')
+//        .set('Accept', 'application/json')
+//        .send(JSON.stringify(createPostConvertYoutube))
 //        .expect('Content-Type', 'application/json; charset=utf-8')
 //        .expect(201)
 //        .end(function (err, res) {
@@ -118,12 +116,11 @@ exports.testPostLinkCreateValid = {
 //  'POST /api/tap4video/posts':{
 //    'should return new post object info with vimeo url':function (done) {
 //
-//      //update sessionId
-//      createPostVimeo.sessionId = Tester.getAuthSession();
-//
 //      supertest(Tester.getApiVhost())
-//        .post('/api/tap4video/posts')
-//        .send({data:JSON.stringify(createPostVimeo)})
+//        .post('/api/tap4video/posts?sessionId=' + Tester.getPostOwnerSessId())
+//        .set('Content-Type', 'application/json')
+//        .set('Accept', 'application/json')
+//        .send(JSON.stringify(createPostVimeo))
 //        .expect('Content-Type', 'application/json; charset=utf-8')
 //        .expect(201)
 //        .end(function (err, res) {
@@ -167,12 +164,11 @@ exports.testPostLinkCreateValid = {
 //  'POST /api/tap4video/posts':{
 //    'should return new post object info with converted vimeo url':function (done) {
 //
-//      //update sessionId
-//      createPostConvertVimeo.sessionId = Tester.getAuthSession();
-//
 //      supertest(Tester.getApiVhost())
-//        .post('/api/tap4video/posts')
-//        .send({data:JSON.stringify(createPostConvertVimeo)})
+//        .post('/api/tap4video/posts?sessionId=' + Tester.getPostOwnerSessId())
+//        .set('Content-Type', 'application/json')
+//        .set('Accept', 'application/json')
+//        .send(JSON.stringify(createPostConvertVimeo))
 //        .expect('Content-Type', 'application/json; charset=utf-8')
 //        .expect(201)
 //        .end(function (err, res) {
@@ -216,12 +212,11 @@ exports.testPostLinkCreateValid = {
 //  'POST /api/tap4video/posts':{
 //    'should return new post object info with dailymotion url':function (done) {
 //
-//      //update sessionId
-//      createPostDailymotion.sessionId = Tester.getAuthSession();
-//
 //      supertest(Tester.getApiVhost())
-//        .post('/api/tap4video/posts')
-//        .send({data:JSON.stringify(createPostDailymotion)})
+//        .post('/api/tap4video/posts?sessionId=' + Tester.getPostOwnerSessId())
+//        .set('Content-Type', 'application/json')
+//        .set('Accept', 'application/json')
+//        .send(JSON.stringify(createPostDailymotion))
 //        .expect('Content-Type', 'application/json; charset=utf-8')
 //        .expect(201)
 //        .end(function (err, res) {
@@ -264,12 +259,11 @@ exports.testPostLinkCreateValid = {
 //  'POST /api/tap4video/posts':{
 //    'should return new post object info with converted dailymotion url':function (done) {
 //
-//      //update sessionId
-//      createPostConvertDailymotion.sessionId = Tester.getAuthSession();
-//
 //      supertest(Tester.getApiVhost())
-//        .post('/api/tap4video/posts')
-//        .send({data:JSON.stringify(createPostConvertDailymotion)})
+//        .post('/api/tap4video/posts?sessionId=' + Tester.getPostOwnerSessId())
+//        .set('Content-Type', 'application/json')
+//        .set('Accept', 'application/json')
+//        .send(JSON.stringify(createPostConvertDailymotion))
 //        .expect('Content-Type', 'application/json; charset=utf-8')
 //        .expect(201)
 //        .end(function (err, res) {
@@ -313,12 +307,11 @@ exports.testPostLinkCreateValid = {
 //  'POST /api/tap4video/posts':{
 //    'should return error json response (ERR_BAD_REQUEST)':function (done) {
 //
-//      //update sessionId
-//      createPostInvalidUrl.sessionId = Tester.getAuthSession();
-//
 //      supertest(Tester.getApiVhost())
-//        .post('/api/tap4video/posts')
-//        .send({data:JSON.stringify(createPostInvalidUrl)})
+//        .post('/api/tap4video/posts?sessionId=' + Tester.getPostOwnerSessId())
+//        .set('Content-Type', 'application/json')
+//        .set('Accept', 'application/json')
+//        .send(JSON.stringify(createPostInvalidUrl))
 //        .expect('Content-Type', 'application/json; charset=utf-8')
 //        .expect(200)
 //        .end(function (err, res) {
@@ -346,12 +339,11 @@ exports.testPostLinkCreateValid = {
 //  'POST /api/tap4video/posts':{
 //    'should return error json response (ERR_BAD_REQUEST)':function (done) {
 //
-//      //update sessionId
-//      createPost.sessionId = Tester.getSession();
-//
 //      supertest(Tester.getApiVhost())
-//        .post('/api/tap4video/posts')
-//        .send({data:JSON.stringify(createPost)})
+//        .post('/api/tap4video/posts?sessionId=' + Tester.getPostOwnerSessId())
+//        .set('Content-Type', 'application/json')
+//        .set('Accept', 'application/json')
+//        .send(JSON.stringify(createPost))
 //        .expect('Content-Type', 'application/json; charset=utf-8')
 //        .expect(200)
 //        .end(function (err, res) {
@@ -379,12 +371,11 @@ exports.testPostLinkCreateValid = {
 //  'POST /api/tap4video/posts':{
 //    'should return error json response (ERR_BAD_REQUEST)':function (done) {
 //
-//      //update sessionId
-//      createPostMissingUrlParam.sessionId = Tester.getAuthSession();
-//
 //      supertest(Tester.getApiVhost())
-//        .post('/api/tap4video/posts')
-//        .send({data:JSON.stringify(createPostMissingUrlParam)})
+//        .post('/api/tap4video/posts?sessionId=' + Tester.getPostOwnerSessId())
+//        .set('Content-Type', 'application/json')
+//        .set('Accept', 'application/json')
+//        .send(JSON.stringify(createPostMissingUrlParam))
 //        .expect('Content-Type', 'application/json; charset=utf-8')
 //        .expect(200)
 //        .end(function (err, res) {

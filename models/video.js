@@ -7,6 +7,8 @@ var
     secure = require("node-secure");
 
 var Video = function () {
+    log.debug('Video.construct()');
+
     this.__className = "Video";
 
     this.__id = ''; //id is equal postId
@@ -47,7 +49,7 @@ var Video = function () {
 
 //static
 Video.factory = function (url, callback) {
-    log.debug('Video.factory()');
+    log.debug('Video.factory(%s)', url);
 
     url = url || '';
     url = sanitize.escape(url);
@@ -82,7 +84,7 @@ Video.factory = function (url, callback) {
         return new Video_Dailymotion(url, callback);
     }
 
-    return callback(error(400, 'Wrong url'));
+    return callback(error(400, 'Not supported url : ' + url));
 };
 
 Video.prototype.__proto__ = Base.prototype;

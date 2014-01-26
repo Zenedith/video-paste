@@ -18,11 +18,11 @@ var Video_Youtube = function (url, callback) {
         url = util.format('http://www.youtube.com/watch?v=%s', matches[2]);
     }
 
-    if (matches = url.match(/http\:\/\/www\.youtube\.com\/watch\?.*v=(.+)&?/i)) {
+    if (matches = url.match(/https?\:\/\/www\.youtube\.com\/watch\?.*v=(.+)&?/i)) {
         this.__url = url;
 
         //check video id
-        if (matches = this.__url.match(/http\:\/\/www\.youtube\.com\/.*v=(.+)&?/i)) {
+        if (matches = this.__url.match(/https?\:\/\/www\.youtube\.com\/.*v=(.+)&?/i)) {
             this.__videoId = matches[1];
 
             var

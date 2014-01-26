@@ -1,6 +1,7 @@
 # Available api helpers
 
 - GET /debug/requests
+
     ```
     request and response live debugger
     ```
@@ -8,19 +9,21 @@
 # Available tasks
 
 - GET /task/checkNewList
+
     ```
     cleaning older posts from new list
     ```
 
 # Available api methods
 
-- GET /api/getSession/:apiKey
+- GET /api/auth?apiKey=
+
     ```
     get session for unauthorized user
     ```
     ```
     {
-      sess: string, 
+      id: string, 
       userId: int
     }
     ```
@@ -28,16 +31,17 @@
     * ERR_API_INTERNAL_ERROR
     * ERR_INVALID_KEY
 
-- POST /api/loginByFb/:apiKey
+- POST /api/auth/fb?apiKey=
+
     ```
     get session for authorized user by facebook
     ```
     ```
-    POST JSON: data={id: string, name: string, fist_name: string, last_name: string, locale: string}
+    POST JSON: {id: string, name: string, fist_name: string, last_name: string, locale: string}
     ```
     ```
     {
-      sess: string, 
+      id: string, 
       userId: int
     }
     ```
@@ -46,16 +50,17 @@
     * ERR_INVALID_KEY
     * ERR_LOGIN_FAILED
 
-- POST /api/loginByGoogle/:apiKey
+- POST /api/auth/google?apiKey=
+
     ```
     get session for authorized user by google
     ```
     ```
-    POST JSON: data={id: string, name: string, given_name: string, family_name: string}
+    POST JSON: {id: string, name: string, given_name: string, family_name: string}
     ```
     ```
     {
-      sess: string, 
+      id: string, 
       userId: int
     }
     ```
@@ -64,16 +69,17 @@
     * ERR_INVALID_KEY
     * ERR_LOGIN_FAILED
 
-- POST /api/loginByTwitter/:apiKey
+- POST /api/auth/twitter?apiKey=
+
     ```
     get session for authorized user by twitter
     ```
     ```
-    POST JSON: data={id: string, name: string}
+    POST JSON: {id: string, name: string}
     ```
     ```
     {
-      sess: string, 
+      id: string, 
       userId: int
     }
     ```
@@ -82,16 +88,17 @@
     * ERR_INVALID_KEY
     * ERR_LOGIN_FAILED
 
-- POST /api/loginByWindowsLive/:apiKey
+- POST /api/auth/live?apiKey=
+
     ```
     get session for authorized user by windows live
     ```
     ```
-    POST JSON: data={id: string, name: string, fist_name: string, last_name: string, locale: string}
+    POST JSON: {id: string, name: string, fist_name: string, last_name: string, locale: string}
     ```
     ```
     {
-      sess: string, 
+      id: string, 
       userId: int
     }
     ```
@@ -100,7 +107,8 @@
     * ERR_INVALID_KEY
     * ERR_LOGIN_FAILED
 
-- GET /api/generateKey
+- POST /api/keys
+
     ```
     generate valid key (temp)
     ```
@@ -109,7 +117,8 @@
       key: string
     }
     ```
-- GET /api/postLink/:sessionId/:postId
+- GET /api/tap4video/posts/:postId
+
     ```
     get posted link data by postId
     ```
@@ -137,12 +146,14 @@
     * ERR_API_INTERNAL_ERROR
     * ERR_INVALID_KEY
     * ERR_INVALID_SESSION
-- POST /api/postLink/:sessionId
+
+- POST /api/tap4video/posts
+
     ```
     create post link
     ```
     ```
-    POST JSON: data={url: string, tags: [tagName: string]}
+    POST JSON: {url: string, tags: [tagName: string]}
     ```
     ```
     { 
@@ -170,12 +181,14 @@
     * ERR_INVALID_SESSION
     * ERR_INVALID_TAG_NAME
     * ERR_UNAUTHORIZED
-- POST /api/postViews/:sessionId/:postId
+
+- POST /api/tap4video/posts/:postId/views
+
     ```
     increse post link views count
     ```
     ```
-    POST JSON: data={}
+    POST JSON: {}
     ```
     ```
     { 
@@ -188,12 +201,14 @@
     * ERR_API_INTERNAL_ERROR
     * ERR_INVALID_KEY
     * ERR_INVALID_SESSION
-- POST /api/postRate/:sessionId/:postId
+    
+- POST /api/tap4video/posts/:postId/rate
+
     ```
     rate post link (rate [-1, 1])
     ```
     ```
-    POST JSON: data={rate: int}
+    POST JSON: {rate: int}
     ```
     ```
     { 
@@ -207,43 +222,9 @@
     * ERR_INVALID_SESSION
     * ERR_UNAUTHORIZED
     * ERR_ALREADY_RATED
-- GET /api/getTopLinks/:sessionId/:categoryId/:limit/:page
-    ```
-    get top links (only sessionId is required, max limit value: 100)
-    ```
-    ```
-    {
-      count: int, 
-      pages: int, 
-      currentPage: int, 
-      isNextPage: bool, 
-      isPrevPage: bool, 
-      result: [{ 
-        postId: int,  
-        added: int, 
-        userId: int, 
-        userName: string, 
-        videoInfo: {
-          url: string, 
-          title: string, 
-          description: string, 
-          thumbUrl: string, 
-          explicit: boolean
-        }, 
-        rate: int, 
-        views: int, 
-        tags: [
-          tagName: string
-        ]
-      }]
-    }
-    ```
-    * ERR_BAD_REQUEST
-    * ERR_API_INTERNAL_ERROR
-    * ERR_INVALID_KEY
-    * ERR_INVALID_SESSION
-    * ERR_EMPTY_RESULTS
-- GET /api/getTags/:apiKey/:limit/:page/:searchKey
+
+- GET /api/tap4video/tags
+
     ```
     get tags (searchKey tag is optional, max limit value: 100)
     ```
@@ -262,79 +243,9 @@
     * ERR_BAD_REQUEST
     * ERR_API_INTERNAL_ERROR
     * ERR_INVALID_KEY
-- GET /api/getNewLinks/:sessionId/:limit/:page
-    ```
-    get new links ordered from newer to older (only sessionId is required, max limit value: 100)
-    ```
-    ```
-    {
-      count: int, 
-      pages: int, 
-      currentPage: int, 
-      isNextPage: bool, 
-      isPrevPage: bool, 
-      result: [{ 
-        postId: int, 
-        added: int, 
-        userId: int, 
-        userName: string, 
-        videoInfo: {
-          url: string, 
-          title: string, 
-          description: string, 
-          thumbUrl: string, 
-          explicit: boolean
-        }, 
-        rate: int, 
-        views: int, 
-        tags: [
-          tagName: string
-        ]
-      }]
-    }
-    ```
-    * ERR_BAD_REQUEST
-    * ERR_API_INTERNAL_ERROR
-    * ERR_INVALID_KEY
-    * ERR_INVALID_SESSION
-    * ERR_EMPTY_RESULTS
-- GET /api/getLinksByTag/:sessionId/:tagName/:limit/:page
-    ```
-    get links by given tag name, ordered from newer to older (only sessionId is required, max limit value: 100)
-    ```
-    ```
-    {
-      count: int, 
-      pages: int, 
-      currentPage: int, 
-      isNextPage: bool, 
-      isPrevPage: bool, 
-      result: [{ 
-        postId: int,  
-        added: int, 
-        userId: int, 
-        userName: string, 
-        videoInfo: {
-          url: string, 
-          title: string, 
-          description: string, 
-          thumbUrl: string, 
-          explicit: boolean
-        }, 
-        rate: int, 
-        views: int, 
-        tags: [
-          tagName: string
-        ]
-      }]
-    }
-    ```
-    * ERR_BAD_REQUEST
-    * ERR_API_INTERNAL_ERROR
-    * ERR_INVALID_KEY
-    * ERR_INVALID_SESSION
-    * ERR_EMPTY_RESULTS
-- GET /api/profile/:sessionId/:userId
+
+- GET /api/users/:userId
+
     ```
     get given user profile (userId is optional)
     ```

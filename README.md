@@ -1,3 +1,4 @@
+[![Build Status](https://travis-ci.org/Zenedith/video-paste.png?branch=0.1.3)](https://travis-ci.org/Zenedith/video-paste)
 # Available api helpers
 
 - GET /debug/requests

@@ -1,1 +1,1 @@
-web: node server.js
+web: node cluster_server.js

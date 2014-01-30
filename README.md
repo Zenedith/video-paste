@@ -1,4 +1,6 @@
 [![Build Status](https://travis-ci.org/Zenedith/video-paste.png?branch=master)](https://travis-ci.org/Zenedith/video-paste)
+[![Dependency Status](https://david-dm.org/Zenedith/video-paste.png?theme=shields.io)](https://david-dm.org/Zenedith/video-paste)
+
 # Available api helpers
 
 - GET /debug/requests

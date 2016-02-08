@@ -1,4 +1,4 @@
-[![Analytics](https://ga-beacon.appspot.com/UA-73547207-1/chromeskel_a/readme)](https://github.com/Zenedith/video-paste)
+[![Analytics](https://ga-beacon.appspot.com/UA-73547207-1/video-paste/readme)](https://github.com/Zenedith/video-paste)
 [![Build Status](https://travis-ci.org/Zenedith/video-paste.png?branch=master)](https://travis-ci.org/Zenedith/video-paste)
 [![Dependency Status](https://david-dm.org/Zenedith/video-paste.png?theme=shields.io)](https://david-dm.org/Zenedith/video-paste)
 

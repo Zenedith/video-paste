@@ -4,7 +4,7 @@ var
     Api = require(process.env.APP_PATH + '/vhost/restify').Api,
     api = Api(),
     config = require('config'),
-    log = require(process.env.APP_PATH + '/lib/log');
+    log = require(process.env.APP_PATH + '/lib/logger').logger;
 
 if (!module.parent) {
     api.listen(config.app.port, config.app.host, function () {

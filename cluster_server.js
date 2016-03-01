@@ -13,7 +13,7 @@ var
 
 // Setup the cluster to use app.js
 cluster.setupMaster({
-    exec: 'server.js'
+    exec: 'server-api-restify.js'
 });
 
 // Listen for dying workers

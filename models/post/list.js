@@ -2,7 +2,7 @@ var
     Post = require(process.env.APP_PATH + "/models/post").Post,
     postObj = new Post(),
     List = require(process.env.APP_PATH + "/models/list").List,
-    log = require(process.env.APP_PATH + "/lib/log"),
+    log = require(process.env.APP_PATH + "/lib/logger").logger,
     Database = require(process.env.APP_PATH + "/lib/database").Database,
     secure = require("node-secure");
 

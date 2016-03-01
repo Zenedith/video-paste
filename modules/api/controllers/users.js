@@ -3,7 +3,7 @@ var
     sess_obj = new Session(),
     User = require(process.env.APP_PATH + "/models/user").User,
     userObj = new User(),
-    log = require(process.env.APP_PATH + "/lib/log"),
+    log = require(process.env.APP_PATH + "/lib/logger").logger,
     config = require('config'),
     RequestLogger = require(process.env.APP_PATH + "/lib/requestLogger").RequestLogger,
     sanitize = require('sanitizer'),

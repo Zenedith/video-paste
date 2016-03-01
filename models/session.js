@@ -1,6 +1,6 @@
 var
     Base = require(process.env.APP_PATH + "/models/base").Base,
-    log = require(process.env.APP_PATH + "/lib/log"),
+    log = require(process.env.APP_PATH + "/lib/logger").logger,
 //  util = require("util"),
     secure = require("node-secure");
 

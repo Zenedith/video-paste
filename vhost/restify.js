@@ -2,7 +2,7 @@ var Api = function () {
     var
         restify = require('restify'),
         config = require('config'),
-        log = require(process.env.APP_PATH + "/lib/log"),
+        log = require(process.env.APP_PATH + "/lib/logger").logger,
 //    Restify_TokensTable = require(process.env.APP_PATH + "/lib/restify/tokensTable").Restify_TokensTable,
         RequestLogger = require(process.env.APP_PATH + "/lib/requestLogger").RequestLogger,
         controller = require(process.env.APP_PATH + "/lib/controller"),

@@ -1,5 +1,5 @@
 var
-    log = require(process.env.APP_PATH + "/lib/log"),
+    log = require(process.env.APP_PATH + "/lib/logger").logger,
     util = require('util'),
     Video_Vimeo_Api = require(process.env.APP_PATH + "/models/video/vimeo/api").Video_Vimeo_Api,
     Video = require(process.env.APP_PATH + "/models/video").Video,

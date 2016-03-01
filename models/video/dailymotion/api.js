@@ -1,5 +1,5 @@
 var
-    log = require(process.env.APP_PATH + "/lib/log"),
+    log = require(process.env.APP_PATH + "/lib/logger").logger,
     util = require('util'),
     request = require('request'),
     apiEndpoint = "https://api.dailymotion.com",

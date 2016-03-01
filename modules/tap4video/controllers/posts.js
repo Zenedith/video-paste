@@ -1,7 +1,7 @@
 var
     Session = require(process.env.APP_PATH + "/models/session").Session,
     sess_obj = new Session(),
-    log = require(process.env.APP_PATH + "/lib/log"),
+    log = require(process.env.APP_PATH + "/lib/logger").logger,
     config = require('config'),
     RequestLogger = require(process.env.APP_PATH + "/lib/requestLogger").RequestLogger,
     sanitize = require('sanitizer'),

@@ -1,1 +1,55 @@
-{}
+{
+    "app": {
+    },
+    "tests": {
+        "login": {
+            "facebook": {
+                "id": "100000676497820",
+                "name": "Mateusz%20St%C4%99pniak",
+                "fist_name": "Mateusz",
+                "last_name": "St%C4%99pniak",
+                "locale": "pl_PL"
+            },
+            "google": {
+                "id": "117119194620180629287",
+                "name": "Mateusz%20St%C4%99pniak",
+                "given_name": "Mateusz",
+                "family_name": "St%C4%99pniak"
+            },
+            "twitter": {
+                "id": "154950149",
+                "name": "Ben%20Foster"
+            },
+            "live": {
+                "id": "a53a94848e05416c",
+                "name": "Mateusz%20St%C4%99pniak",
+                "fist_name": "Mateusz",
+                "last_name": "St%C4%99pniak",
+                "locale": "pl_PL"
+            }
+        }
+    },
+    "auth": {
+        "facebook": {
+            "appid": "331302880278902",
+            "appsecret": "6269030c4d1efe6f2f6eecdd761d1470",
+            "accesstoken": "AAAEtUXZA9ZBXYBACxcFSJk6yUKsOqcXgua5iBCIfzAinHgB4U8GG8rkhGVl0ZCIk3lCPIvbWgq9mQkI1kpou8IqPN1nskKQ3g2HHz6O0ThzbOOfafYk"
+        },
+        "google": {
+            "clientid": "635225905917-i54on7ma5ljochnkovifcgouhinpackq.apps.googleusercontent.com",
+            "clientsecret": "imG2T0rXc2CiYAVyAzlJT-hI",
+            "email": "635225905917-i54on7ma5ljochnkovifcgouhinpackq@developer.gserviceaccount.com"
+        },
+        "twitter": {
+            "consumerkey": "yot8vTnRYurijOqFdlDbYA",
+            "consumersecret": "wktAz9tcLHE2J7BDCkVN2SGcA0a8dLTorcKOzBdhU",
+            "accesstoken": "607280343-ULWc87LamUQzzlzOlO3jLyNixV8xMtjFKgokwp37",
+            "accesstokensecret": "7qbR3CynZUQqBSLYHSW3YYqwcPZ7x8D3iajTeMHoPtM"
+        },
+        "live": {
+            "clientid": "00000000440C6787",
+            "clientsecret": "T8k1nN4ouc52s00feCfE-EZkpjjD9-Dw",
+            "accesstoken": "EwAoAq1DBAAUlbRWyAJjK5w968Ru3Cyt/6GvwXwAAfYc3B9q0geqpOyPANPUpi+TNX8Kp8CEp4HUdRE2I4ad6POKSZ4iDW8LhiEfhs/sMJSGPpk1KQ4YtITYdKVgcTvIp+qjfvKtZ46vr4e3M94NfTdSc40cRKWIGdNbfROsGilg8bEYVEqoqHhKZ2Sd+sshs6CPdLiBhCmbzN3o9XFEWdDxJak0ZWttQlQy0F/oPWU17JZAwPPeZlH0K+0fyQMeKrXD1SW53d+VYrYQfEMZUl3mFX1eiiGK7UweJzmx/F1mH2QXVJrwo08NEBk3QknMMMubC9ZFUvrcHFos9fuGg33A0efs6L7sqN4rXEJxkyMYvbVLvTr9ZpCNHQroUbIDZgAACHBei+8Xz1V7+ABsL7z0vBUL4vT2Pr1NQpGly0prcAJr/9O6ofArkKKJKh398iNtnG3r2OdlLfkp2LvRsBPxrqEXJTe3n2cj1xMQXyZj+O7A1+Dz+ADO7lq3TV11iHGd40dWooc1Xd852bU507bNGeEvDlukruxiUa0Rs8J5m3a+jlNnKE+xD7baNqHkBS1JB1cEbnxYt/QBGoS6/cevSubOX2VTe7IJqj+GzKfEZXle+hObuBVfqJKqY00nQ3Dn2lIuuxs0aEqhXE50RC3mZmkmyhGJmjE8uFl2D83OEP64aYWFP5wsRPgmSJnvR7+MgIhCMGuzXNfGsdv/yadCU3dktQAA"
+        }
+    }
+}

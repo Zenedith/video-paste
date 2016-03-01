@@ -1,6 +1,6 @@
 var
     List = require(process.env.APP_PATH + "/models/list").List,
-    log = require(process.env.APP_PATH + "/lib/log"),
+    log = require(process.env.APP_PATH + "/lib/logger").logger,
     Database = require(process.env.APP_PATH + "/lib/database").Database,
 //  util = require("util"),
     secure = require("node-secure");

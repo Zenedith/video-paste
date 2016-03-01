@@ -1,6 +1,6 @@
 var
     Base = require(process.env.APP_PATH + "/models/base").Base,
-    log = require(process.env.APP_PATH + "/lib/log"),
+    log = require(process.env.APP_PATH + "/lib/logger").logger,
     Database = require(process.env.APP_PATH + "/lib/database").Database,
     accountType = require(process.env.APP_PATH + "/models/user/accountType").accountType,
 //  util = require("util"),

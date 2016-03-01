@@ -2,7 +2,7 @@ var Api = function (api) {
     var
         express = require('express'),
         config = require('config'),
-        log = require(process.env.APP_PATH + "/lib/log"),
+        log = require(process.env.APP_PATH + "/lib/logger").logger,
         RequestLogger = require(process.env.APP_PATH + "/lib/requestLogger").RequestLogger,
         controller = require(process.env.APP_PATH + "/lib/controller");
 
@@ -10,7 +10,7 @@ var Api = function (api) {
         api = express();
     }
 
-    api.configure(function () {
+    //api.configure(function () {
 
 //    app.enable('trust proxy');//TODO
 
@@ -104,7 +104,7 @@ var Api = function (api) {
             }, 200);
             RequestLogger.log(req, err);
         });
-    });
+    //});
 
     return api;
 };

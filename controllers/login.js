@@ -1,6 +1,6 @@
 var
     config = require('config'),
-    log = require(process.env.APP_PATH + "/lib/log"),
+    log = require(process.env.APP_PATH + "/lib/logger").logger,
     Auth_Connect = require(process.env.APP_PATH + "/lib/auth/connect").Auth_Connect,
     authConnect = new Auth_Connect(),
     secure = require("node-secure");

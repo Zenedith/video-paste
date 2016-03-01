@@ -1,55 +1,55 @@
 {
-    "name": "video-paste-api",
-    "description": "video paste api project",
-    "subdomain": "video-paste",
-    "homepage": "https://github.com/Zenedith/video-paste",
-    "repository": "https://github.com/Zenedith/video-paste",
-    "main": "server.js",
-    "author": "Mateusz Stępniak (zenedith@wp.pl)",
-    "analyze": false,
-    "version": "0.1.3",
-    "engines": {
-        "node": ">= 0.10.25"
-    },
-    "keywords": [
-        "rest",
-        "restful",
-        "api"
-    ],
-    "scripts": {
-        "prepublish": "npm prune",
-        "test": "mocha -R list -u exports test/app-test.js test/generateKey.js test/login.js test/getSession.js test/postLink.js test/getLinksByTag.js test/getTopLinks.js test/getTags.js test/getNewLinks.js test/profile.js test/postViews.js test/postRate.js"
-    },
-    "devDependencies": {
-        "mocha": "latest",
-        "should": "latest",
-        "methods": "latest",
-        "superagent": "latest",
-        "supertest": "latest"
-    },
-    "dependencies": {
-        "request": "latest",
-        "validator": "latest",
-        "sanitizer": "latest",
-        "formidable": "latest",
-        "qs": "latest",
-        "connect": "latest",
-        "express": "latest",
-        "lru-cache": "latest",
-        "restify": "latest",
-        "hiredis": "latest",
-        "redis": "latest",
-        "jade": "latest",
-        "log": "latest",
-        "config": "latest",
-        "socket.io": "latest",
-        "node-secure": "latest",
-        "ga": "latest",
-        "loggly": "latest",
-        "oauth": "latest",
-        "authom": "latest",
-        "async": "latest",
-        "n-vimeo": "latest"
-    },
-    "license": "MIT"
+  "name": "video-paste-api",
+  "description": "video paste api project",
+  "subdomain": "video-paste",
+  "homepage": "https://github.com/Zenedith/video-paste",
+  "repository": "https://github.com/Zenedith/video-paste",
+  "main": "server.js",
+  "author": "Mateusz Stępniak (zenedith@wp.pl)",
+  "analyze": false,
+  "version": "0.1.3",
+  "engines": {
+    "node": ">= 5.6.0"
+  },
+  "keywords": [
+    "rest",
+    "restful",
+    "api"
+  ],
+  "scripts": {
+    "prepublish": "npm prune",
+    "test": "mocha -R list -u exports test/app-test.js test/generateKey.js test/login.js test/getSession.js test/postLink.js test/getLinksByTag.js test/getTopLinks.js test/getTags.js test/getNewLinks.js test/profile.js test/postViews.js test/postRate.js"
+  },
+  "devDependencies": {
+    "mocha": "2.4.5",
+    "should": "8.2.2",
+    "methods": "1.1.2",
+    "superagent": "1.8.0-beta.2",
+    "supertest": "1.2.0"
+  },
+  "dependencies": {
+    "async": "1.5.2",
+    "authom": "0.4.36",
+    "config": "1.19.0",
+    "connect": "3.4.1",
+    "formidable": "1.0.17",
+    "ga": "0.0.2",
+    "hiredis": "0.4.1",
+    "jade": "1.11.0",
+    "log": "1.4.0",
+    "lru-cache": "4.0.0",
+    "n-vimeo": "0.3.0",
+    "node-secure": "0.2.0",
+    "oauth": "0.9.14",
+    "qs": "6.1.0",
+    "redis": "2.4.2",
+    "request": "2.69.0",
+    "restify": "4.0.4",
+    "sanitizer": "0.1.3",
+    "socket.io": "1.4.5",
+    "validator": "5.1.0",
+    "winston": "2.2.0",
+    "winston-loggly": "1.3.1"
+  },
+  "license": "MIT"
 }

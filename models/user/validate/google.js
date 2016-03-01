@@ -2,7 +2,7 @@ var
     config = require("config"),
 //  User_Validate_Oauth = require(process.env.APP_PATH + "/models/user/validate/oauth").User_Validate_Oauth,
     http = require('http'),
-    log = require(process.env.APP_PATH + "/lib/log"),
+    log = require(process.env.APP_PATH + "/lib/logger").logger,
     secure = require("node-secure");
 
 var User_Validate_Google = function () {

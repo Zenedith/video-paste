@@ -1,7 +1,7 @@
 var
     Base = require(process.env.APP_PATH + "/models/base").Base,
     Database = require(process.env.APP_PATH + "/lib/database").Database,
-    log = require(process.env.APP_PATH + "/lib/log"),
+    log = require(process.env.APP_PATH + "/lib/logger").logger,
     sanitize = require('sanitizer'),
     validator = require('validator'),
     secure = require("node-secure");

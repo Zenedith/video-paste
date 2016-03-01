@@ -3,7 +3,7 @@ var WebSocketApp = function (app) {
         express = require('express'),
         http = require('http'),
         config = require('config'),
-        log = require(process.env.APP_PATH + "/lib/log"),
+        log = require(process.env.APP_PATH + "/lib/logger").logger,
         controller = require(process.env.APP_PATH + "/lib/controller"),
         Auth_Authom = require(process.env.APP_PATH + "/lib/auth/authom").Auth_Authom,
         auth = new Auth_Authom();
@@ -19,13 +19,6 @@ var WebSocketApp = function (app) {
     }
 
     app.configure(function () {
-        if (process.env.NODE_ENV !== 'development') {
-            app.use(express.logger());
-        }
-        else {
-            app.use(express.logger("dev"));
-            app.locals.pretty = true;
-        }
 
         app.set('views', process.env.APP_PATH + '/views');
         app.set('view engine', 'jade');

@@ -1,7 +1,7 @@
 var
     OAuth = require("oauth").OAuth2,
     config = require("config"),
-    log = require(process.env.APP_PATH + "/lib/log"),
+    log = require(process.env.APP_PATH + "/lib/logger").logger,
     secure = require("node-secure");
 
 var User_Validate_Oauth = function (clientId, clientSecret, baseSite, authorizePath, accessTokenPath) {

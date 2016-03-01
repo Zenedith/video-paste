@@ -24,7 +24,7 @@ var ServerInit = function () {
 
     var
         config = require('config'),
-        log = require(process.env.APP_PATH + '/lib/log'),
+        log = require(process.env.APP_PATH + "/lib/logger").logger,
         Errors = require(process.env.APP_PATH + '/models/errors').Errors;
 
     //global
@@ -40,17 +40,6 @@ var ServerInit = function () {
         port = 0;
 
     switch (process.env.NODE_ENV) {
-        case 'dotcloud':
-            var fs = require('fs');
-            var env = JSON.parse(fs.readFileSync('environment.json', 'utf-8'));
-
-            host = env.DOTCLOUD_WWW_HTTP_HOST; // override host
-            port = env.PORT_WWW; // override port
-            config.db.use = 'redis';
-            config.db.redis.host = env.DOTCLOUD_DATA_REDIS_HOST; // override redis host
-            config.db.redis.port = env.DOTCLOUD_DATA_REDIS_PORT; // override redis port
-            config.db.redis.auth = env.DOTCLOUD_DATA_REDIS_PASSWORD; // override redis auth
-            break;
         case 'cloudfoundry':
             host = process.env.VCAP_APP_HOST;
             port = process.env.VCAP_APP_PORT;

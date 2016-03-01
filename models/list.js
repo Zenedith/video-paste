@@ -1,5 +1,5 @@
 var
-    log = require(process.env.APP_PATH + "/lib/log"),
+    log = require(process.env.APP_PATH + "/lib/logger").logger,
     secure = require("node-secure");
 
 var List = function (limit, page, count, data) {

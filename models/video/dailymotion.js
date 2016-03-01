@@ -1,5 +1,5 @@
 var
-    log = require(process.env.APP_PATH + "/lib/log"),
+    log = require(process.env.APP_PATH + "/lib/logger").logger,
     util = require('util'),
     Video_Dailymotion_Api = require(process.env.APP_PATH + "/models/video/dailymotion/api").Video_Dailymotion_Api,
     Video = require(process.env.APP_PATH + "/models/video").Video,

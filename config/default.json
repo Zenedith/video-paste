@@ -63,12 +63,12 @@
         }
     },
     "db": {
-        "use" : "redis",
-        "prefix" : "vpa",
+        "use": "redis",
+        "prefix": "vpa",
         "redis": {
-            "host": "127.0.0.1",
-            "port": 6379,
-            "auth": ""
+            "host": "koi.redistogo.com",
+            "port": 9319,
+            "auth": "2bcb8f46bc5f0072cba542c71b8ee1cc"
         }
     },
     "routers": {
